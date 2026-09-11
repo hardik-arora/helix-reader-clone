@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="referrer" content="no-referrer" />
+  <title>Helix Reader — Live Login Monitor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #090a0f;
+      --surface: rgba(17, 20, 30, 0.75);
+      --border: rgba(255, 255, 255, 0.08);
+      --accent: #6366f1;
+      --accent-glow: rgba(99, 102, 241, 0.15);
+      --text: #f3f4f6;
+      --text3: #9ca3af;
+      --google: #4285F4;
+      --apple: #ffffff;
+      --github: #2da44e;
+      --standard: #14b8a6;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(20, 184, 166, 0.06) 0%, transparent 40%);
+      background-attachment: fixed;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 3rem;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .logo-icon {
+      background: linear-gradient(135deg, var(--accent) 0%, #4f46e5 100%);
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      color: #fff;
+      font-size: 1.4rem;
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .logo-text h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    .logo-text p {
+      font-size: 0.8rem;
+      color: var(--text3);
+    }
+
+    .action-group {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 1.2rem;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      text-decoration: none;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-danger {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #f87171;
+    }
+
+    .btn-danger:hover {
+      background: rgba(239, 68, 68, 0.25);
+      border-color: rgba(239, 68, 68, 0.5);
+    }
+
+    /* Grid Stats Layout */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-2px);
+    }
+
+    .stat-info h3 {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text3);
+      margin-bottom: 0.4rem;
+    }
+
+    .stat-number {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.2rem;
+      font-weight: 800;
+      line-height: 1.1;
+    }
+
+    .stat-icon {
+      font-size: 2.4rem;
+      opacity: 0.2;
+    }
+
+    /* Table Workspace */
+    .card-table-wrap {
+      background: var(--surface);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 1.5rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .table-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .table-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+
+    .table-filters {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .search-input {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 0.85rem;
+      outline: none;
+      width: 250px;
+      transition: all 0.2s ease;
+    }
+
+    .search-input:focus {
+      border-color: var(--accent);
+      background: rgba(255, 255, 255, 0.08);
+      box-shadow: 0 0 10px var(--accent-glow);
+    }
+
+    .auto-refresh-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      color: var(--text3);
+    }
+
+    /* Toggle Switch */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 38px;
+      height: 20px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(255, 255, 255, 0.1);
+      transition: .3s;
+      border-radius: 20px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 14px;
+      width: 14px;
+      left: 3px;
+      bottom: 3px;
+      background-color: #fff;
+      transition: .3s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: var(--accent);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(18px);
+    }
+
+    /* Log Table UI */
+    .table-container {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    th {
+      padding: 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text3);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 700;
+    }
+
+    td {
+      padding: 1.1rem 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 0.9rem;
+      vertical-align: middle;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background: rgba(255, 255, 255, 0.01);
+    }
+
+    .badge-method {
+      display: inline-block;
+      padding: 0.25rem 0.6rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: capitalize;
+    }
+
+    .badge-google {
+      background: rgba(66, 133, 244, 0.15);
+      color: #93c5fd;
+      border: 1px solid rgba(66, 133, 244, 0.3);
+    }
+
+    .badge-apple {
+      background: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .badge-github {
+      background: rgba(45, 164, 78, 0.15);
+      color: #86efac;
+      border: 1px solid rgba(45, 164, 78, 0.3);
+    }
+
+    .badge-standard {
+      background: rgba(20, 184, 166, 0.15);
+      color: #99f6e4;
+      border: 1px solid rgba(20, 184, 166, 0.3);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--text3);
+    }
+
+    .empty-state-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
+
+    .loading-pulse {
+      width: 8px;
+      height: 8px;
+      background-color: var(--accent);
+      border-radius: 50%;
+      display: inline-block;
+      margin-left: 0.5rem;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(0.9); opacity: 0.4; }
+      50% { transform: scale(1.3); opacity: 1; }
+      100% { transform: scale(0.9); opacity: 0.4; }
+    }
+
+    /* Toast Notification */
+    #toast {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: #111827;
+      color: var(--text);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 0.8rem 1.5rem;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+      z-index: 1000;
+      transform: translateY(150%);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    #toast.show {
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo-area">
+        <div class="logo-icon">📊</div>
+        <div class="logo-text">
+          <h1>Helix Monitor</h1>
+          <p>Real-time Login Auditing Dashboard</p>
+        </div>
+      </div>
+      <div class="action-group">
+        <button class="btn btn-secondary" onclick="fetchLogins()">🔄 Force Refresh</button>
+        <button class="btn btn-danger" onclick="confirmClearLogs()">🗑️ Clear Logs</button>
+        <a href="index.html" class="btn btn-secondary" style="background:linear-gradient(135deg, var(--accent) 0%, #4f46e5 100%); border:none; box-shadow:0 4px 12px rgba(99, 102, 241, 0.2);">← Helix App</a>
+      </div>
+    </header>
+
+    <!-- Stats Cards Grid -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-info">
+          <h3>Total Logins</h3>
+          <div class="stat-number" id="stat-total">0</div>
+        </div>
+        <div class="stat-icon">👥</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-info">
+          <h3>Total Signups</h3>
+          <div class="stat-number" id="stat-signups" style="color:var(--standard)">0</div>
+        </div>
+        <div class="stat-icon">✨</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-info">
+          <h3>Google Auth</h3>
+          <div class="stat-number" id="stat-google" style="color:var(--google)">0</div>
+        </div>
+        <div class="stat-icon">🔑</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-info">
+          <h3>Apple Auth</h3>
+          <div class="stat-number" id="stat-apple" style="color:var(--apple)">0</div>
+        </div>
+        <div class="stat-icon"></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-info">
+          <h3>GitHub Auth</h3>
+          <div class="stat-number" id="stat-github" style="color:var(--github)">0</div>
+        </div>
+        <div class="stat-icon">🐙</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-info">
+          <h3>Guest Users</h3>
+          <div class="stat-number" id="stat-guest" style="color:var(--text3)">0</div>
+        </div>
+        <div class="stat-icon">🍃</div>
+      </div>
+    </div>
+
+    <!-- Active Logs Section -->
+    <div class="card-table-wrap">
+      <div class="table-header">
+        <div class="table-title">Recent Telemetry Activity <span class="loading-pulse" id="refresh-pulse"></span></div>
+        <div class="table-filters">
+          <input type="text" class="search-input" id="search-filter" placeholder="Search display name or method..." oninput="filterLogs()" />
+          <div class="auto-refresh-wrap">
+            <span>Auto Refresh</span>
+            <label class="switch">
+              <input type="checkbox" id="refresh-toggle" checked onchange="toggleAutoRefresh()" />
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="table-container">
+        <table id="logs-table">
+          <thead>
+            <tr>
+              <th>User Account ID / Display Name</th>
+              <th>Login Method</th>
+              <th>Timestamp</th>
+            </tr>
+          </thead>
+          <tbody id="logs-tbody">
+            <!-- Rendered Dynamically -->
+          </tbody>
+        </table>
+        
+        <div class="empty-state" id="empty-state" style="display:none">
+          <div class="empty-state-icon">📭</div>
+          <p>No login events found in this bucket. Telemetry matches will appear when users sign in.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast">Logins updated!</div>
+
+  <script>
+    const binUrl = 'https://corsproxy.io/?url=' + encodeURIComponent('https://extendsclass.com/api/json-storage/bin/ffaaeaa');
+    let currentLogs = [];
+    let refreshInterval = null;
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2000);
+    }
+
+    function toggleAutoRefresh() {
+      const toggle = document.getElementById('refresh-toggle');
+      const pulse = document.getElementById('refresh-pulse');
+      if (toggle.checked) {
+        pulse.style.display = 'inline-block';
+        startPolling();
+      } else {
+        pulse.style.display = 'none';
+        stopPolling();
+      }
+    }
+
+    function startPolling() {
+      stopPolling();
+      refreshInterval = setInterval(fetchLogins, 8000);
+    }
+
+    function stopPolling() {
+      if (refreshInterval) {
+        clearInterval(refreshInterval);
+        refreshInterval = null;
+      }
+    }
+
+    function fetchLogins() {
+      // 1. Fetch CounterAPI counters (CORS-safe, highly responsive, no-cache forced)
+      const counters = [
+        { key: 'logins', elementId: 'stat-total' },
+        { key: 'signups', elementId: 'stat-signups' },
+        { key: 'google', elementId: 'stat-google' },
+        { key: 'apple', elementId: 'stat-apple' },
+        { key: 'github', elementId: 'stat-github' },
+        { key: 'guest', elementId: 'stat-guest' }
+      ];
+
+      counters.forEach(c => {
+        fetch(`https://api.counterapi.dev/v1/helixreader/${c.key}`, { cache: 'no-store' })
+          .then(res => {
+            if (!res.ok) return { count: 0 };
+            return res.json();
+          })
+          .then(data => {
+            document.getElementById(c.elementId).textContent = data.count || 0;
+          })
+          .catch(err => {
+            console.warn(`Failed to fetch ${c.key} count:`, err);
+            document.getElementById(c.elementId).textContent = 0;
+          });
+      });
+
+      // 2. Fetch detailed logs from ExtendsClass (via CORS proxy)
+      fetch(binUrl, { cache: 'no-store' })
+        .then(res => res.json())
+        .then(data => {
+          currentLogs = data.logins || [];
+          renderLogs();
+        })
+        .catch(err => {
+          console.warn("Failed to load detailed logins:", err);
+          renderLogs(); // Still render to keep filter inputs active
+        });
+    }
+
+    function renderLogs() {
+      const tbody = document.getElementById('logs-tbody');
+      const emptyState = document.getElementById('empty-state');
+      const searchVal = document.getElementById('search-filter').value.toLowerCase().trim();
+      
+      tbody.innerHTML = '';
+      
+      // Filter list
+      const filtered = currentLogs.filter(log => {
+        const user = (log.user || '').toLowerCase();
+        const method = (log.method || '').toLowerCase();
+        return user.includes(searchVal) || method.includes(searchVal);
+      });
+
+      if (filtered.length === 0) {
+        emptyState.style.display = 'block';
+        emptyState.innerHTML = `
+          <div class="empty-state-icon">📭</div>
+          <p>No login events found. Telemetry records will appear here as users sign in/register.</p>
+        `;
+      } else {
+        emptyState.style.display = 'none';
+        filtered.forEach(log => {
+          const tr = document.createElement('tr');
+          
+          let badgeClass = 'badge-standard';
+          let mLower = (log.method || '').toLowerCase();
+          if (mLower.includes('google')) badgeClass = 'badge-google';
+          else if (mLower.includes('apple')) badgeClass = 'badge-apple';
+          else if (mLower.includes('github')) badgeClass = 'badge-github';
+          else if (mLower.includes('standard')) badgeClass = 'badge-standard';
+          
+          const formattedTime = formatTimestamp(log.time);
+
+          tr.innerHTML = `
+            <td style="font-weight: 600; color: var(--text);">${escapeHtml(log.user)}</td>
+            <td><span class="badge-method ${badgeClass}">${escapeHtml(log.method || 'Unknown')}</span></td>
+            <td style="color: var(--text3);">${formattedTime}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+    }
+
+    function filterLogs() {
+      renderLogs();
+    }
+
+    function formatTimestamp(isoStr) {
+      if (!isoStr) return 'N/A';
+      try {
+        const d = new Date(isoStr);
+        if (isNaN(d.getTime())) return isoStr;
+        return d.toLocaleDateString() + ' ' + d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      } catch(e) {
+        return isoStr;
+      }
+    }
+
+    function confirmClearLogs() {
+      const ok = confirm("⚠️ Are you absolutely sure you want to clear the telemetry login records? Note: Detailed audit logs will be cleared. Global counters are stored on a public ledger.");
+      if (ok) {
+        fetch(binUrl, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ logins: [] })
+        })
+        .then(() => {
+          showToast("🗑️ Detailed telemetry logs cleared!");
+          fetchLogins();
+        })
+        .catch(err => {
+          alert("Failed to reset detailed logs: " + err);
+        });
+      }
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+    }
+
+    // Initial Fetch & Start Polling
+    fetchLogins();
+    startPolling();
+  </script>
+</body>
+</html>
