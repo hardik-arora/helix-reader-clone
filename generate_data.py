@@ -656,7 +656,7 @@ def main():
     print(f"Target Output: {output_file}")
     
     fieldnames = [
-        "resource_id", "title", "author", "source", "topic", 
+        "resource_id", "isbn", "olid", "cover_url", "title", "author", "source", "topic", 
         "reading_level", "excerpt", "keywords", "language", 
         "format", "summary", "dictionary"
     ]
