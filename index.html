@@ -6077,6 +6077,9 @@ function getCoverUrl(book, size = 'L') {
   const cachedCover = state.covers[book.id];
   if (cachedCover && cachedCover !== 'none') return cachedCover;
 
+  if (book.cover_url && book.cover_url !== 'none' && book.cover_url.startsWith('http')) {
+    return book.cover_url;
+  }
   if (book.cover_id) {
     return `https://covers.openlibrary.org/b/id/${book.cover_id}-${size}.jpg?default=false`;
   }
@@ -6097,8 +6100,9 @@ function makeCoverStyle(book) {
   if (cachedCover && cachedCover !== 'none') {
     return `background-image: url('${cachedCover}'); background-size: cover; background-position: center;`;
   }
-  if (book?.cover && book?.cover !== 'none' && book?.cover.startsWith('http')) {
-    return `background-image: url('${book.cover}'); background-size: cover; background-position: center;`;
+  const url = book?.cover_url || book?.cover;
+  if (url && url !== 'none' && url.startsWith('http')) {
+    return `background-image: url('${url}'); background-size: cover; background-position: center;`;
   }
   const colors = book?.color || ['#1e293b', '#0f172a'];
   return `background: linear-gradient(135deg, ${colors[0]} 0%, ${colors[1]} 100%);`;
@@ -6343,6 +6347,9 @@ function getCoverUrl(book, size = 'L') {
   const cachedCover = state.covers[book.id];
   if (cachedCover && cachedCover !== 'none') return cachedCover;
 
+  if (book.cover_url && book.cover_url !== 'none' && book.cover_url.startsWith('http')) {
+    return book.cover_url;
+  }
   if (book.cover_id) {
     return `https://covers.openlibrary.org/b/id/${book.cover_id}-${size}.jpg?default=false`;
   }
@@ -6363,8 +6370,9 @@ function makeCoverStyle(book) {
   if (cachedCover && cachedCover !== 'none') {
     return `background-image: url('${cachedCover}'); background-size: cover; background-position: center;`;
   }
-  if (book?.cover && book?.cover !== 'none' && book?.cover.startsWith('http')) {
-    return `background-image: url('${book.cover}'); background-size: cover; background-position: center;`;
+  const url = book?.cover_url || book?.cover;
+  if (url && url !== 'none' && url.startsWith('http')) {
+    return `background-image: url('${url}'); background-size: cover; background-position: center;`;
   }
   const colors = book?.color || ['#1e293b', '#0f172a'];
   return `background: linear-gradient(135deg, ${colors[0]} 0%, ${colors[1]} 100%);`;
