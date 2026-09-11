@@ -25,6 +25,9 @@ def create_database(db_path):
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS resources (
             resource_id TEXT PRIMARY KEY,
+            isbn TEXT,
+            olid TEXT,
+            cover_url TEXT,
             title TEXT NOT NULL,
             author TEXT NOT NULL,
             topic TEXT NOT NULL,
