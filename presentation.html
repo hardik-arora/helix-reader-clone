@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Helix Reader — Pitch Presentation</title>
+  <!-- Modern Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Georgia&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg: #030712;          /* Midnight Space Black */
+      --text: #f3f4f6;        /* Starlight white text */
+      --accent: #00f2fe;      /* Glowing Cyber Cyan */
+      --accent-secondary: #6366f1; /* Cosmic Indigo */
+      --accent-gold: #d4af37; /* Solar Gold */
+      --card-bg: #0b0f19;     /* Sleek space card */
+      --card-border: #1f2937; /* Subtle cosmic borders */
+      --accent-muted: rgba(0, 242, 254, 0.1);
+      --prob-red: #ff7675;
+      --sol-green: #00f2fe;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg);
+      background-image: 
+        radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
+        radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px),
+        radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 40px);
+      background-size: 550px 550px, 350px 350px, 250px 250px;
+      background-position: 0 0, 40px 60px, 130px 270px;
+      color: var(--text);
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: background-color 0.4s ease, color 0.4s ease;
+    }
+
+    /* Header Nav */
+    header {
+      padding: 1.5rem 2.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 10;
+    }
+
+    .logo {
+      font-family: 'Georgia', serif;
+      font-size: 1.25rem;
+      font-weight: bold;
+      color: var(--text);
+      letter-spacing: 0.15em;
+    }
+
+    .slide-badge {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      background-color: var(--accent-muted);
+      padding: 0.25rem 0.75rem;
+      border-radius: 12px;
+    }
+
+    /* Presentation Slides Container */
+    .slides-container {
+      flex: 1;
+      position: relative;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .slide {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(50px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 0 2.5rem;
+    }
+
+    .slide.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(0);
+    }
+
+    .slide.prev {
+      transform: translateX(-50px);
+    }
+
+    /* Typography inside Slides */
+    .slide h1 {
+      font-family: 'Georgia', serif;
+      font-size: 3rem;
+      font-weight: bold;
+      margin-bottom: 1.5rem;
+      line-height: 1.15;
+      color: var(--text);
+    }
+
+    .slide h2 {
+      font-family: 'Georgia', serif;
+      font-size: 2rem;
+      font-weight: 600;
+      margin-bottom: 1.25rem;
+      color: var(--text);
+    }
+
+    .slide p.subtitle {
+      font-size: 1.25rem;
+      color: rgba(244, 249, 249, 0.7);
+      max-width: 800px;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+    }
+
+    /* Grid layouts */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2.5rem;
+      width: 100%;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1.5rem;
+      width: 100%;
+    }
+
+    /* Cards */
+    .card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 2rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 30px rgba(140, 115, 75, 0.08);
+    }
+
+    .card .card-number {
+      font-family: 'Georgia', serif;
+      font-size: 2.25rem;
+      font-weight: bold;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+
+    .card h3 {
+      font-family: 'Georgia', serif;
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: var(--text);
+    }
+
+    .card ul, .column ul {
+      list-style-type: none;
+    }
+
+    .card li, .column li {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 0.75rem;
+      color: var(--text);
+      position: relative;
+      padding-left: 1.25rem;
+    }
+
+    .card li::before, .column li::before {
+      content: "•";
+      color: var(--accent);
+      font-weight: bold;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+
+    /* Two Columns Style for Problem/Solution */
+    .column {
+      border-radius: 8px;
+      padding: 2.5rem;
+    }
+
+    .column.problem {
+      background-color: rgba(190, 80, 70, 0.06);
+      border: 1px solid rgba(190, 80, 70, 0.15);
+    }
+
+    .column.solution {
+      background-color: rgba(60, 120, 80, 0.06);
+      border: 1px solid rgba(60, 120, 80, 0.15);
+    }
+
+    .column h3 {
+      font-family: 'Georgia', serif;
+      font-size: 1.25rem;
+      font-weight: bold;
+      margin-bottom: 1.5rem;
+      letter-spacing: 0.05em;
+    }
+
+    .column.problem h3 { color: var(--prob-red); }
+    .column.solution h3 { color: var(--sol-green); }
+
+    /* Code representation block */
+    .code-block {
+      background-color: #24292e;
+      color: #e1e4e8;
+      font-family: 'Courier New', Courier, monospace;
+      padding: 1.5rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      line-height: 1.5;
+      border: 1px solid #1b1f23;
+    }
+
+    .code-block span.tag { color: var(--accent); }
+    .code-block span.comment { color: #6a737d; }
+
+    /* Footer Controls */
+    footer {
+      padding: 1.5rem 2.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--card-border);
+      z-index: 10;
+    }
+
+    .controls {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .btn-control {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text);
+      padding: 0.6rem 1.2rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.85rem;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      user-select: none;
+    }
+
+    .btn-control:hover {
+      background-color: var(--text);
+      color: var(--bg);
+      border-color: var(--text);
+    }
+
+    .ppt-download {
+      background-color: var(--accent);
+      color: #ffffff;
+      border-color: var(--accent);
+    }
+
+    .ppt-download:hover {
+      background-color: var(--text);
+      border-color: var(--text);
+      color: #ffffff;
+    }
+
+    .progress-bar-container {
+      width: 120px;
+      height: 4px;
+      background-color: var(--card-border);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 16.66%;
+      background-color: var(--accent);
+      transition: width 0.3s ease;
+    }
+
+    .slide-number {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    /* Slide specific styles */
+    .slide-title-centered {
+      align-items: center;
+      text-align: center;
+    }
+
+    .slide-title-centered h1 {
+      font-size: 4rem;
+      letter-spacing: -0.02em;
+    }
+
+    .accent-word {
+      color: var(--accent);
+    }
+
+    /* Speaker Notes Toggle box */
+    .speaker-notes-toggle {
+      position: fixed;
+      bottom: 5rem;
+      right: 2.5rem;
+      z-index: 100;
+    }
+
+    .notes-panel {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: #1e1e1e;
+      color: #ccc;
+      padding: 1.5rem 2.5rem;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      transform: translateY(100%);
+      transition: transform 0.3s ease;
+      z-index: 99;
+      border-top: 2px solid var(--accent);
+    }
+
+    .notes-panel.active {
+      transform: translateY(0);
+    }
+
+    .notes-panel h4 {
+      color: #fff;
+      margin-bottom: 0.5rem;
+      font-family: 'Georgia', serif;
+    }
+
+    /* Key bindings tip */
+    .keys-tip {
+      font-size: 0.8rem;
+      color: #888;
+      margin-left: 1rem;
+    }
+
+    /* Animations for slides */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .active .animate-fade {
+      animation: fadeInUp 0.6s ease forwards;
+    }
+
+    .active .animate-delay-1 { animation-delay: 0.1s; }
+    .active .animate-delay-2 { animation-delay: 0.2s; }
+    .active .animate-delay-3 { animation-delay: 0.3s; }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="logo">HELIX READER</div>
+    <div class="slide-badge" id="slide-category">Pitch Deck</div>
+  </header>
+
+  <!-- Slides Container -->
+  <div class="slides-container">
+
+    <!-- Slide 1: Welcome -->
+    <div class="slide slide-title-centered active" data-category="Vision">
+      <h3 class="animate-fade" style="font-size: 1.1rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin-bottom: 1.5rem;">H E L I X   R E A D E R</h3>
+      <h1 class="animate-fade animate-delay-1">Cognitive Pacing & Active Retention</h1>
+      <p class="subtitle animate-fade animate-delay-2" style="margin-bottom: 1.5rem;">Reinventing how we absorb knowledge from digital screens by merging visual pacing with active recall hooks.</p>
+      <div class="animate-fade animate-delay-3" style="margin-top: 1rem;">
+        <a href="https://github.com/hardik-arora/helix-reader" target="_blank" style="color: var(--accent-gold); text-decoration: none; font-weight: bold; font-size: 1.05rem; border: 1.5px solid var(--accent-gold); padding: 0.6rem 1.2rem; border-radius: 4px; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 0.5rem; background-color: rgba(3, 7, 18, 0.4);">
+          🐱 View GitHub Repository
+        </a>
+      </div>
+    </div>
+
+    <!-- Slide 2: Problem & Solution -->
+    <div class="slide" data-category="Problem & Solution">
+      <h1 class="animate-fade">The Digital Reading Crisis</h1>
+      <div class="grid-2 animate-fade animate-delay-1">
+        <div class="column problem">
+          <h3>THE FRICTION POINTS</h3>
+          <ul>
+            <li><strong>The Skimming Epidemic</strong>: Over 70% of readers scan pages in an F-pattern, missing up to 50% of the core content.</li>
+            <li><strong>The Retention Leak</strong>: According to the forgetting curve, 80% of newly read vocabulary is lost within 24 hours without immediate reinforcement.</li>
+            <li><strong>Tool Fragmentation</strong>: Readers must jump between files, visual speed apps, and flashcards.</li>
+          </ul>
+        </div>
+        <div class="column solution">
+          <h3>THE HELIX SYSTEM</h3>
+          <ul>
+            <li><strong>Guided Highlighting</strong>: Paced line focus guides align sight paths to double reading speeds.</li>
+            <li><strong>Direct Vocabulary Lock</strong>: Double-clicking captures definitions into custom study decks instantly.</li>
+            <li><strong>Narration Engine</strong>: Speed-controlled text-to-speech audio outputs reinforce semantic memory.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 3: Features -->
+    <div class="slide" data-category="Core Features">
+      <h1 class="animate-fade">The Product Pillars</h1>
+      <div class="grid-3 animate-fade animate-delay-1">
+        <div class="card">
+          <div class="card-number">01</div>
+          <h3>Guided Reading Guide</h3>
+          <ul>
+            <li>Paces the reader through customizable margins and guided guide bars.</li>
+            <li>Reduces eye-regression, helping readers absorb blocks of text systematically.</li>
+            <li>Ideal for long papers and textbooks.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-number">02</div>
+          <h3>Active Vocabulary Deck</h3>
+          <ul>
+            <li>Replaces standard lookup tabs. Double-click to instantly map definitions.</li>
+            <li>Caches cards automatically into active review collections.</li>
+            <li>Transforms words from passive recognition to active usage.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-number">03</div>
+          <h3>Context Library Hub</h3>
+          <ul>
+            <li>A customized personal catalog for documents, papers, and EPUBs.</li>
+            <li>Keeps a comprehensive visual log of page completions.</li>
+            <li>Calculates words-per-minute speed in real time.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 4: Target Market & Impact -->
+    <div class="slide" data-category="Social Impact">
+      <h1 class="animate-fade">Target Market & Accessibility</h1>
+      <div class="grid-2 animate-fade animate-delay-1">
+        <div>
+          <h2>Solving for Diverse Learners</h2>
+          <p class="subtitle" style="font-size: 1rem; margin-top: 1rem;">
+            Helix Reader targets critical friction areas in visual learning and active document parsing.
+          </p>
+          <ul style="margin-top: 1rem;">
+            <li style="font-size: 1rem; margin-bottom: 1rem;"><strong>Academic & Researchers</strong>: Accelerating data analysis schedules by helping them parse papers and documentation efficiently.</li>
+            <li style="font-size: 1rem; margin-bottom: 1rem;"><strong>Neurodivergent Accessibility</strong>: Providing dyslexia-friendly fonts, focus guides, and adjustable speed pacing for readers with ADHD.</li>
+            <li style="font-size: 1rem;"><strong>Life-Long Learners</strong>: Helping professionals consume newsletters and learning logs systematically.</li>
+          </ul>
+        </div>
+        
+        <!-- 2x2 Grid of visual metric cards -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+          <div class="card animate-fade animate-delay-1" style="text-align: center; border-color: var(--card-border);">
+            <div style="font-family: 'Georgia', serif; font-size: 2.5rem; font-weight: bold; color: var(--accent); margin-bottom: 0.5rem;">2.5x</div>
+            <div style="font-weight: 600; font-size: 0.9rem; color: var(--text);">Reading Speed</div>
+          </div>
+          <div class="card animate-fade animate-delay-2" style="text-align: center; border-color: var(--card-border);">
+            <div style="font-family: 'Georgia', serif; font-size: 2.5rem; font-weight: bold; color: var(--accent); margin-bottom: 0.5rem;">80%</div>
+            <div style="font-weight: 600; font-size: 0.9rem; color: var(--text);">Recall Growth</div>
+          </div>
+          <div class="card animate-fade animate-delay-2" style="text-align: center; border-color: var(--card-border);">
+            <div style="font-family: 'Georgia', serif; font-size: 2.5rem; font-weight: bold; color: var(--accent); margin-bottom: 0.5rem;">ADHD</div>
+            <div style="font-weight: 600; font-size: 0.9rem; color: var(--text);">Focus Pacing</div>
+          </div>
+          <div class="card animate-fade animate-delay-3" style="text-align: center; border-color: var(--card-border);">
+            <div style="font-family: 'Georgia', serif; font-size: 2.5rem; font-weight: bold; color: var(--accent); margin-bottom: 0.5rem;">Global</div>
+            <div style="font-weight: 600; font-size: 0.9rem; color: var(--text);">Book Access</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 5: Gamification -->
+    <div class="slide" data-category="Gamification">
+      <h1 class="animate-fade">The Habit Loop & Gamification</h1>
+      <div class="grid-2 animate-fade animate-delay-1">
+        <div>
+          <h2>Hooking User Consistency</h2>
+          <p class="subtitle" style="font-size: 1rem; margin-top: 1rem;">
+            Using positive behavioral reward loops to establish daily learning habits.
+          </p>
+          <ul style="margin-top: 1rem;">
+            <li style="font-size: 1rem; margin-bottom: 1rem;"><strong>Reading XP loops</strong>: Rewarding visual experience points dynamically for focus durations.</li>
+            <li style="font-size: 1rem; margin-bottom: 1rem;"><strong>Milestone Badges</strong>: Creating accomplishment loops for long-term consistency.</li>
+            <li style="font-size: 1rem;"><strong>Daily Pacing Streaks</strong>: Visual feedback dashboards that keep users motivated to maintain reading streaks.</li>
+          </ul>
+        </div>
+        <div class="card animate-fade animate-delay-2" style="background-color: var(--card-bg); border-color: var(--accent);">
+          <h3 style="font-size: 1.4rem; color: var(--accent); margin-bottom: 1.5rem;">THE BEHAVIORAL DASHBOARD</h3>
+          <div style="font-family: 'Georgia', serif; font-size: 1.1rem; line-height: 1.8;">
+            <div>🏆 <strong>LEVEL 4 MASTER READER</strong></div>
+            <div style="color: rgba(244, 249, 249, 0.7); font-size: 0.95rem; margin-bottom: 1rem;">4,250 XP (Reward Loops Active)</div>
+            
+            <div>⚡ <strong>SPEED VELOCITY</strong></div>
+            <div style="color: rgba(244, 249, 249, 0.7); font-size: 0.95rem; margin-bottom: 1rem;">Live velocity indicators tracking WPM speeds</div>
+            
+            <div>🏅 <strong>CREDENTIAL BADGES</strong></div>
+            <div style="color: rgba(244, 249, 249, 0.7); font-size: 0.95rem;">Displays unlocks to keep learners consistently motivated</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 6: Future Vision -->
+    <div class="slide" data-category="Venture Roadmap">
+      <h1 class="animate-fade">Venture Roadmap & Scale</h1>
+      <div class="grid-3 animate-fade animate-delay-1">
+        <div class="card">
+          <div style="font-family: 'Georgia', serif; font-size: 0.9rem; font-weight: bold; color: var(--accent); margin-bottom: 0.75rem; letter-spacing: 0.05em;">PHASE 1</div>
+          <h3>🌐 Universal Web Clipper</h3>
+          <p style="font-size: 0.85rem; color: rgba(244, 249, 249, 0.8); line-height: 1.6; margin-top: 0.5rem;">
+            Bringing guided line pacing to any web article or page.
+          </p>
+        </div>
+        <div class="card">
+          <div style="font-family: 'Georgia', serif; font-size: 0.9rem; font-weight: bold; color: var(--accent); margin-bottom: 0.75rem; letter-spacing: 0.05em;">PHASE 2</div>
+          <h3>🎙️ Personalized Audio</h3>
+          <p style="font-size: 0.85rem; color: rgba(244, 249, 249, 0.8); line-height: 1.6; margin-top: 0.5rem;">
+            Multi-speaker high-fidelity custom narrator voices.
+          </p>
+        </div>
+        <div class="card">
+          <div style="font-family: 'Georgia', serif; font-size: 0.9rem; font-weight: bold; color: var(--accent); margin-bottom: 0.75rem; letter-spacing: 0.05em;">PHASE 3</div>
+          <h3>🏫 Institutional LMS</h3>
+          <p style="font-size: 0.85rem; color: rgba(244, 249, 249, 0.8); line-height: 1.6; margin-top: 0.5rem;">
+            B2B integration linking student progress to dashboards.
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer Controls -->
+  <footer>
+    <div class="controls">
+      <button class="btn-control" onclick="prevSlide()">← Prev</button>
+      <button class="btn-control" onclick="nextSlide()">Next →</button>
+      <div class="progress-bar-container">
+        <div class="progress-bar" id="progress-indicator"></div>
+      </div>
+      <div class="slide-number" id="slide-num-label">1 / 6</div>
+      <span class="keys-tip">Tip: Use Arrow Keys ◀ ▶ to navigate</span>
+    </div>
+    
+    <div class="controls">
+      <button class="btn-control" onclick="toggleNotes()">📝 Speaker Notes</button>
+      <a href="https://canva.link/l2a26shp0bnrokw" target="_blank" class="btn-control" style="background-color: #00c4cc; color: white; border-color: #00c4cc;">
+        🎨 View Canva Presentation
+      </a>
+      <a href="helix_reader_presentation.pdf" class="btn-control" style="background-color: var(--accent); color: white; border-color: var(--accent);" download>
+        📄 Download PDF Presentation
+      </a>
+      <a href="helix_reader_presentation.pptx" class="btn-control ppt-download" download>
+        📥 Download PowerPoint (.pptx)
+      </a>
+    </div>
+  </footer>
+
+  <!-- Speaker Notes Panel -->
+  <div class="notes-panel" id="notes-panel">
+    <h4>Speaker Notes:</h4>
+    <div id="notes-content">Loading notes...</div>
+  </div>
+
+  <!-- Logic -->
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    const progressIndicator = document.getElementById('progress-indicator');
+    const slideNumLabel = document.getElementById('slide-num-label');
+    const slideCategory = document.getElementById('slide-category');
+    const notesContent = document.getElementById('notes-content');
+    const notesPanel = document.getElementById('notes-panel');
+    
+    let currentSlideIndex = 0;
+
+    const speakerNotes = [
+      "Introduction slide. Hook the audience by explaining how Helix Reader is a cognitive pacing tool designed to transform screen reading from passive scrolling to active recall.",
+      "Detail the problem: Screen skimming is a major epidemy, causing poor retention. Our solutions utilize paced highlighting, low-friction vocab lock, and multi-sensory narration to address it.",
+      "Present the product pillars: Guided focus line reading, double-click instant vocabulary deck syncing, and unified progress logs with speed tracking.",
+      "Explain the target market and accessibility: Targeting researchers and students, providing ADHD and dyslexic reading aids, and bringing global library books to any device.",
+      "Highlight the engagement loop: Gamification mechanics like XP progression, streaks, and milestone badges that incentivize consistency.",
+      "Conclude with scaling and B2B growth: AI summary companions, universal web extension pacers, and B2B integrations with educational LMS portals."
+    ];
+
+    function updatePresentation() {
+      // Remove classes
+      slides.forEach((slide, idx) => {
+        slide.classList.remove('active', 'prev');
+        if (idx < currentSlideIndex) {
+          slide.classList.add('prev');
+        }
+      });
+
+      // Set active
+      const activeSlide = slides[currentSlideIndex];
+      activeSlide.classList.add('active');
+
+      // Update indicators
+      const progressPercent = ((currentSlideIndex + 1) / slides.length) * 100;
+      progressIndicator.style.width = `${progressPercent}%`;
+      slideNumLabel.textContent = `${currentSlideIndex + 1} / ${slides.length}`;
+      
+      // Category badge
+      const category = activeSlide.getAttribute('data-category') || 'Pitch Deck';
+      slideCategory.textContent = category;
+
+      // Notes
+      notesContent.textContent = speakerNotes[currentSlideIndex] || 'No notes for this slide.';
+    }
+
+    function nextSlide() {
+      if (currentSlideIndex < slides.length - 1) {
+        currentSlideIndex++;
+        updatePresentation();
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlideIndex > 0) {
+        currentSlideIndex--;
+        updatePresentation();
+      }
+    }
+
+    function toggleNotes() {
+      notesPanel.classList.toggle('active');
+    }
+
+    // Keyboard controls
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'Enter') {
+        nextSlide();
+      } else if (e.key === 'ArrowLeft' || e.key === 'Backspace') {
+        prevSlide();
+      } else if (e.key === 'n' || e.key === 'N') {
+        toggleNotes();
+      }
+    });
+
+    // Initialize
+    updatePresentation();
+  </script>
+</body>
+</html>
