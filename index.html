@@ -3313,6 +3313,16 @@
       <div class="shelf" id="shelf-philosophy"></div>
     </div>
 
+    <!-- Shelf: History -->
+    <div class="shelf-wrap">
+      <div class="section-header">
+        <div class="section-title">🏛️ History & Civilization</div>
+        <span class="section-more" onclick="filterByTopic('History')">See all →</span>
+      </div>
+      <div class="shelf" id="shelf-history"></div>
+    </div>
+
+
     <!-- Shelf: Biography -->
     <div class="shelf-wrap">
       <div class="section-header">
@@ -6509,14 +6519,16 @@ function renderDiscoverPage() {
 
   // Render shelves
   const scienceShelf = document.getElementById('shelf-science');
+  const historyShelf = document.getElementById('shelf-history');
   const fictionShelf = document.getElementById('shelf-fiction');
   const philosophyShelf = document.getElementById('shelf-philosophy');
   const biographyShelf = document.getElementById('shelf-biography');
 
-  scienceShelf.innerHTML = allBooks.filter(b => b.topic === 'Science').slice(0, 10).map(renderBookCard).join('');
-  fictionShelf.innerHTML = allBooks.filter(b => b.topic === 'Fiction').slice(0, 10).map(renderBookCard).join('');
-  philosophyShelf.innerHTML = allBooks.filter(b => b.topic === 'Philosophy').slice(0, 10).map(renderBookCard).join('');
-  biographyShelf.innerHTML = allBooks.filter(b => b.topic === 'Biography').slice(0, 10).map(renderBookCard).join('');
+  if (scienceShelf) scienceShelf.innerHTML = allBooks.filter(b => b.topic === 'Science').map(renderBookCard).join('');
+  if (historyShelf) historyShelf.innerHTML = allBooks.filter(b => b.topic === 'History').map(renderBookCard).join('');
+  if (fictionShelf) fictionShelf.innerHTML = allBooks.filter(b => b.topic === 'Fiction').map(renderBookCard).join('');
+  if (philosophyShelf) philosophyShelf.innerHTML = allBooks.filter(b => b.topic === 'Philosophy').map(renderBookCard).join('');
+  if (biographyShelf) biographyShelf.innerHTML = allBooks.filter(b => b.topic === 'Biography' || b.topic === 'Technology').map(renderBookCard).join('');
 
   // Author Spotlight
   const authorShelf = document.getElementById('shelf-authors');
