@@ -4174,24 +4174,24 @@
 // DATA: 75 Famous Books Database
 // ══════════════════════════════════════════════════════════════
 let MASTER_BOOKS = [
-  {id:'b001',title:'War and Peace',author:'Leo Tolstoy',topic:'Fiction',level:'Academic',year:1869,lang:'Russian',pages:1225,rating:4.8,emoji:'⚔️',color:['#1e1b4b','#312e81'],cover:'https://covers.openlibrary.org/b/id/14786370-L.jpg',summary:'An epic narrative of Russian society during the Napoleonic Wars, weaving together the lives of five aristocratic families.',excerpt:'Well, Prince, so Genoa and Lucca are now just family estates of the Buonapartes. But I warn you, if you don\'t tell me that this means war, if you still try to defend the infamies and horrors perpetrated by that Antichrist—I really believe he is Antichrist—I will have nothing more to do with you.',keywords:['russia','war','society','epic'],dictionary:{epithet:'A descriptive name or phrase expressing a quality of the person or thing.',laconic:'Using very few words; concise.'},quotes:["The two most powerful warriors are patience and time.","All great literature is one of two stories; a man goes on a journey or a stranger comes to town."]},
-  {id:'b002',title:'Anna Karenina',author:'Leo Tolstoy',topic:'Romance',level:'High School',year:1878,lang:'Russian',pages:864,rating:4.7,emoji:'🚂',color:['#4c0519','#881337'],cover:'https://covers.openlibrary.org/b/id/14786395-L.jpg',summary:'A masterpiece of tragic love, family dynamics, and social hypocrisy in late 19th-century imperial Russian high society.',excerpt:'All happy families are alike; each unhappy family is unhappy in its own way. Everything was in confusion in the Oblonskys\' house.',keywords:['russia','love','tragedy','society'],dictionary:{hypocrisy:'Claiming to have higher moral beliefs than is the case.'},quotes:["If you look for perfection, you\'ll never be content.","Happy families are all alike; every unhappy family is unhappy in its own way."]},
-  {id:'b003',title:'Crime and Punishment',author:'Fyodor Dostoevsky',topic:'Mystery',level:'Academic',year:1866,lang:'Russian',pages:671,rating:4.7,emoji:'🪓',color:['#111827','#1f2937'],cover:'https://covers.openlibrary.org/b/id/14786401-L.jpg',summary:'A psychological exploration of Rodion Raskolnikov\'s mental anguish and moral dilemmas after murdering a pawnbroker.',excerpt:'Pain and suffering are always inevitable for a large intelligence and a deep heart. The really great men must, I think, have great sadness on earth.',keywords:['russia','psychology','crime','morality'],dictionary:{nihilism:'The rejection of all religious and moral principles.'},quotes:["Pain and suffering are always inevitable for a large intelligence and a deep heart.","Taking a new step, uttering a new word, is what people fear most."]},
-  {id:'b004',title:'The Brothers Karamazov',author:'Fyodor Dostoevsky',topic:'Fiction',level:'Academic',year:1880,lang:'Russian',pages:796,rating:4.9,emoji:'👨‍👦‍👦',color:['#064e3b','#065f46'],cover:'https://covers.openlibrary.org/b/id/14786419-L.jpg',summary:'Dostoevsky\'s final philosophical masterpiece investigating faith, doubt, morality, and familial murder in 19th-century Russia.',excerpt:'Love all God\'s creation, both the whole and every grain of sand. Love every tiny leaf, every ray of sunshine. Love the animals, love the plants, love each separate thing.',keywords:['russia','faith','family','philosophy'],dictionary:{theodicy:'The vindication of divine goodness in view of the existence of evil.'},quotes:["If God does not exist, everything is permitted.","Beauty will save the world."]},
-  {id:'b005',title:'One Hundred Years of Solitude',author:'Gabriel García Márquez',topic:'Fiction',level:'Academic',year:1967,lang:'Spanish',pages:417,rating:4.8,emoji:'🦋',color:['#7c2d12','#9a3412'],cover:'https://covers.openlibrary.org/b/id/14786427-L.jpg',summary:'A landmark magical realist epic tracking the rise and fall of the Buendía family in the mythical town of Macondo.',excerpt:'Many years later, as he faced the firing squad, Colonel Aureliano Buendía was to remember that distant afternoon when his father took him to discover ice.',keywords:['magic realism','family','colombia','solitude'],dictionary:{solitude:'The state of being alone, especially in a pleasant way.'},quotes:["A person doesn't die when he should but when he can.","The heart's memory eliminates the bad and magnifies the good."]},
-  {id:'b006',title:'The Metamorphosis',author:'Franz Kafka',topic:'Fiction',level:'High School',year:1915,lang:'German',pages:112,rating:4.5,emoji:'🪲',color:['#0f172a','#1e293b'],cover:'https://covers.openlibrary.org/b/id/14786445-L.jpg',summary:'The bizarre story of Gregor Samsa, who wakes up transformed into a giant insect, illustrating alienation and guilt.',excerpt:'As Gregor Samsa awoke one morning from uneasy dreams he found himself transformed in his bed into a gigantic insect.',keywords:['alienation','surreal','existentialism','kafka'],dictionary:{alienation:'Feeling isolated or excluded from a group or society.'},quotes:["In the fight between you and the world, back the world.","A book must be the axe for the frozen sea within us."]},
-  {id:'b007',title:'Don Quixote',author:'Miguel de Cervantes',topic:'Adventure',level:'High School',year:1605,lang:'Spanish',pages:992,rating:4.6,emoji:'🐴',color:['#581c0c','#7f1d1d'],cover:'https://covers.openlibrary.org/b/id/14786461-L.jpg',summary:'The classic satire of chivalric tales, depicting the adventures of the eccentric knight Don Quixote and his squire Sancho Panza.',excerpt:'Somewhere in La Mancha, in a place whose name I do not care to remember, a gentleman lived not long ago, one of those who has a lance and ancient shield on a shelf and keeps a skinny nag and a greyhound for racing.',keywords:['chivalry','satire','spain','adventure'],dictionary:{chivalry:'The medieval knightly system of honor and code.'},quotes:["Too much sanity may be madness, and maddest of all, to see life as it is and not as it should be."]},
-  {id:'b008',title:'Pride and Prejudice',author:'Jane Austen',topic:'Romance',level:'High School',year:1813,lang:'English',pages:432,rating:4.7,emoji:'🎭',color:['#831843','#9d174d'],cover:'https://covers.openlibrary.org/b/id/14786475-L.jpg',summary:'A classic social comedy of manners detailing the courtship between Elizabeth Bennet and Fitzwilliam Darcy.',excerpt:'It is a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife.',keywords:['romance','class','austen','england'],dictionary:{prejudice:'Preconceived opinion that is not based on reason.'},quotes:["A lady's imagination is very rapid; it jumps from admiration to love, from love to matrimony in a moment."]},
-  {id:'b009',title:'Jane Eyre',author:'Charlotte Brontë',topic:'Romance',level:'High School',year:1847,lang:'English',pages:532,rating:4.7,emoji:'🕯️',color:['#271c19','#451a03'],cover:'https://covers.openlibrary.org/b/id/14786489-L.jpg',summary:'An orphan governess struggles for self-realization and love with the complex, brooding landowner Mr. Rochester.',excerpt:'I am no bird; and no net ensnares me: I am a free human being with an independent will.',keywords:['gothic','independence','romance','governess'],dictionary:{governess:'A woman employed to teach children in a private household.'},quotes:["I am no bird; and no net ensnares me: I am a free human being with an independent will."]},
-  {id:'b010',title:'Hamlet',author:'William Shakespeare',topic:'Drama',level:'High School',year:1600,lang:'English',pages:342,rating:4.8,emoji:'💀',color:['#18181b','#27272a'],cover:'https://covers.openlibrary.org/b/id/14786501-L.jpg',summary:'The tragedy of the Danish prince Hamlet, contemplating revenge against his uncle Claudius for his father\'s murder.',excerpt:'To be, or not to be, that is the question: Whether \'tis nobler in the mind to suffer the slings and arrows of outrageous fortune, or to take arms against a sea of troubles.',keywords:['shakespeare','tragedy','revenge','existential'],dictionary:{soliloquy:'An act of speaking one\'s thoughts aloud when alone.'},quotes:["To thine own self be true.","Brevity is the soul of wit."]},
-  {id:'b011',title:'The Origin of Species',author:'Charles Darwin',topic:'Science',level:'Academic',year:1859,lang:'English',pages:502,rating:4.9,emoji:'🦎',color:['#14532d','#166534'],cover:'https://covers.openlibrary.org/b/id/14786519-L.jpg',summary:'Darwin introduces the theory of evolution by natural selection, rewriting the scientific consensus on the origins of life.',excerpt:'When on board H.M.S. \'Beagle,\' as naturalist, I was much struck with certain facts in the distribution of the organic beings inhabiting South America, and in the geological relations of the present to the past inhabitants of that continent.',keywords:['evolution','natural selection','biology','darwin'],dictionary:{naturalist:'An expert in or student of natural history.'},quotes:["It is not the strongest of the species that survives, nor the most intelligent, but the one most responsive to change."]},
-  {id:'b012',title:'A Brief History of Time',author:'Stephen Hawking',topic:'Science',level:'High School',year:1988,lang:'English',pages:212,rating:4.7,emoji:'🌌',color:['#1e3a8a','#1e40af'],cover:'https://covers.openlibrary.org/b/id/14786537-L.jpg',summary:'Hawking decodes cosmic mysteries, explaining the Big Bang, black holes, and time for the layman.',excerpt:'A well-known scientist once gave a public lecture on astronomy. He described how the earth orbits around the sun and how the sun, in turn, orbits around the center of a vast collection of stars called our galaxy.',keywords:['physics','cosmology','space','hawking'],dictionary:{cosmology:'The science of the origin and development of the universe.'},quotes:["Remember to look up at the stars and not down at your feet.","Intelligence is the ability to adapt to change."]},
-  {id:'b013',title:'Cosmos',author:'Carl Sagan',topic:'Science',level:'High School',year:1980,lang:'English',pages:365,rating:4.9,emoji:'🌠',color:['#311b92','#4a148c'],cover:'https://covers.openlibrary.org/b/id/14786551-L.jpg',summary:'Sagan takes readers on an epic journey across space and time, tracing the roots of science, civilization, and the universe.',excerpt:'The Cosmos is all that is or was or ever will be. Our feeblest contemplations of the Cosmos stir us — there is a tingling in the spine, a catch in the voice.',keywords:['astronomy','sagan','universe','humanity'],dictionary:{contemplation:'The action of looking thoughtfully at something.'},quotes:["We are made of star-stuff.","Somewhere, something incredible is waiting to be known."]},
-  {id:'b014',title:'The Selfish Gene',author:'Richard Dawkins',topic:'Science',level:'High School',year:1976,lang:'English',pages:360,rating:4.7,emoji:'🧬',color:['#991b1b','#b91c1c'],cover:'https://covers.openlibrary.org/b/id/14786567-L.jpg',summary:'Dawkins proposes a gene-centered view of evolution, explaining altruism and selfishness in nature, introducing the term "meme".',excerpt:'We are survival machines—robot vehicles blindly programmed to preserve the selfish molecules known as genes.',keywords:['biology','genetics','evolution','behavior'],dictionary:{meme:'An element of a culture passed from one individual to another.'},quotes:["We are survival machines — robot vehicles blindly programmed to preserve the selfish molecules known as genes."]},
-  {id:'b015',title:'Meditations',author:'Marcus Aurelius',topic:'Philosophy',level:'High School',year:161,lang:'Latin',pages:254,rating:4.9,emoji:'🌅',color:['#7c2d12','#c2410c'],cover:'https://covers.openlibrary.org/b/id/14786581-L.jpg',summary:'Private journals of the Roman emperor offering profound Stoic insights on self-discipline, mortality, and resilience.',excerpt:'From my grandfather Verus I learned good morals and the government of my temper. You have power over your mind, not outside events. Realize this, and you will find strength.',keywords:['stoicism','resilience','philosophy','rome'],dictionary:{stoicism:'Enduring pain or hardship without display of feelings.'},quotes:["You have power over your mind, not outside events. Realize this, and you will find strength.","The happiness of your life depends upon the quality of your thoughts."]},
-  {id:'b016',title:'The Republic',author:'Plato',topic:'Philosophy',level:'Academic',year:-380,lang:'Greek',pages:416,rating:4.7,emoji:'🏛️',color:['#701a75','#86198f'],cover:'https://covers.openlibrary.org/b/id/14786599-L.jpg',summary:'Plato\'s dialogue exploring justice, the ideal state layout, and the theory of forms including the Cave allegory.',excerpt:'I went down yesterday to the Piraeus with Glaucon the son of Ariston, that I might offer up my prayers to the goddess. Justice in the state is the same as justice in the individual.',keywords:['justice','politics','idealism','plato'],dictionary:{dialectic:'Investigating the truth of opinions through logical discussion.'},quotes:["The heaviest penalty for declining to rule is to be ruled by someone inferior to yourself."]},
-  {id:'b017',title:'Steve Jobs',author:'Walter Isaacson',topic:'Biography',level:'High School',year:2011,lang:'English',pages:656,rating:4.6,emoji:'🍎',color:['#111827','#374151'],cover:'https://covers.openlibrary.org/b/id/14786615-L.jpg',summary:'The exclusive biography of the visionary Apple co-founder, highlighting his drive, perfectionism, and digital revolutions.',excerpt:'By the time he was in his early twenties, Steve Jobs was already famous, rich, and eccentric. He wanted to make a dent in the universe.',keywords:['apple','technology','biography','creativity'],dictionary:{entrepreneur:'A person who sets up a business, taking financial risks.'},quotes:["Stay hungry, stay foolish.","Design is not just what it looks like and feels like. Design is how it works."]},
-  {id:'b018',title:'Man\'s Search for Meaning',author:'Viktor Frankl',topic:'Self-Help',level:'High School',year:1946,lang:'German',pages:200,rating:4.9,emoji:'🧠',color:['#3b0764','#581c87'],cover:'https://covers.openlibrary.org/b/id/14786631-L.jpg',summary:'Frankl shares his survival experiences in Nazi concentration camps, detailing how finding purpose helps endure extreme suffering.',excerpt:'Everything can be taken from a man but one thing: the last of the human freedoms—to choose one\'s attitude in any given set of circumstances.',keywords:['psychology','holocaust','resilience','meaning'],dictionary:{existentialism:'A philosophy emphasizing individual existence and freedom.'},quotes:["He who has a why to live can bear almost any how.","When we are no longer able to change a situation, we are challenged to change ourselves."]}
+  {id:'b001',title:'War and Peace',author:'Leo Tolstoy',topic:'Fiction',level:'Academic',year:1869,lang:'Russian',pages:1225,rating:4.8,emoji:'⚔️',color:['#1e1b4b','#312e81'],cover:'none',summary:'An epic narrative of Russian society during the Napoleonic Wars, weaving together the lives of five aristocratic families.',excerpt:'Well, Prince, so Genoa and Lucca are now just family estates of the Buonapartes. But I warn you, if you don\'t tell me that this means war, if you still try to defend the infamies and horrors perpetrated by that Antichrist—I really believe he is Antichrist—I will have nothing more to do with you.',keywords:['russia','war','society','epic'],dictionary:{epithet:'A descriptive name or phrase expressing a quality of the person or thing.',laconic:'Using very few words; concise.'},quotes:["The two most powerful warriors are patience and time.","All great literature is one of two stories; a man goes on a journey or a stranger comes to town."]},
+  {id:'b002',title:'Anna Karenina',author:'Leo Tolstoy',topic:'Romance',level:'High School',year:1878,lang:'Russian',pages:864,rating:4.7,emoji:'🚂',color:['#4c0519','#881337'],cover:'none',summary:'A masterpiece of tragic love, family dynamics, and social hypocrisy in late 19th-century imperial Russian high society.',excerpt:'All happy families are alike; each unhappy family is unhappy in its own way. Everything was in confusion in the Oblonskys\' house.',keywords:['russia','love','tragedy','society'],dictionary:{hypocrisy:'Claiming to have higher moral beliefs than is the case.'},quotes:["If you look for perfection, you\'ll never be content.","Happy families are all alike; every unhappy family is unhappy in its own way."]},
+  {id:'b003',title:'Crime and Punishment',author:'Fyodor Dostoevsky',topic:'Mystery',level:'Academic',year:1866,lang:'Russian',pages:671,rating:4.7,emoji:'🪓',color:['#111827','#1f2937'],cover:'none',summary:'A psychological exploration of Rodion Raskolnikov\'s mental anguish and moral dilemmas after murdering a pawnbroker.',excerpt:'Pain and suffering are always inevitable for a large intelligence and a deep heart. The really great men must, I think, have great sadness on earth.',keywords:['russia','psychology','crime','morality'],dictionary:{nihilism:'The rejection of all religious and moral principles.'},quotes:["Pain and suffering are always inevitable for a large intelligence and a deep heart.","Taking a new step, uttering a new word, is what people fear most."]},
+  {id:'b004',title:'The Brothers Karamazov',author:'Fyodor Dostoevsky',topic:'Fiction',level:'Academic',year:1880,lang:'Russian',pages:796,rating:4.9,emoji:'👨‍👦‍👦',color:['#064e3b','#065f46'],cover:'none',summary:'Dostoevsky\'s final philosophical masterpiece investigating faith, doubt, morality, and familial murder in 19th-century Russia.',excerpt:'Love all God\'s creation, both the whole and every grain of sand. Love every tiny leaf, every ray of sunshine. Love the animals, love the plants, love each separate thing.',keywords:['russia','faith','family','philosophy'],dictionary:{theodicy:'The vindication of divine goodness in view of the existence of evil.'},quotes:["If God does not exist, everything is permitted.","Beauty will save the world."]},
+  {id:'b005',title:'One Hundred Years of Solitude',author:'Gabriel García Márquez',topic:'Fiction',level:'Academic',year:1967,lang:'Spanish',pages:417,rating:4.8,emoji:'🦋',color:['#7c2d12','#9a3412'],cover:'none',summary:'A landmark magical realist epic tracking the rise and fall of the Buendía family in the mythical town of Macondo.',excerpt:'Many years later, as he faced the firing squad, Colonel Aureliano Buendía was to remember that distant afternoon when his father took him to discover ice.',keywords:['magic realism','family','colombia','solitude'],dictionary:{solitude:'The state of being alone, especially in a pleasant way.'},quotes:["A person doesn't die when he should but when he can.","The heart's memory eliminates the bad and magnifies the good."]},
+  {id:'b006',title:'The Metamorphosis',author:'Franz Kafka',topic:'Fiction',level:'High School',year:1915,lang:'German',pages:112,rating:4.5,emoji:'🪲',color:['#0f172a','#1e293b'],cover:'none',summary:'The bizarre story of Gregor Samsa, who wakes up transformed into a giant insect, illustrating alienation and guilt.',excerpt:'As Gregor Samsa awoke one morning from uneasy dreams he found himself transformed in his bed into a gigantic insect.',keywords:['alienation','surreal','existentialism','kafka'],dictionary:{alienation:'Feeling isolated or excluded from a group or society.'},quotes:["In the fight between you and the world, back the world.","A book must be the axe for the frozen sea within us."]},
+  {id:'b007',title:'Don Quixote',author:'Miguel de Cervantes',topic:'Adventure',level:'High School',year:1605,lang:'Spanish',pages:992,rating:4.6,emoji:'🐴',color:['#581c0c','#7f1d1d'],cover:'none',summary:'The classic satire of chivalric tales, depicting the adventures of the eccentric knight Don Quixote and his squire Sancho Panza.',excerpt:'Somewhere in La Mancha, in a place whose name I do not care to remember, a gentleman lived not long ago, one of those who has a lance and ancient shield on a shelf and keeps a skinny nag and a greyhound for racing.',keywords:['chivalry','satire','spain','adventure'],dictionary:{chivalry:'The medieval knightly system of honor and code.'},quotes:["Too much sanity may be madness, and maddest of all, to see life as it is and not as it should be."]},
+  {id:'b008',title:'Pride and Prejudice',author:'Jane Austen',topic:'Romance',level:'High School',year:1813,lang:'English',pages:432,rating:4.7,emoji:'🎭',color:['#831843','#9d174d'],cover:'none',summary:'A classic social comedy of manners detailing the courtship between Elizabeth Bennet and Fitzwilliam Darcy.',excerpt:'It is a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife.',keywords:['romance','class','austen','england'],dictionary:{prejudice:'Preconceived opinion that is not based on reason.'},quotes:["A lady's imagination is very rapid; it jumps from admiration to love, from love to matrimony in a moment."]},
+  {id:'b009',title:'Jane Eyre',author:'Charlotte Brontë',topic:'Romance',level:'High School',year:1847,lang:'English',pages:532,rating:4.7,emoji:'🕯️',color:['#271c19','#451a03'],cover:'none',summary:'An orphan governess struggles for self-realization and love with the complex, brooding landowner Mr. Rochester.',excerpt:'I am no bird; and no net ensnares me: I am a free human being with an independent will.',keywords:['gothic','independence','romance','governess'],dictionary:{governess:'A woman employed to teach children in a private household.'},quotes:["I am no bird; and no net ensnares me: I am a free human being with an independent will."]},
+  {id:'b010',title:'Hamlet',author:'William Shakespeare',topic:'Drama',level:'High School',year:1600,lang:'English',pages:342,rating:4.8,emoji:'💀',color:['#18181b','#27272a'],cover:'none',summary:'The tragedy of the Danish prince Hamlet, contemplating revenge against his uncle Claudius for his father\'s murder.',excerpt:'To be, or not to be, that is the question: Whether \'tis nobler in the mind to suffer the slings and arrows of outrageous fortune, or to take arms against a sea of troubles.',keywords:['shakespeare','tragedy','revenge','existential'],dictionary:{soliloquy:'An act of speaking one\'s thoughts aloud when alone.'},quotes:["To thine own self be true.","Brevity is the soul of wit."]},
+  {id:'b011',title:'The Origin of Species',author:'Charles Darwin',topic:'Science',level:'Academic',year:1859,lang:'English',pages:502,rating:4.9,emoji:'🦎',color:['#14532d','#166534'],cover:'none',summary:'Darwin introduces the theory of evolution by natural selection, rewriting the scientific consensus on the origins of life.',excerpt:'When on board H.M.S. \'Beagle,\' as naturalist, I was much struck with certain facts in the distribution of the organic beings inhabiting South America, and in the geological relations of the present to the past inhabitants of that continent.',keywords:['evolution','natural selection','biology','darwin'],dictionary:{naturalist:'An expert in or student of natural history.'},quotes:["It is not the strongest of the species that survives, nor the most intelligent, but the one most responsive to change."]},
+  {id:'b012',title:'A Brief History of Time',author:'Stephen Hawking',topic:'Science',level:'High School',year:1988,lang:'English',pages:212,rating:4.7,emoji:'🌌',color:['#1e3a8a','#1e40af'],cover:'none',summary:'Hawking decodes cosmic mysteries, explaining the Big Bang, black holes, and time for the layman.',excerpt:'A well-known scientist once gave a public lecture on astronomy. He described how the earth orbits around the sun and how the sun, in turn, orbits around the center of a vast collection of stars called our galaxy.',keywords:['physics','cosmology','space','hawking'],dictionary:{cosmology:'The science of the origin and development of the universe.'},quotes:["Remember to look up at the stars and not down at your feet.","Intelligence is the ability to adapt to change."]},
+  {id:'b013',title:'Cosmos',author:'Carl Sagan',topic:'Science',level:'High School',year:1980,lang:'English',pages:365,rating:4.9,emoji:'🌠',color:['#311b92','#4a148c'],cover:'none',summary:'Sagan takes readers on an epic journey across space and time, tracing the roots of science, civilization, and the universe.',excerpt:'The Cosmos is all that is or was or ever will be. Our feeblest contemplations of the Cosmos stir us — there is a tingling in the spine, a catch in the voice.',keywords:['astronomy','sagan','universe','humanity'],dictionary:{contemplation:'The action of looking thoughtfully at something.'},quotes:["We are made of star-stuff.","Somewhere, something incredible is waiting to be known."]},
+  {id:'b014',title:'The Selfish Gene',author:'Richard Dawkins',topic:'Science',level:'High School',year:1976,lang:'English',pages:360,rating:4.7,emoji:'🧬',color:['#991b1b','#b91c1c'],cover:'none',summary:'Dawkins proposes a gene-centered view of evolution, explaining altruism and selfishness in nature, introducing the term "meme".',excerpt:'We are survival machines—robot vehicles blindly programmed to preserve the selfish molecules known as genes.',keywords:['biology','genetics','evolution','behavior'],dictionary:{meme:'An element of a culture passed from one individual to another.'},quotes:["We are survival machines — robot vehicles blindly programmed to preserve the selfish molecules known as genes."]},
+  {id:'b015',title:'Meditations',author:'Marcus Aurelius',topic:'Philosophy',level:'High School',year:161,lang:'Latin',pages:254,rating:4.9,emoji:'🌅',color:['#7c2d12','#c2410c'],cover:'none',summary:'Private journals of the Roman emperor offering profound Stoic insights on self-discipline, mortality, and resilience.',excerpt:'From my grandfather Verus I learned good morals and the government of my temper. You have power over your mind, not outside events. Realize this, and you will find strength.',keywords:['stoicism','resilience','philosophy','rome'],dictionary:{stoicism:'Enduring pain or hardship without display of feelings.'},quotes:["You have power over your mind, not outside events. Realize this, and you will find strength.","The happiness of your life depends upon the quality of your thoughts."]},
+  {id:'b016',title:'The Republic',author:'Plato',topic:'Philosophy',level:'Academic',year:-380,lang:'Greek',pages:416,rating:4.7,emoji:'🏛️',color:['#701a75','#86198f'],cover:'none',summary:'Plato\'s dialogue exploring justice, the ideal state layout, and the theory of forms including the Cave allegory.',excerpt:'I went down yesterday to the Piraeus with Glaucon the son of Ariston, that I might offer up my prayers to the goddess. Justice in the state is the same as justice in the individual.',keywords:['justice','politics','idealism','plato'],dictionary:{dialectic:'Investigating the truth of opinions through logical discussion.'},quotes:["The heaviest penalty for declining to rule is to be ruled by someone inferior to yourself."]},
+  {id:'b017',title:'Steve Jobs',author:'Walter Isaacson',topic:'Biography',level:'High School',year:2011,lang:'English',pages:656,rating:4.6,emoji:'🍎',color:['#111827','#374151'],cover:'none',summary:'The exclusive biography of the visionary Apple co-founder, highlighting his drive, perfectionism, and digital revolutions.',excerpt:'By the time he was in his early twenties, Steve Jobs was already famous, rich, and eccentric. He wanted to make a dent in the universe.',keywords:['apple','technology','biography','creativity'],dictionary:{entrepreneur:'A person who sets up a business, taking financial risks.'},quotes:["Stay hungry, stay foolish.","Design is not just what it looks like and feels like. Design is how it works."]},
+  {id:'b018',title:'Man\'s Search for Meaning',author:'Viktor Frankl',topic:'Self-Help',level:'High School',year:1946,lang:'German',pages:200,rating:4.9,emoji:'🧠',color:['#3b0764','#581c87'],cover:'none',summary:'Frankl shares his survival experiences in Nazi concentration camps, detailing how finding purpose helps endure extreme suffering.',excerpt:'Everything can be taken from a man but one thing: the last of the human freedoms—to choose one\'s attitude in any given set of circumstances.',keywords:['psychology','holocaust','resilience','meaning'],dictionary:{existentialism:'A philosophy emphasizing individual existence and freedom.'},quotes:["He who has a why to live can bear almost any how.","When we are no longer able to change a situation, we are challenged to change ourselves."]}
 ];
 
 // ══════════════════════════════════════════════════════════════
@@ -4484,7 +4484,7 @@ function seedProceduralCatalog() {
     const title = modifierFn(baseTitle);
     
     // Use known cover if baseTitle matches, else cycle through verified OL covers pool
-    const cover = (title === baseTitle && KNOWN_COVERS[baseTitle]) ? KNOWN_COVERS[baseTitle] : 'none';
+    const cover = 'none';
     
     catalog.push({
       id: `proc-${index}`,
@@ -5898,29 +5898,15 @@ function initCoverObserver() {
 }
 
 function updateCoversOnScreen() {
-  initCoverObserver();
   const coverElements = document.querySelectorAll('.book-cover[data-book-id], .detail-cover-img[data-book-id]');
   const allBooks = [...MASTER_BOOKS, ...DYNAMIC_SEARCH_CACHE, ...state.customBooks];
-  
   coverElements.forEach(el => {
     const bookId = el.getAttribute('data-book-id');
     const book = allBooks.find(b => b.id === bookId);
     if (!book) return;
-    
-    // Fast render from localStorage cache instantly
-    if (state.covers[bookId]) {
-      applyBookCoverImage(el, state.covers[bookId], book);
-      return;
-    }
-
-    // Fast render from pre-assigned verified book cover directly
-    if (book.cover && book.cover !== 'none' && book.cover.startsWith('http')) {
-      applyBookCoverImage(el, book.cover, book);
-      return;
-    }
-    
-    // Observe for lazy loading if not cached yet
-    coverObserver.observe(el);
+    el.classList.remove('has-cover-image');
+    el.style.backgroundImage = 'none';
+    ensureEmojiFallback(el, book);
   });
 }
 
@@ -5937,7 +5923,7 @@ function getCoverUrl(book) {
 }
 
 function makeCoverStyle(book) {
-  const colors = book.color || ['#1e293b', '#0f172a'];
+  const colors = book?.color || ['#1e293b', '#0f172a'];
   return `background: linear-gradient(140deg, ${colors[0]} 0%, ${colors[1]} 100%);`;
 }
 
@@ -5974,74 +5960,8 @@ function renderBookCard(book) {
 
 function fetchBookCover(book) {
   const cacheKey = book.id;
-  
-  // Return from cache first
-  if (state.covers[cacheKey]) {
-    return Promise.resolve(state.covers[cacheKey]);
-  }
-  
-  // Use pre-set cover only if it's a valid HTTP URL
-  if (book.cover && book.cover !== 'none' && book.cover.startsWith('http')) {
-    // Return directly without modifying cache or saving state to avoid heavy scroll write-overhead
-    return Promise.resolve(book.cover);
-  }
-  
-  // Custom books — no search
-  if (book.id && (book.id.startsWith('custom-') || book.id.startsWith('proc-'))) {
-    state.covers[cacheKey] = 'none';
-    saveState();
-    return Promise.resolve('none');
-  }
-
-  // Use _baseTitle for procedural books for a better search hit
-  const searchTitle = book._baseTitle || book.title;
-  const olSearchUrl = `https://openlibrary.org/search.json?q=${encodeURIComponent(searchTitle + ' ' + book.author)}&limit=1&fields=cover_i,cover_edition_key`;
-  
-  return fetch(olSearchUrl)
-    .then(res => res.json())
-    .then(data => {
-      const doc = data.docs?.[0];
-      const coverId = doc?.cover_i;
-      if (coverId) {
-        // Validate the image actually loads before committing
-        const imgUrl = `https://covers.openlibrary.org/b/id/${coverId}-L.jpg`;
-        return new Promise((resolve) => {
-          const img = new Image();
-          img.onload = () => {
-            state.covers[cacheKey] = imgUrl;
-            saveState();
-            resolve(imgUrl);
-          };
-          img.onerror = () => {
-            // Try medium size as fallback
-            const mUrl = `https://covers.openlibrary.org/b/id/${coverId}-M.jpg`;
-            state.covers[cacheKey] = mUrl;
-            saveState();
-            resolve(mUrl);
-          };
-          img.src = imgUrl;
-        });
-      }
-      // Fallback: Wikipedia thumbnail
-      const wUrl = `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(searchTitle)}&format=json&origin=*`;
-      return fetch(wUrl)
-        .then(r => r.json())
-        .then(wdata => {
-          const first = wdata.query?.search?.[0];
-          if (!first) throw new Error('no wiki');
-          const sumUrl = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(first.title.replace(/ /g, '_'))}`;
-          return fetch(sumUrl).then(r => r.json()).then(s => {
-            const imgUrl = s.originalimage?.source || s.thumbnail?.source;
-            if (imgUrl) { state.covers[cacheKey] = imgUrl; saveState(); return imgUrl; }
-            throw new Error('no img');
-          });
-        });
-    })
-    .catch(() => {
-      state.covers[cacheKey] = 'none';
-      saveState();
-      return 'none';
-    });
+  state.covers[cacheKey] = 'none';
+  return Promise.resolve('none');
 }
 
 
@@ -6194,12 +6114,7 @@ window.addEventListener('keydown', (e) => {
 // RENDERERS: BOOK CARDS
 // ════════════════════════════════════════
 function hasBookCover(book) {
-  if (!book) return false;
-  const cached = state.covers[book.id];
-  if (cached) {
-    return cached !== 'none';
-  }
-  return !!(book.cover && book.cover !== 'none' && book.cover.startsWith('http'));
+  return false;
 }
 
 function getCoverUrl(book) {
@@ -6215,15 +6130,7 @@ function getCoverUrl(book) {
 }
 
 function makeCoverStyle(book) {
-  const cachedCover = state.covers[book.id];
-  if (cachedCover && cachedCover !== 'none') {
-    return `background-image: url('${cachedCover}'); background-size: cover; background-position: center;`;
-  }
-  // Use book.cover ONLY for MASTER_BOOKS / procedural books with valid URLs
-  if (book.cover && book.cover !== 'none' && book.cover.startsWith('http')) {
-    return `background-image: url('${book.cover}'); background-size: cover; background-position: center;`;
-  }
-  const colors = book.color || ['#1e293b', '#0f172a'];
+  const colors = book?.color || ['#1e293b', '#0f172a'];
   return `background: linear-gradient(140deg, ${colors[0]} 0%, ${colors[1]} 100%);`;
 }
 
