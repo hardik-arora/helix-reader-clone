@@ -921,7 +921,16 @@
       border-radius: 4px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.03);
     }
-    body.old-money-theme .book-cover, body.mahogany-theme .book-cover {
+    body.old-money-theme .book-cover, body.mahogany-theme 
+    .book-cover-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 6px;
+      display: block;
+    }
+
+    .book-cover {
       border-radius: 2px;
       border-color: rgba(179,142,93,0.25);
     }
@@ -1349,6 +1358,15 @@
       animation: bookMaterialise 0.6s ease both;
     }
     .book-card:hover { transform: translateY(-10px); }
+    
+    .book-cover-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 6px;
+      display: block;
+    }
+
     .book-cover {
       width: 170px; height: 240px; border-radius: 10px;
       padding: 1.5rem 1.2rem; position: relative; overflow: hidden;
@@ -1361,7 +1379,16 @@
       border: 1px solid rgba(255,255,255,0.12);
       border-radius: 6px; pointer-events: none; z-index: 2;
     }
-    .book-card:hover .book-cover {
+    .book-card:hover 
+    .book-cover-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 6px;
+      display: block;
+    }
+
+    .book-cover {
       box-shadow:
         0 20px 50px rgba(0,0,0,0.7),
         0 0 0 2px var(--accent),
@@ -1468,13 +1495,31 @@
       transition: transform 0.35s cubic-bezier(0.34, 1.3, 0.64, 1), z-index 0s 0s;
     }
     /* Cover image zoom on hover */
-    .shelf .book-card:hover .book-cover, .results-grid .book-card:hover .book-cover {
+    .shelf .book-card:hover .book-cover, .results-grid .book-card:hover 
+    .book-cover-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 6px;
+      display: block;
+    }
+
+    .book-cover {
       background-size: 110% !important;
       transition: background-size 0.5s ease, box-shadow 0.4s ease;
       box-shadow: 0 24px 60px rgba(0,0,0,0.85), 0 0 0 2.5px var(--accent), 0 0 40px 6px var(--accent-glow);
     }
     
-    .shelf .book-cover, .results-grid .book-cover {
+    .shelf .book-cover, .results-grid 
+    .book-cover-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 6px;
+      display: block;
+    }
+
+    .book-cover {
       width: 100%;
       border-radius: 8px;
       display: flex;
@@ -1491,7 +1536,16 @@
       background-repeat: no-repeat !important;
       transition: box-shadow 0.4s ease;
     }
-    .shelf .book-cover { height: 360px; /* matches aspect ratio 2/3 (240px * 1.5) */ }
+    .shelf 
+    .book-cover-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 6px;
+      display: block;
+    }
+
+    .book-cover { height: 360px; /* matches aspect ratio 2/3 (240px * 1.5) */ }
     /* Gloss shine pseudo-element */
     .shelf .book-cover::before, .results-grid .book-cover::before {
       content: '' !important;
@@ -1514,7 +1568,16 @@
     .shelf .book-card:hover .book-cover::before, .results-grid .book-card:hover .book-cover::before {
       animation: bookShine 0.7s ease forwards !important;
     }
-    .shelf .book-card:hover .book-cover, .results-grid .book-card:hover .book-cover {
+    .shelf .book-card:hover .book-cover, .results-grid .book-card:hover 
+    .book-cover-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 6px;
+      display: block;
+    }
+
+    .book-cover {
       animation: bookShadowPulse 1.2s ease infinite;
     }
     
@@ -2371,14 +2434,32 @@
       /* Phone compatibility overrides */
       .shelf { gap: 1rem; padding: 0.8rem 0.2rem 1.6rem; }
       .shelf .book-card { width: 120px; }
-      .shelf .book-cover { height: 180px; padding: 0.8rem 0.5rem; }
+      .shelf 
+    .book-cover-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 6px;
+      display: block;
+    }
+
+    .book-cover { height: 180px; padding: 0.8rem 0.5rem; }
       .shelf .book-cover-title { font-size: 0.75rem !important; }
       .shelf .book-cover-author { font-size: 0.6rem !important; margin-top: 1px; }
       .shelf .book-cover-emoji { font-size: 2.2rem; }
       
       .results-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 1rem; }
       .results-grid .book-card { width: 100%; }
-      .results-grid .book-cover { width: 100%; height: 195px; }
+      .results-grid 
+    .book-cover-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 6px;
+      display: block;
+    }
+
+    .book-cover { width: 100%; height: 195px; }
       
       .reader-viewport { padding: 5.5rem 1rem 4rem; }
       .reader-title-header { font-size: 1.6rem !important; margin-bottom: 1.5rem; }
@@ -5891,7 +5972,7 @@ function navigate(pageId) {
   // Execute page loaders
   if (pageId === 'library') renderLibraryPage();
   if (pageId === 'search') renderSearchPage();
-  if (pageId === 'home') renderDiscoverPage();
+  if (pageId === 'home') loadStarterCSV();
   if (pageId === 'tools') renderToolsPage();
   
   if (targetChanged) {
@@ -6109,15 +6190,11 @@ function makeCoverStyle(book) {
 }
 
 function renderBookCard(book) {
+  const imgSrc = book.cover_url || (book.isbn ? `https://covers.openlibrary.org/b/isbn/${book.isbn}-L.jpg` : 'https://openlibrary.org/images/icons/avatar_book-lg.png');
   return `
     <div class="book-card" onclick="flipAndOpenBook(this, '${book.id}')">
-      <div class="book-cover" data-book-id="${book.id}" style="${makeCoverStyle(book)}">
-        <div class="book-spine-line"></div>
-        <div class="book-cover-emoji">${book.emoji || '📖'}</div>
-        <div class="book-cover-text">
-          <div class="book-cover-title">${book.title}</div>
-          <div class="book-cover-author">${book.author}</div>
-        </div>
+      <div class="book-cover" data-book-id="${book.id}">
+        <img src="${imgSrc}" alt="${book.title}" class="book-cover-img" onerror="this.onerror=null; this.src='https://openlibrary.org/images/icons/avatar_book-lg.png';" />
         <div class="shelf-hover-overlay">
           <div class="shelf-hover-title">${book.title}</div>
           <div class="shelf-hover-author">by ${book.author}</div>
@@ -6132,7 +6209,7 @@ function renderBookCard(book) {
         <div class="book-author">${book.author}</div>
         <div class="book-rating">
           <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-          <span>${book.rating}</span>
+          <span>${book.rating || '4.8'}</span>
         </div>
       </div>
     </div>
@@ -6379,16 +6456,11 @@ function makeCoverStyle(book) {
 }
 
 function renderBookCard(book) {
-  const hasCover = hasBookCover(book);
+  const imgSrc = book.cover_url || (book.isbn ? `https://covers.openlibrary.org/b/isbn/${book.isbn}-L.jpg` : 'https://openlibrary.org/images/icons/avatar_book-lg.png');
   return `
     <div class="book-card" onclick="flipAndOpenBook(this, '${book.id}')">
-      <div class="book-cover ${hasCover ? 'has-cover-image' : ''}" data-book-id="${book.id}" style="${makeCoverStyle(book)}">
-        <div class="book-spine-line"></div>
-        ${hasCover ? '' : `<div class="book-cover-emoji">${book.emoji || '📖'}</div>`}
-        <div class="book-cover-text">
-          <div class="book-cover-title">${book.title}</div>
-          <div class="book-cover-author">${book.author}</div>
-        </div>
+      <div class="book-cover" data-book-id="${book.id}">
+        <img src="${imgSrc}" alt="${book.title}" class="book-cover-img" onerror="this.onerror=null; this.src='https://openlibrary.org/images/icons/avatar_book-lg.png';" />
         <div class="shelf-hover-overlay">
           <div class="shelf-hover-title">${book.title}</div>
           <div class="shelf-hover-author">by ${book.author}</div>
@@ -6403,7 +6475,7 @@ function renderBookCard(book) {
         <div class="book-author">${book.author}</div>
         <div class="book-rating">
           <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-          <span>${book.rating}</span>
+          <span>${book.rating || '4.8'}</span>
         </div>
       </div>
     </div>
@@ -10647,6 +10719,85 @@ function executeToolCall(actionObj) {
 // ════════════════════════════════════════
 // INITIALIZATION
 // ════════════════════════════════════════
+
+function parseCSV(text) {
+  const lines = text.split('\n');
+  if (lines.length < 2) return [];
+  const headers = parseCSVLine(lines[0]);
+  const results = [];
+  for (let i = 1; i < lines.length; i++) {
+    if (!lines[i].trim()) continue;
+    const values = parseCSVLine(lines[i]);
+    const row = {};
+    headers.forEach((h, idx) => {
+      row[h.trim()] = values[idx] ? values[idx].trim() : '';
+    });
+    if (row.title) {
+      results.push({
+        id: row.resource_id || ('csv-' + i),
+        title: row.title,
+        author: row.author,
+        isbn: row.isbn,
+        olid: row.olid,
+        cover_url: row.cover_url,
+        topic: row.topic || 'General',
+        level: row.reading_level || 'General',
+        summary: row.summary,
+        excerpt: row.excerpt,
+        keywords: row.keywords ? row.keywords.split(',').map(k => k.trim()) : [],
+        language: row.language || 'English',
+        format: row.format || 'EPUB',
+        source: row.source
+      });
+    }
+  }
+  return results;
+}
+
+function parseCSVLine(line) {
+  const result = [];
+  let current = '';
+  let inQuotes = false;
+  for (let i = 0; i < line.length; i++) {
+    const ch = line[i];
+    if (ch === '"') {
+      if (inQuotes && i + 1 < line.length && line[i + 1] === '"') {
+        current += '"';
+        i++;
+      } else {
+        inQuotes = !inQuotes;
+      }
+    } else if (ch === ',' && !inQuotes) {
+      result.push(current);
+      current = '';
+    } else {
+      current += ch;
+    }
+  }
+  result.push(current);
+  return result;
+}
+
+let CSV_BOOKS = [];
+
+async function loadStarterCSV() {
+  try {
+    const res = await fetch('digital_library_starter.csv?v=' + Date.now());
+    if (res.ok) {
+      const text = await res.text();
+      CSV_BOOKS = parseCSV(text);
+      if (CSV_BOOKS.length > 0) {
+        MASTER_BOOKS = CSV_BOOKS;
+        console.log("Loaded " + CSV_BOOKS.length + " books directly from digital_library_starter.csv!");
+      }
+    }
+  } catch (err) {
+    console.warn("Error loading starter CSV:", err);
+  }
+  loadStarterCSV();
+}
+
+
 document.addEventListener('DOMContentLoaded', () => {
   // Showcase the new Old Money theme by default once
   try {
@@ -10678,7 +10829,7 @@ document.addEventListener('DOMContentLoaded', () => {
     navigate('auth');
   } else {
     // Load main lists
-    renderDiscoverPage();
+    loadStarterCSV();
     checkBadgesUnlock();
   }
 });
