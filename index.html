@@ -6205,23 +6205,11 @@ function renderBookCard(book) {
   return `
     <div class="book-card" onclick="flipAndOpenBook(this, '${book.id}')">
       <div class="book-cover" data-book-id="${book.id}">
-        <img src="${imgSrc}" alt="${book.title}" class="book-cover-img" onerror="this.onerror=null; this.src='https://openlibrary.org/images/icons/avatar_book-lg.png';" />
-        <div class="shelf-hover-overlay">
-          <div class="shelf-hover-title">${book.title}</div>
-          <div class="shelf-hover-author">by ${book.author}</div>
-          <div class="shelf-hover-actions">
-            <button class="shelf-hover-btn primary" onclick="event.stopPropagation(); openReader('${book.id}')">▶ Read</button>
-            <button class="shelf-hover-btn secondary" onclick="event.stopPropagation(); flipAndOpenBook(this.closest('.book-card'), '${book.id}')">ℹ Info</button>
-          </div>
-        </div>
+        <img src="${imgSrc}" alt="${book.title}" class="book-cover-img" style="width:100%; height:100%; object-fit:cover; border-radius:4px;" onerror="this.onerror=null; this.src='https://openlibrary.org/images/icons/avatar_book-lg.png';" />
       </div>
       <div class="book-card-info">
         <div class="book-title">${book.title}</div>
         <div class="book-author">${book.author}</div>
-        <div class="book-rating">
-          <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-          <span>${book.rating || '4.8'}</span>
-        </div>
       </div>
     </div>
   `;
@@ -6471,23 +6459,11 @@ function renderBookCard(book) {
   return `
     <div class="book-card" onclick="flipAndOpenBook(this, '${book.id}')">
       <div class="book-cover" data-book-id="${book.id}">
-        <img src="${imgSrc}" alt="${book.title}" class="book-cover-img" onerror="this.onerror=null; this.src='https://openlibrary.org/images/icons/avatar_book-lg.png';" />
-        <div class="shelf-hover-overlay">
-          <div class="shelf-hover-title">${book.title}</div>
-          <div class="shelf-hover-author">by ${book.author}</div>
-          <div class="shelf-hover-actions">
-            <button class="shelf-hover-btn primary" onclick="event.stopPropagation(); openReader('${book.id}')">▶ Read</button>
-            <button class="shelf-hover-btn secondary" onclick="event.stopPropagation(); flipAndOpenBook(this.closest('.book-card'), '${book.id}')">ℹ Info</button>
-          </div>
-        </div>
+        <img src="${imgSrc}" alt="${book.title}" class="book-cover-img" style="width:100%; height:100%; object-fit:cover; border-radius:4px;" onerror="this.onerror=null; this.src='https://openlibrary.org/images/icons/avatar_book-lg.png';" />
       </div>
       <div class="book-card-info">
         <div class="book-title">${book.title}</div>
         <div class="book-author">${book.author}</div>
-        <div class="book-rating">
-          <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-          <span>${book.rating || '4.8'}</span>
-        </div>
       </div>
     </div>
   `;
@@ -10794,13 +10770,17 @@ function renderBooks(books) {
       card.className = 'book-card';
       const coverUrl = book.cover_url || (book.isbn ? `https://covers.openlibrary.org/b/isbn/${book.isbn}-L.jpg` : '');
       card.innerHTML = `
-        <div class="book-cover-wrap" style="position:relative; width:100%; height:100%;">
+        <div class="book-cover" style="position:relative; width:100%; height:100%;">
           <img 
             src="${coverUrl}" 
             alt="${book.title}"
-            style="width:100%; height:100%; object-fit:cover; border-radius:6px;"
+            style="width:100%; height:100%; object-fit:cover; border-radius:4px;"
             onerror="this.onerror=null; this.src='https://openlibrary.org/images/icons/avatar_book-lg.png';"
           />
+        </div>
+        <div class="book-card-info">
+          <div class="book-title">${book.title}</div>
+          <div class="book-author">${book.author}</div>
         </div>
       `;
       containers[0].appendChild(card);
