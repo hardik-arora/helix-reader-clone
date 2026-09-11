@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="referrer" content="no-referrer" />
@@ -10732,81 +10733,79 @@ function executeToolCall(actionObj) {
 // INITIALIZATION
 // ════════════════════════════════════════
 
-function parseCSV(text) {
-  const lines = text.split('\n');
-  if (lines.length < 2) return [];
-  const headers = parseCSVLine(lines[0]);
-  const results = [];
-  for (let i = 1; i < lines.length; i++) {
-    if (!lines[i].trim()) continue;
-    const values = parseCSVLine(lines[i]);
-    const row = {};
-    headers.forEach((h, idx) => {
-      row[h.trim()] = values[idx] ? values[idx].trim() : '';
-    });
-    if (row.title) {
-      results.push({
-        id: row.resource_id || ('csv-' + i),
-        title: row.title,
-        author: row.author,
-        isbn: row.isbn,
-        olid: row.olid,
-        cover_url: row.cover_url,
-        topic: row.topic || 'General',
-        level: row.reading_level || 'General',
-        summary: row.summary,
-        excerpt: row.excerpt,
-        keywords: row.keywords ? row.keywords.split(',').map(k => k.trim()) : [],
-        language: row.language || 'English',
-        format: row.format || 'EPUB',
-        source: row.source
-      });
-    }
-  }
-  return results;
-}
-
-function parseCSVLine(line) {
-  const result = [];
-  let current = '';
-  let inQuotes = false;
-  for (let i = 0; i < line.length; i++) {
-    const ch = line[i];
-    if (ch === '"') {
-      if (inQuotes && i + 1 < line.length && line[i + 1] === '"') {
-        current += '"';
-        i++;
-      } else {
-        inQuotes = !inQuotes;
-      }
-    } else if (ch === ',' && !inQuotes) {
-      result.push(current);
-      current = '';
-    } else {
-      current += ch;
-    }
-  }
-  result.push(current);
-  return result;
-}
-
 let CSV_BOOKS = [];
 
 async function loadStarterCSV() {
   try {
     const res = await fetch('digital_library_starter.csv?v=' + Date.now());
-    if (res.ok) {
-      const text = await res.text();
-      CSV_BOOKS = parseCSV(text);
-      if (CSV_BOOKS.length > 0) {
-        MASTER_BOOKS = CSV_BOOKS;
-        console.log("Loaded " + CSV_BOOKS.length + " books directly from digital_library_starter.csv!");
+    if (!res.ok) throw new Error("CSV fetch failed: " + res.status);
+    const text = await res.text();
+
+    Papa.parse(text, {
+      header: true,
+      skipEmptyLines: true,
+      complete: function(results) {
+        const books = results.data.filter(b => b.title && b.title.trim() !== '').map((row, i) => ({
+          id: row.resource_id || ('csv-' + (i + 1)),
+          title: row.title ? row.title.trim() : '',
+          author: row.author ? row.author.trim() : 'Unknown Author',
+          isbn: row.isbn ? row.isbn.trim() : '',
+          olid: row.olid ? row.olid.trim() : '',
+          cover_url: row.cover_url ? row.cover_url.trim() : '',
+          topic: row.topic ? row.topic.trim() : 'General',
+          level: row.reading_level ? row.reading_level.trim() : 'General',
+          summary: row.summary ? row.summary.trim() : '',
+          excerpt: row.excerpt ? row.excerpt.trim() : '',
+          keywords: row.keywords ? (Array.isArray(row.keywords) ? row.keywords : row.keywords.split(',').map(k => k.trim())) : [],
+          language: row.language ? row.language.trim() : 'English',
+          format: row.format ? row.format.trim() : 'EPUB',
+          source: row.source ? row.source.trim() : ''
+        }));
+        
+        CSV_BOOKS = books;
+        if (CSV_BOOKS.length > 0) {
+          MASTER_BOOKS = CSV_BOOKS;
+        }
+        renderBooks(books);
       }
-    }
+    });
   } catch (err) {
-    console.warn("Error loading starter CSV:", err);
+    console.error("Critical rendering error, fallback to baseline:", err);
   }
-  loadStarterCSV();
+}
+
+function renderBooks(books) {
+  const scienceShelf = document.getElementById('shelf-science');
+  const historyShelf = document.getElementById('shelf-history');
+  const fictionShelf = document.getElementById('shelf-fiction');
+  const philosophyShelf = document.getElementById('shelf-philosophy');
+  const biographyShelf = document.getElementById('shelf-biography');
+
+  if (scienceShelf || historyShelf || fictionShelf || philosophyShelf || biographyShelf) {
+    renderDiscoverPage();
+    return;
+  }
+
+  const containers = document.querySelectorAll('.book-carousel, .carousel, .grid, [data-shelf]');
+  if (containers.length > 0) {
+    containers[0].innerHTML = '';
+    books.forEach(book => {
+      const card = document.createElement('div');
+      card.className = 'book-card';
+      const coverUrl = book.cover_url || (book.isbn ? `https://covers.openlibrary.org/b/isbn/${book.isbn}-L.jpg` : '');
+      card.innerHTML = `
+        <div class="book-cover-wrap" style="position:relative; width:100%; height:100%;">
+          <img 
+            src="${coverUrl}" 
+            alt="${book.title}"
+            style="width:100%; height:100%; object-fit:cover; border-radius:6px;"
+            onerror="this.onerror=null; this.src='https://openlibrary.org/images/icons/avatar_book-lg.png';"
+          />
+        </div>
+      `;
+      containers[0].appendChild(card);
+    });
+  }
 }
 
 
