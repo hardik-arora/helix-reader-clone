@@ -6135,10 +6135,53 @@ function renderBookCard(book) {
   `;
 }
 
-function fetchBookCover(book) {
-  const cacheKey = book.id;
-  state.covers[cacheKey] = 'none';
-  return Promise.resolve('none');
+async function getCoverBySearch(title, author) {
+  const cacheKey = `cover_${title}_${author}`;
+  try {
+    const cached = localStorage.getItem(cacheKey);
+    if (cached) return cached;
+  } catch(e) {}
+
+  try {
+    const q = encodeURIComponent(`${title} ${author || ''}`.trim());
+    const res = await fetch(`https://openlibrary.org/search.json?q=${q}&limit=1&fields=cover_i,isbn`);
+    const data = await res.json();
+    if (data?.docs?.[0]?.cover_i) {
+      const url = `https://covers.openlibrary.org/b/id/${data.docs[0].cover_i}-L.jpg`;
+      try { localStorage.setItem(cacheKey, url); } catch(e) {}
+      return url;
+    }
+  } catch (err) {
+    console.warn("Cover fetch error:", err);
+  }
+  return null;
+}
+
+async function fetchBookCover(book) {
+  if (!book) return null;
+  const cachedCover = state.covers[book.id];
+  if (cachedCover && cachedCover !== 'none') return cachedCover;
+
+  if (book.isbn) {
+    return `https://covers.openlibrary.org/b/isbn/${book.isbn}-L.jpg?default=false`;
+  }
+  if (book.cover_id) {
+    return `https://covers.openlibrary.org/b/id/${book.cover_id}-L.jpg?default=false`;
+  }
+  if (book.olid) {
+    return `https://covers.openlibrary.org/b/olid/${book.olid}-L.jpg?default=false`;
+  }
+  if (book.cover && book.cover !== 'none' && book.cover.startsWith('http')) {
+    return book.cover;
+  }
+
+  const searchUrl = await getCoverBySearch(book.title, book.author);
+  if (searchUrl) {
+    state.covers[book.id] = searchUrl;
+    return searchUrl;
+  }
+
+  return null;
 }
 
 
