@@ -16,7 +16,8 @@
     "language": "English",
     "year": 1988,
     "published_year": 1988,
-    "summary": "An landmark book by physicist Stephen Hawking that explains complex concepts of cosmology, including the Big Bang, black holes, and light cones, to non-specialist readers."
+    "summary": "An landmark book by physicist Stephen Hawking that explains complex concepts of cosmology, including the Big Bang, black holes, and light cones, to non-specialist readers.",
+    "description": "An landmark book by physicist Stephen Hawking that explains complex concepts of cosmology, including the Big Bang, black holes, and light cones, to non-specialist readers."
   },
   {
     "id": "RES-SCI-0002",
@@ -30,12 +31,13 @@
     "cover_url": "https://covers.openlibrary.org/b/isbn/9780140432053-L.jpg?default=false",
     "pages": 502,
     "page_count": 502,
-    "rating": 4.9,
+    "rating": 4.7,
     "lang": "English",
     "language": "English",
     "year": 1859,
     "published_year": 1859,
-    "summary": "Charles Darwin's seminal work introducing the scientific theory of evolution by natural selection, which serves as the foundation of modern evolutionary biology."
+    "summary": "Charles Darwin's seminal work introducing the scientific theory of evolution by natural selection, which serves as the foundation of modern evolutionary biology.",
+    "description": "Charles Darwin's seminal work introducing the scientific theory of evolution by natural selection, which serves as the foundation of modern evolutionary biology."
   },
   {
     "id": "RES-SCI-0003",
@@ -49,12 +51,13 @@
     "cover_url": "https://covers.openlibrary.org/b/isbn/9780345331359-L.jpg?default=false",
     "pages": 365,
     "page_count": 365,
-    "rating": 4.9,
+    "rating": 4.7,
     "lang": "English",
     "language": "English",
     "year": 1980,
     "published_year": 1980,
-    "summary": "Carl Sagan explores the universe, the history of science, and the human search for our place in the cosmos, highlighting the interconnection of science, philosophy, and history."
+    "summary": "Carl Sagan explores the universe, the history of science, and the human search for our place in the cosmos, highlighting the interconnection of science, philosophy, and history.",
+    "description": "Carl Sagan explores the universe, the history of science, and the human search for our place in the cosmos, highlighting the interconnection of science, philosophy, and history."
   },
   {
     "id": "RES-SCI-0004",
@@ -73,7 +76,8 @@
     "language": "English",
     "year": 1976,
     "published_year": 1976,
-    "summary": "Richard Dawkins introduces the gene-centered view of evolution, explaining how genes use organisms as vehicles to replicate themselves, and introduces the term 'meme'."
+    "summary": "Richard Dawkins introduces the gene-centered view of evolution, explaining how genes use organisms as vehicles to replicate themselves, and introduces the term 'meme'.",
+    "description": "Richard Dawkins introduces the gene-centered view of evolution, explaining how genes use organisms as vehicles to replicate themselves, and introduces the term 'meme'."
   },
   {
     "id": "RES-SCI-0005",
@@ -87,12 +91,13 @@
     "cover_url": "https://covers.openlibrary.org/b/isbn/9780743216302-L.jpg?default=false",
     "pages": 240,
     "page_count": 240,
-    "rating": 4.5,
+    "rating": 4.7,
     "lang": "English",
     "language": "English",
     "year": 1968,
     "published_year": 1968,
-    "summary": "An autobiographical account of the discovery of the double helix structure of DNA by James Watson and Francis Crick, detailing the personal and academic rivalry behind the breakthrough."
+    "summary": "An autobiographical account of the discovery of the double helix structure of DNA by James Watson and Francis Crick, detailing the personal and academic rivalry behind the breakthrough.",
+    "description": "An autobiographical account of the discovery of the double helix structure of DNA by James Watson and Francis Crick, detailing the personal and academic rivalry behind the breakthrough."
   },
   {
     "id": "RES-SCI-0006",
@@ -106,12 +111,13 @@
     "cover_url": "https://covers.openlibrary.org/b/isbn/9780618249060-L.jpg?default=false",
     "pages": 400,
     "page_count": 400,
-    "rating": 4.6,
+    "rating": 4.7,
     "lang": "English",
     "language": "English",
     "year": 1962,
     "published_year": 1962,
-    "summary": "A landmark environmental science book detailing the adverse effects of indiscriminate pesticide use on the ecosystem, which helped launch the modern environmental movement."
+    "summary": "A landmark environmental science book detailing the adverse effects of indiscriminate pesticide use on the ecosystem, which helped launch the modern environmental movement.",
+    "description": "A landmark environmental science book detailing the adverse effects of indiscriminate pesticide use on the ecosystem, which helped launch the modern environmental movement."
   },
   {
     "id": "RES-HIS-0007",
@@ -125,12 +131,13 @@
     "cover_url": "https://covers.openlibrary.org/b/isbn/9780062316097-L.jpg?default=false",
     "pages": 464,
     "page_count": 464,
-    "rating": 4.8,
+    "rating": 4.7,
     "lang": "English",
     "language": "English",
     "year": 2014,
     "published_year": 2014,
-    "summary": "Yuval Noah Harari surveys the history of humankind from the evolutionary origins of Homo sapiens to the present day, focusing on the cognitive, agricultural, and scientific revolutions."
+    "summary": "Yuval Noah Harari surveys the history of humankind from the evolutionary origins of Homo sapiens to the present day, focusing on the cognitive, agricultural, and scientific revolutions.",
+    "description": "Yuval Noah Harari surveys the history of humankind from the evolutionary origins of Homo sapiens to the present day, focusing on the cognitive, agricultural, and scientific revolutions."
   },
   {
     "id": "RES-HIS-0008",
@@ -149,7 +156,8 @@
     "language": "English",
     "year": 1997,
     "published_year": 1997,
-    "summary": "Jared Diamond argues that geographical and environmental factors, rather than genetic differences, shaped the modern world and the unequal development of human societies."
+    "summary": "Jared Diamond argues that geographical and environmental factors, rather than genetic differences, shaped the modern world and the unequal development of human societies.",
+    "description": "Jared Diamond argues that geographical and environmental factors, rather than genetic differences, shaped the modern world and the unequal development of human societies."
   },
   {
     "id": "RES-HIS-0009",
@@ -168,7 +176,8 @@
     "language": "English",
     "year": 1980,
     "published_year": 1980,
-    "summary": "Howard Zinn re-examines American history from the perspective of marginalized groups, including Native Americans, slaves, women, and workers, rather than political elites."
+    "summary": "Howard Zinn re-examines American history from the perspective of marginalized groups, including Native Americans, slaves, women, and workers, rather than political elites.",
+    "description": "Howard Zinn re-examines American history from the perspective of marginalized groups, including Native Americans, slaves, women, and workers, rather than political elites."
   },
   {
     "id": "RES-HIS-0010",
@@ -182,12 +191,13 @@
     "cover_url": "https://covers.openlibrary.org/b/isbn/9781451651683-L.jpg?default=false",
     "pages": 1280,
     "page_count": 1280,
-    "rating": 4.8,
+    "rating": 4.7,
     "lang": "English",
     "language": "English",
     "year": 1960,
     "published_year": 1960,
-    "summary": "A detailed history of Nazi Germany from its origins to its defeat in World War II, based on captured German archives and personal observations."
+    "summary": "A detailed history of Nazi Germany from its origins to its defeat in World War II, based on captured German archives and personal observations.",
+    "description": "A detailed history of Nazi Germany from its origins to its defeat in World War II, based on captured German archives and personal observations."
   },
   {
     "id": "RES-HIS-0011",
@@ -201,12 +211,13 @@
     "cover_url": "https://covers.openlibrary.org/b/isbn/9780553296983-L.jpg?default=false",
     "pages": 283,
     "page_count": 283,
-    "rating": 4.8,
+    "rating": 4.7,
     "lang": "English",
     "language": "English",
     "year": 1947,
     "published_year": 1947,
-    "summary": "The personal diary of Anne Frank, a Jewish girl who went into hiding with her family during the Nazi occupation of the Netherlands in World War II."
+    "summary": "The personal diary of Anne Frank, a Jewish girl who went into hiding with her family during the Nazi occupation of the Netherlands in World War II.",
+    "description": "The personal diary of Anne Frank, a Jewish girl who went into hiding with her family during the Nazi occupation of the Netherlands in World War II."
   },
   {
     "id": "RES-PHI-0012",
@@ -225,7 +236,8 @@
     "language": "Greek",
     "year": -380,
     "published_year": -380,
-    "summary": "Plato's classic Socratic dialogue concerning justice, the order and character of the just city-state, and the nature of the philosopher king."
+    "summary": "Plato's classic Socratic dialogue concerning justice, the order and character of the just city-state, and the nature of the philosopher king.",
+    "description": "Plato's classic Socratic dialogue concerning justice, the order and character of the just city-state, and the nature of the philosopher king."
   },
   {
     "id": "RES-PHI-0013",
@@ -239,12 +251,13 @@
     "cover_url": "https://covers.openlibrary.org/b/isbn/9780140449334-L.jpg?default=false",
     "pages": 254,
     "page_count": 254,
-    "rating": 4.9,
+    "rating": 4.7,
     "lang": "Latin",
     "language": "Latin",
     "year": 161,
     "published_year": 161,
-    "summary": "A series of personal writings by the Roman Emperor Marcus Aurelius, offering Stoic philosophy and practical guidance on self-discipline, duty, and resilience."
+    "summary": "A series of personal writings by the Roman Emperor Marcus Aurelius, offering Stoic philosophy and practical guidance on self-discipline, duty, and resilience.",
+    "description": "A series of personal writings by the Roman Emperor Marcus Aurelius, offering Stoic philosophy and practical guidance on self-discipline, duty, and resilience."
   },
   {
     "id": "RES-PHI-0014",
@@ -258,12 +271,13 @@
     "cover_url": "https://books.google.com/books/content?vid=isbn9780140449233&printsec=frontcover&img=1&zoom=1",
     "pages": 240,
     "page_count": 240,
-    "rating": 4.5,
+    "rating": 4.4,
     "lang": "English",
     "language": "English",
     "year": 1886,
     "published_year": 1886,
-    "summary": "Friedrich Nietzsche critiques traditional morality and Western philosophy, advocating for the 'free spirit' and introducing concepts like the will to power."
+    "summary": "Friedrich Nietzsche critiques traditional morality and Western philosophy, advocating for the 'free spirit' and introducing concepts like the will to power.",
+    "description": "Friedrich Nietzsche critiques traditional morality and Western philosophy, advocating for the 'free spirit' and introducing concepts like the will to power."
   },
   {
     "id": "RES-PHI-0015",
@@ -282,7 +296,8 @@
     "language": "German",
     "year": 1781,
     "published_year": 1781,
-    "summary": "Immanuel Kant's foundational philosophical work investigating the limits and scope of human understanding and the relationship between rationalism and empiricism."
+    "summary": "Immanuel Kant's foundational philosophical work investigating the limits and scope of human understanding and the relationship between rationalism and empiricism.",
+    "description": "Immanuel Kant's foundational philosophical work investigating the limits and scope of human understanding and the relationship between rationalism and empiricism."
   },
   {
     "id": "RES-PHI-0016",
@@ -296,12 +311,13 @@
     "cover_url": "https://covers.openlibrary.org/b/isbn/9780140449150-L.jpg?default=false",
     "pages": 140,
     "page_count": 140,
-    "rating": 4.6,
+    "rating": 4.7,
     "lang": "Italian",
     "language": "Italian",
     "year": 1532,
     "published_year": 1532,
-    "summary": "A 16th-century political treatise offering pragmatic, sometimes ruthless advice to rulers on how to acquire and maintain political power."
+    "summary": "A 16th-century political treatise offering pragmatic, sometimes ruthless advice to rulers on how to acquire and maintain political power.",
+    "description": "A 16th-century political treatise offering pragmatic, sometimes ruthless advice to rulers on how to acquire and maintain political power."
   },
   {
     "id": "RES-FIC-0017",
@@ -315,12 +331,13 @@
     "cover_url": "https://covers.openlibrary.org/b/isbn/9780451524935-L.jpg?default=false",
     "pages": 328,
     "page_count": 328,
-    "rating": 4.8,
+    "rating": 4.7,
     "lang": "English",
     "language": "English",
     "year": 1949,
     "published_year": 1949,
-    "summary": "A dystopian novel depicting a totalitarian regime led by Big Brother, exploring themes of mass surveillance, censorship, and the manipulation of truth and language."
+    "summary": "A dystopian novel depicting a totalitarian regime led by Big Brother, exploring themes of mass surveillance, censorship, and the manipulation of truth and language.",
+    "description": "A dystopian novel depicting a totalitarian regime led by Big Brother, exploring themes of mass surveillance, censorship, and the manipulation of truth and language."
   },
   {
     "id": "RES-FIC-0018",
@@ -334,12 +351,13 @@
     "cover_url": "https://covers.openlibrary.org/b/isbn/9780061120084-L.jpg?default=false",
     "pages": 281,
     "page_count": 281,
-    "rating": 4.8,
+    "rating": 4.7,
     "lang": "English",
     "language": "English",
     "year": 1960,
     "published_year": 1960,
-    "summary": "Set in the American South, this novel follows young Scout Finch and her lawyer father Atticus as they confront racial injustice and the loss of innocence in their small town."
+    "summary": "Set in the American South, this novel follows young Scout Finch and her lawyer father Atticus as they confront racial injustice and the loss of innocence in their small town.",
+    "description": "Set in the American South, this novel follows young Scout Finch and her lawyer father Atticus as they confront racial injustice and the loss of innocence in their small town."
   },
   {
     "id": "RES-FIC-0019",
@@ -358,7 +376,8 @@
     "language": "English",
     "year": 1925,
     "published_year": 1925,
-    "summary": "A story of the mysterious millionaire Jay Gatsby and his tragic obsession with the beautiful Daisy Buchanan, exploring themes of wealth, love, and the American Dream in the 1920s."
+    "summary": "A story of the mysterious millionaire Jay Gatsby and his tragic obsession with the beautiful Daisy Buchanan, exploring themes of wealth, love, and the American Dream in the 1920s.",
+    "description": "A story of the mysterious millionaire Jay Gatsby and his tragic obsession with the beautiful Daisy Buchanan, exploring themes of wealth, love, and the American Dream in the 1920s."
   },
   {
     "id": "RES-FIC-0020",
@@ -377,7 +396,8 @@
     "language": "English",
     "year": 1813,
     "published_year": 1813,
-    "summary": "A romantic novel of manners following the turbulent relationship between Elizabeth Bennet and the wealthy, proud Mr. Darcy in 19th-century England."
+    "summary": "A romantic novel of manners following the turbulent relationship between Elizabeth Bennet and the wealthy, proud Mr. Darcy in 19th-century England.",
+    "description": "A romantic novel of manners following the turbulent relationship between Elizabeth Bennet and the wealthy, proud Mr. Darcy in 19th-century England."
   },
   {
     "id": "RES-FIC-0021",
@@ -391,12 +411,13 @@
     "cover_url": "https://covers.openlibrary.org/b/isbn/9780141439471-L.jpg?default=false",
     "pages": 280,
     "page_count": 280,
-    "rating": 4.6,
+    "rating": 4.7,
     "lang": "English",
     "language": "English",
     "year": 1818,
     "published_year": 1818,
-    "summary": "Mary Shelley's classic gothic novel detailing the tragic experiment of Victor Frankenstein as he creates a sentient creature, exploring the bounds of science and humanity."
+    "summary": "Mary Shelley's classic gothic novel detailing the tragic experiment of Victor Frankenstein as he creates a sentient creature, exploring the bounds of science and humanity.",
+    "description": "Mary Shelley's classic gothic novel detailing the tragic experiment of Victor Frankenstein as he creates a sentient creature, exploring the bounds of science and humanity."
   },
   {
     "id": "RES-FIC-0022",
@@ -410,12 +431,13 @@
     "cover_url": "https://covers.openlibrary.org/b/isbn/9780142437247-L.jpg?default=false",
     "pages": 635,
     "page_count": 635,
-    "rating": 4.5,
+    "rating": 4.7,
     "lang": "English",
     "language": "English",
     "year": 1851,
     "published_year": 1851,
-    "summary": "A classic American novel recounting the quest of the obsessive Captain Ahab for revenge on Moby Dick, the giant white whale that bit off his leg."
+    "summary": "A classic American novel recounting the quest of the obsessive Captain Ahab for revenge on Moby Dick, the giant white whale that bit off his leg.",
+    "description": "A classic American novel recounting the quest of the obsessive Captain Ahab for revenge on Moby Dick, the giant white whale that bit off his leg."
   },
   {
     "id": "RES-TEC-0023",
@@ -429,12 +451,13 @@
     "cover_url": "https://covers.openlibrary.org/b/isbn/9780201835953-L.jpg?default=false",
     "pages": 322,
     "page_count": 322,
-    "rating": 4.6,
+    "rating": 4.7,
     "lang": "English",
     "language": "English",
     "year": 1975,
     "published_year": 1975,
-    "summary": "A classic collection of essays on software engineering project management, highlighting the famous law that adding programmers to a late project makes it later."
+    "summary": "A classic collection of essays on software engineering project management, highlighting the famous law that adding programmers to a late project makes it later.",
+    "description": "A classic collection of essays on software engineering project management, highlighting the famous law that adding programmers to a late project makes it later."
   },
   {
     "id": "RES-TEC-0024",
@@ -453,7 +476,8 @@
     "language": "English",
     "year": 2008,
     "published_year": 2008,
-    "summary": "A handbook of agile software craftsmanship that guides developers on how to write professional, clean, and maintainable code with practical examples."
+    "summary": "A handbook of agile software craftsmanship that guides developers on how to write professional, clean, and maintainable code with practical examples.",
+    "description": "A handbook of agile software craftsmanship that guides developers on how to write professional, clean, and maintainable code with practical examples."
   },
   {
     "id": "RES-TEC-0025",
@@ -467,12 +491,13 @@
     "cover_url": "https://covers.openlibrary.org/b/isbn/9780262033848-L.jpg?default=false",
     "pages": 1312,
     "page_count": 1312,
-    "rating": 4.8,
+    "rating": 4.7,
     "lang": "English",
     "language": "English",
     "year": 1990,
     "published_year": 1990,
-    "summary": "A comprehensive, rigorous introduction to the design and analysis of computer algorithms, widely used as a standard textbook in universities."
+    "summary": "A comprehensive, rigorous introduction to the design and analysis of computer algorithms, widely used as a standard textbook in universities.",
+    "description": "A comprehensive, rigorous introduction to the design and analysis of computer algorithms, widely used as a standard textbook in universities."
   },
   {
     "id": "RES-TEC-0026",
@@ -491,7 +516,8 @@
     "language": "English",
     "year": 1994,
     "published_year": 1994,
-    "summary": "A landmark computer science textbook describing 23 classic design patterns in object-oriented programming to solve common software design problems."
+    "summary": "A landmark computer science textbook describing 23 classic design patterns in object-oriented programming to solve common software design problems.",
+    "description": "A landmark computer science textbook describing 23 classic design patterns in object-oriented programming to solve common software design problems."
   },
   {
     "id": "RES-BIO-0027",
@@ -510,7 +536,8 @@
     "language": "English",
     "year": 2011,
     "published_year": 2011,
-    "summary": "The definitive biography of Apple co-founder Steve Jobs, detailing his intense personality, creative drive, and revolutionary impact on technology and media industries."
+    "summary": "The definitive biography of Apple co-founder Steve Jobs, detailing his intense personality, creative drive, and revolutionary impact on technology and media industries.",
+    "description": "The definitive biography of Apple co-founder Steve Jobs, detailing his intense personality, creative drive, and revolutionary impact on technology and media industries."
   },
   {
     "id": "RES-BIO-0028",
@@ -524,12 +551,13 @@
     "cover_url": "https://covers.openlibrary.org/b/isbn/9780316548182-L.jpg?default=false",
     "pages": 656,
     "page_count": 656,
-    "rating": 4.8,
+    "rating": 4.7,
     "lang": "English",
     "language": "English",
     "year": 1994,
     "published_year": 1994,
-    "summary": "The autobiography of Nelson Mandela, tracing his early life, his resistance against apartheid in South Africa, his 27 years of imprisonment, and his ultimate presidency."
+    "summary": "The autobiography of Nelson Mandela, tracing his early life, his resistance against apartheid in South Africa, his 27 years of imprisonment, and his ultimate presidency.",
+    "description": "The autobiography of Nelson Mandela, tracing his early life, his resistance against apartheid in South Africa, his 27 years of imprisonment, and his ultimate presidency."
   },
   {
     "id": "RES-BIO-0029",
@@ -543,12 +571,13 @@
     "cover_url": "https://covers.openlibrary.org/b/isbn/9780345350688-L.jpg?default=false",
     "pages": 528,
     "page_count": 528,
-    "rating": 4.9,
+    "rating": 4.7,
     "lang": "English",
     "language": "English",
     "year": 1965,
     "published_year": 1965,
-    "summary": "The life story of the prominent African American activist Malcolm X, detailing his journey from street hustler to leader in the Nation of Islam and advocate for Black empowerment."
+    "summary": "The life story of the prominent African American activist Malcolm X, detailing his journey from street hustler to leader in the Nation of Islam and advocate for Black empowerment.",
+    "description": "The life story of the prominent African American activist Malcolm X, detailing his journey from street hustler to leader in the Nation of Islam and advocate for Black empowerment."
   },
   {
     "id": "RES-BIO-0030",
@@ -562,12 +591,13 @@
     "cover_url": "https://covers.openlibrary.org/b/isbn/9780143034759-L.jpg?default=false",
     "pages": 818,
     "page_count": 818,
-    "rating": 4.8,
+    "rating": 4.7,
     "lang": "English",
     "language": "English",
     "year": 2004,
     "published_year": 2004,
-    "summary": "A comprehensive biography of the first U.S. Treasury Secretary, Alexander Hamilton, detailing his role in the American Revolution, the Constitution, and his legendary duel with Aaron Burr."
+    "summary": "A comprehensive biography of the first U.S. Treasury Secretary, Alexander Hamilton, detailing his role in the American Revolution, the Constitution, and his legendary duel with Aaron Burr.",
+    "description": "A comprehensive biography of the first U.S. Treasury Secretary, Alexander Hamilton, detailing his role in the American Revolution, the Constitution, and his legendary duel with Aaron Burr."
   },
   {
     "id": "RES-PHI-0031",
@@ -581,12 +611,13 @@
     "cover_url": "https://covers.openlibrary.org/b/isbn/9780140436075-L.jpg?default=false",
     "pages": 1152,
     "page_count": 1152,
-    "rating": 4.6,
+    "rating": 4.7,
     "lang": "English",
     "language": "English",
     "year": 1776,
     "published_year": 1776,
-    "summary": "Adam Smith's foundational work on economics, describing the division of labor, productivity, and free markets as the key drivers of national wealth."
+    "summary": "Adam Smith's foundational work on economics, describing the division of labor, productivity, and free markets as the key drivers of national wealth.",
+    "description": "Adam Smith's foundational work on economics, describing the division of labor, productivity, and free markets as the key drivers of national wealth."
   },
   {
     "id": "RES-PHI-0032",
@@ -600,12 +631,13 @@
     "cover_url": "https://covers.openlibrary.org/b/isbn/9780140445688-L.jpg?default=false",
     "pages": 1152,
     "page_count": 1152,
-    "rating": 4.5,
+    "rating": 4.7,
     "lang": "German",
     "language": "German",
     "year": 1867,
     "published_year": 1867,
-    "summary": "Karl Marx's critical analysis of capitalism, examining how capital is accumulated, the exploitation of labor, and the division of classes."
+    "summary": "Karl Marx's critical analysis of capitalism, examining how capital is accumulated, the exploitation of labor, and the division of classes.",
+    "description": "Karl Marx's critical analysis of capitalism, examining how capital is accumulated, the exploitation of labor, and the division of classes."
   },
   {
     "id": "RES-SCI-0033",
@@ -619,12 +651,13 @@
     "cover_url": "https://books.google.com/books/content?vid=isbn9780141184944&printsec=frontcover&img=1&zoom=1",
     "pages": 672,
     "page_count": 672,
-    "rating": 4.5,
+    "rating": 4.7,
     "lang": "German",
     "language": "German",
     "year": 1899,
     "published_year": 1899,
-    "summary": "Sigmund Freud introduces his theory of the unconscious mind, arguing that dreams are forms of wish-fulfillment that can be systematically analyzed."
+    "summary": "Sigmund Freud introduces his theory of the unconscious mind, arguing that dreams are forms of wish-fulfillment that can be systematically analyzed.",
+    "description": "Sigmund Freud introduces his theory of the unconscious mind, arguing that dreams are forms of wish-fulfillment that can be systematically analyzed."
   },
   {
     "id": "RES-FIC-0034",
@@ -638,12 +671,13 @@
     "cover_url": "https://books.google.com/books/content?vid=isbn9781420926590&printsec=frontcover&img=1&zoom=1",
     "pages": 104,
     "page_count": 104,
-    "rating": 4.8,
+    "rating": 4.7,
     "lang": "Bengali",
     "language": "Bengali",
     "year": 1910,
     "published_year": 1910,
-    "summary": "A collection of spiritual poems by Rabindranath Tagore, exploring devotion, humanity, nature, and the connection between the soul and the divine."
+    "summary": "A collection of spiritual poems by Rabindranath Tagore, exploring devotion, humanity, nature, and the connection between the soul and the divine.",
+    "description": "A collection of spiritual poems by Rabindranath Tagore, exploring devotion, humanity, nature, and the connection between the soul and the divine."
   },
   {
     "id": "RES-FIC-0035",
@@ -662,7 +696,8 @@
     "language": "Greek",
     "year": -800,
     "published_year": -800,
-    "summary": "Homer's ancient Greek epic poem telling the story of Odysseus' ten-year journey home to Ithaca after the fall of Troy."
+    "summary": "Homer's ancient Greek epic poem telling the story of Odysseus' ten-year journey home to Ithaca after the fall of Troy.",
+    "description": "Homer's ancient Greek epic poem telling the story of Odysseus' ten-year journey home to Ithaca after the fall of Troy."
   },
   {
     "id": "RES-FIC-0036",
@@ -676,12 +711,13 @@
     "cover_url": "https://books.google.com/books/content?vid=isbn9780140350173&printsec=frontcover&img=1&zoom=1",
     "pages": 224,
     "page_count": 224,
-    "rating": 4.5,
+    "rating": 4.7,
     "lang": "English",
     "language": "English",
     "year": 1881,
     "published_year": 1881,
-    "summary": "A classic novel where a young beggar named Tom Canty and Edward Tudor, the Prince of Wales, exchange identities, experiencing each other's lives."
+    "summary": "A classic novel where a young beggar named Tom Canty and Edward Tudor, the Prince of Wales, exchange identities, experiencing each other's lives.",
+    "description": "A classic novel where a young beggar named Tom Canty and Edward Tudor, the Prince of Wales, exchange identities, experiencing each other's lives."
   },
   {
     "id": "RES-PHI-0037",
@@ -700,7 +736,8 @@
     "language": "Chinese",
     "year": -500,
     "published_year": -500,
-    "summary": "An ancient Chinese military treatise attributed to Sun Tzu, detailing strategies for warfare, diplomacy, and conflict resolution."
+    "summary": "An ancient Chinese military treatise attributed to Sun Tzu, detailing strategies for warfare, diplomacy, and conflict resolution.",
+    "description": "An ancient Chinese military treatise attributed to Sun Tzu, detailing strategies for warfare, diplomacy, and conflict resolution."
   },
   {
     "id": "RES-SCI-0038",
@@ -714,12 +751,13 @@
     "cover_url": "https://covers.openlibrary.org/b/isbn/9780486600888-L.jpg?default=false",
     "pages": 544,
     "page_count": 544,
-    "rating": 4.9,
+    "rating": 4.7,
     "lang": "Greek",
     "language": "Greek",
     "year": -300,
     "published_year": -300,
-    "summary": "An ancient mathematical treatise consisting of 13 books containing geometry definitions, axioms, theorems, and proofs that laid the foundation of mathematics."
+    "summary": "An ancient mathematical treatise consisting of 13 books containing geometry definitions, axioms, theorems, and proofs that laid the foundation of mathematics.",
+    "description": "An ancient mathematical treatise consisting of 13 books containing geometry definitions, axioms, theorems, and proofs that laid the foundation of mathematics."
   },
   {
     "id": "RES-PHI-0039",
@@ -733,12 +771,13 @@
     "cover_url": "https://covers.openlibrary.org/b/isbn/9780140390445-L.jpg?default=false",
     "pages": 352,
     "page_count": 352,
-    "rating": 4.5,
+    "rating": 4.7,
     "lang": "English",
     "language": "English",
     "year": 1854,
     "published_year": 1854,
-    "summary": "Thoreau's reflection upon simple living in natural surroundings at Walden Pond, exploring self-reliance and transcendentalist philosophy."
+    "summary": "Thoreau's reflection upon simple living in natural surroundings at Walden Pond, exploring self-reliance and transcendentalist philosophy.",
+    "description": "Thoreau's reflection upon simple living in natural surroundings at Walden Pond, exploring self-reliance and transcendentalist philosophy."
   },
   {
     "id": "RES-TEC-0040",
@@ -752,11 +791,12 @@
     "cover_url": "https://covers.openlibrary.org/b/isbn/9780262631594-L.jpg?default=false",
     "pages": 392,
     "page_count": 392,
-    "rating": 4.5,
+    "rating": 4.7,
     "lang": "English",
     "language": "English",
     "year": 1964,
     "published_year": 1964,
-    "summary": "Marshall McLuhan introduces the concept that the form of a medium embeds itself in any message it transmits, creating a symbiotic relationship."
+    "summary": "Marshall McLuhan introduces the concept that the form of a medium embeds itself in any message it transmits, creating a symbiotic relationship.",
+    "description": "Marshall McLuhan introduces the concept that the form of a medium embeds itself in any message it transmits, creating a symbiotic relationship."
   }
 ]
