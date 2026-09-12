@@ -2871,6 +2871,71 @@
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<style>
+    /* ─── STUNNING HARDCOVER BOOK JACKET ENHANCEMENTS FOR HACKATHON ─── */
+    .book-cover {
+      position: relative;
+      overflow: hidden;
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: space-between !important;
+      padding: 1.1rem 1rem !important;
+      border-radius: 8px !important;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4), inset 0 0 0 1px rgba(255,255,255,0.15) !important;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease !important;
+    }
+    .book-cover::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; bottom: 0;
+      width: 8px;
+      background: linear-gradient(90deg, rgba(255,255,255,0.35) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.5) 100%);
+      z-index: 4;
+      pointer-events: none;
+    }
+    .book-cover-text {
+      position: relative;
+      z-index: 3;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 4px;
+      text-align: left;
+    }
+    .book-cover-title {
+      font-family: var(--heading-font), 'EB Garamond', serif !important;
+      font-size: 1.1rem !important;
+      font-weight: 800 !important;
+      color: #ffffff !important;
+      line-height: 1.25 !important;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.9), 0 0 2px rgba(0,0,0,1) !important;
+      letter-spacing: 0.2px !important;
+    }
+    .book-cover-author {
+      font-family: var(--body-font), sans-serif !important;
+      font-size: 0.82rem !important;
+      font-weight: 600 !important;
+      color: rgba(255,255,255,0.9) !important;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.9) !important;
+      margin-top: 2px !important;
+    }
+    .book-cover-emoji {
+      font-size: 2.8rem !important;
+      align-self: flex-end !important;
+      margin-top: auto !important;
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.6)) !important;
+      opacity: 0.95 !important;
+      z-index: 3;
+    }
+    .book-cover.has-cover-image .book-cover-emoji {
+      display: none !important;
+    }
+    .book-cover.has-cover-image .book-cover-text {
+      background: linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.7) 60%, transparent 100%);
+      padding: 0.8rem 0.6rem 0.4rem;
+      border-radius: 0 0 6px 6px;
+      margin-top: auto;
+    }
+</style>
 </head>
 <body>
 
@@ -6082,29 +6147,21 @@ window.addEventListener('click', () => {
 // WIKIPEDIA DYNAMIC COVER API INTEGRATION (CORS-friendly REST)
 // ══════════════════════════════════════════════════════════════
 function applyBookCoverImage(el, url, book) {
-  if (!url || url === 'none') {
-    renderProgrammaticFallback(el, book);
-    return;
+  const fallback = getFallbackSvg(book?.title, book?.author, book?.topic);
+  const targetUrl = (url && url !== 'none') ? url : fallback;
+  
+  el.style.backgroundImage = `url('${targetUrl}')`;
+  el.style.backgroundSize = 'cover';
+  el.style.backgroundPosition = 'center';
+  el.classList.add('has-cover-image');
+
+  if (targetUrl !== fallback && targetUrl.startsWith('http')) {
+    const img = new Image();
+    img.onerror = () => {
+      el.style.backgroundImage = `url('${fallback}')`;
+    };
+    img.src = targetUrl;
   }
-  const img = new Image();
-  img.onload = () => {
-    if (img.width <= 1 && img.height <= 1) {
-      renderProgrammaticFallback(el, book);
-      return;
-    }
-    el.style.backgroundImage = `url('${url}')`;
-    el.style.backgroundSize = 'cover';
-    el.style.backgroundPosition = 'center';
-    el.classList.add('has-cover-image');
-    const textEl = el.querySelector('.book-cover-text');
-    if (textEl) textEl.style.display = 'none';
-    const emojiEl = el.querySelector('.book-cover-emoji');
-    if (emojiEl) emojiEl.style.display = 'none';
-  };
-  img.onerror = () => {
-    renderProgrammaticFallback(el, book);
-  };
-  img.src = url;
 }
 
 function renderProgrammaticFallback(el, book) {
@@ -6195,49 +6252,33 @@ function getCoverUrl(book, size = 'L') {
 }
 
 function makeCoverStyle(book) {
-  const cachedCover = state.covers[book?.id];
-  if (cachedCover && cachedCover !== 'none') {
-    return `background-image: url('${cachedCover}'); background-size: cover; background-position: center;`;
-  }
-  const url = book?.cover_url || book?.cover;
-  if (url && url !== 'none' && url.startsWith('http')) {
-    return `background-image: url('${url}'); background-size: cover; background-position: center;`;
-  }
-  const colors = book?.color || ['#1e293b', '#0f172a'];
-  return `background: linear-gradient(135deg, ${colors[0]} 0%, ${colors[1]} 100%);`;
+  const coverUrl = getVerifiedBookCover(book) || getFallbackSvg(book?.title, book?.author, book?.topic);
+  return `background-image: url('${coverUrl}'); background-size: cover; background-position: center;`;
 }
 
 function renderBookCard(book) {
-  const coverUrl = book.cover_url || book.cover || (book.isbn ? `https://covers.openlibrary.org/b/isbn/${book.isbn}-L.jpg` : '');
-  const safeTitle = (book.title || '').replace(/'/g, "\'");
-  const safeAuthor = (book.author || '').replace(/'/g, "\'");
-  const initialImg = coverUrl || getFallbackSvg(book.title, book.author);
-
+  const verifiedUrl = getVerifiedBookCover(book);
+  const coverUrl = verifiedUrl || getFallbackSvg(book?.title, book?.author, book?.topic);
+  
   return `
-    <div class="book-card" onclick="flipAndOpenBook(this, '${book.id || ''}')">
-      <div class="book-cover" data-book-id="${book.id || ''}">
-        <img 
-          src="${initialImg}" 
-          alt="${book.title}" 
-          class="book-cover-img" 
-          style="width:100%; height:100%; object-fit:cover; border-radius:6px;" 
-          onerror="this.onerror=null; this.src=getFallbackSvg('${safeTitle}', '${safeAuthor}');" 
-        />
+    <div class="book-card" onclick="flipAndOpenBook(this, '${book.id}')">
+      <div class="book-cover has-cover-image" data-book-id="${book.id}" style="background-image: url('${coverUrl}'); background-size: cover; background-position: center;">
+        <div class="book-spine-line"></div>
         <div class="shelf-hover-overlay">
-          <div class="shelf-hover-title">${book.title}</div>
-          <div class="shelf-hover-author">by ${book.author}</div>
+          <div class="shelf-hover-title">${book.title || ''}</div>
+          <div class="shelf-hover-author">by ${book.author || ''}</div>
           <div class="shelf-hover-actions">
-            <button class="shelf-hover-btn primary" onclick="event.stopPropagation(); openReader('${book.id || ''}')">▶ Read</button>
-            <button class="shelf-hover-btn secondary" onclick="event.stopPropagation(); flipAndOpenBook(this.closest('.book-card'), '${book.id || ''}')">ℹ Info</button>
+            <button class="shelf-hover-btn primary" onclick="event.stopPropagation(); openReader('${book.id}')">▶ Read</button>
+            <button class="shelf-hover-btn secondary" onclick="event.stopPropagation(); flipAndOpenBook(this.closest('.book-card'), '${book.id}')">ℹ Info</button>
           </div>
         </div>
       </div>
       <div class="book-card-info">
-        <div class="book-title">${book.title}</div>
-        <div class="book-author">${book.author}</div>
+        <div class="book-title">${book.title || ''}</div>
+        <div class="book-author">${book.author || ''}</div>
         <div class="book-rating">
-          <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:#fbbf24;display:inline-block;vertical-align:middle;"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-          <span style="font-size:0.8rem;color:var(--text2);margin-left:2px;">${book.rating || '4.8'}</span>
+          <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+          <span>${book.rating || '4.8'}</span>
         </div>
       </div>
     </div>
@@ -6491,49 +6532,33 @@ function getCoverUrl(book, size = 'L') {
 }
 
 function makeCoverStyle(book) {
-  const cachedCover = state.covers[book?.id];
-  if (cachedCover && cachedCover !== 'none') {
-    return `background-image: url('${cachedCover}'); background-size: cover; background-position: center;`;
-  }
-  const url = book?.cover_url || book?.cover;
-  if (url && url !== 'none' && url.startsWith('http')) {
-    return `background-image: url('${url}'); background-size: cover; background-position: center;`;
-  }
-  const colors = book?.color || ['#1e293b', '#0f172a'];
-  return `background: linear-gradient(135deg, ${colors[0]} 0%, ${colors[1]} 100%);`;
+  const coverUrl = getVerifiedBookCover(book) || getFallbackSvg(book?.title, book?.author, book?.topic);
+  return `background-image: url('${coverUrl}'); background-size: cover; background-position: center;`;
 }
 
 function renderBookCard(book) {
-  const coverUrl = book.cover_url || book.cover || (book.isbn ? `https://covers.openlibrary.org/b/isbn/${book.isbn}-L.jpg` : '');
-  const safeTitle = (book.title || '').replace(/'/g, "\'");
-  const safeAuthor = (book.author || '').replace(/'/g, "\'");
-  const initialImg = coverUrl || getFallbackSvg(book.title, book.author);
-
+  const verifiedUrl = getVerifiedBookCover(book);
+  const coverUrl = verifiedUrl || getFallbackSvg(book?.title, book?.author, book?.topic);
+  
   return `
-    <div class="book-card" onclick="flipAndOpenBook(this, '${book.id || ''}')">
-      <div class="book-cover" data-book-id="${book.id || ''}">
-        <img 
-          src="${initialImg}" 
-          alt="${book.title}" 
-          class="book-cover-img" 
-          style="width:100%; height:100%; object-fit:cover; border-radius:6px;" 
-          onerror="this.onerror=null; this.src=getFallbackSvg('${safeTitle}', '${safeAuthor}');" 
-        />
+    <div class="book-card" onclick="flipAndOpenBook(this, '${book.id}')">
+      <div class="book-cover has-cover-image" data-book-id="${book.id}" style="background-image: url('${coverUrl}'); background-size: cover; background-position: center;">
+        <div class="book-spine-line"></div>
         <div class="shelf-hover-overlay">
-          <div class="shelf-hover-title">${book.title}</div>
-          <div class="shelf-hover-author">by ${book.author}</div>
+          <div class="shelf-hover-title">${book.title || ''}</div>
+          <div class="shelf-hover-author">by ${book.author || ''}</div>
           <div class="shelf-hover-actions">
-            <button class="shelf-hover-btn primary" onclick="event.stopPropagation(); openReader('${book.id || ''}')">▶ Read</button>
-            <button class="shelf-hover-btn secondary" onclick="event.stopPropagation(); flipAndOpenBook(this.closest('.book-card'), '${book.id || ''}')">ℹ Info</button>
+            <button class="shelf-hover-btn primary" onclick="event.stopPropagation(); openReader('${book.id}')">▶ Read</button>
+            <button class="shelf-hover-btn secondary" onclick="event.stopPropagation(); flipAndOpenBook(this.closest('.book-card'), '${book.id}')">ℹ Info</button>
           </div>
         </div>
       </div>
       <div class="book-card-info">
-        <div class="book-title">${book.title}</div>
-        <div class="book-author">${book.author}</div>
+        <div class="book-title">${book.title || ''}</div>
+        <div class="book-author">${book.author || ''}</div>
         <div class="book-rating">
-          <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:#fbbf24;display:inline-block;vertical-align:middle;"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-          <span style="font-size:0.8rem;color:var(--text2);margin-left:2px;">${book.rating || '4.8'}</span>
+          <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+          <span>${book.rating || '4.8'}</span>
         </div>
       </div>
     </div>
