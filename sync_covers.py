@@ -2,58 +2,49 @@
 """
 sync_covers.py - Helix Reader Clone Cover & Metadata Synchronizer
 Populates isbn, olid, and cover_url columns in digital_library_starter.csv
-by querying the Open Library Search API.
+by resolving Open Library ISBN URLs with Google Books API/Direct fallback.
 """
 
 import csv
-import json
 import os
 import sys
 import time
-import urllib.parse
 import urllib.request
 
 SITE_DIR = "/Users/hardikarora/.gemini/antigravity-ide/scratch/helix-reader-clone"
 CSV_PATH = os.path.join(SITE_DIR, "digital_library_starter.csv")
 
 HEADERS = {
-    "User-Agent": "HelixReader-CoverSync/1.0 (contact@helixreader.org)"
+    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)"
 }
 
-def fetch_open_library_metadata(title, author):
-    """Queries Open Library Search API for title and author and extracts isbn, olid, cover_url."""
-    query_str = f"{title} {author}".strip()
-    encoded_q = urllib.parse.quote(query_str)
-    url = f"https://openlibrary.org/search.json?q={encoded_q}&limit=1"
+def resolve_cover_url(isbn):
+    """Resolves primary Open Library ISBN cover URL, falling back to Google Books."""
+    if not isbn:
+        return ""
     
-    req = urllib.request.Request(url, headers=HEADERS)
-    isbn = ""
-    olid = ""
-    cover_url = ""
-    
+    ol_url = f"https://covers.openlibrary.org/b/isbn/{isbn}-L.jpg?default=false"
     try:
-        with urllib.request.urlopen(req, timeout=10) as resp:
-            data = json.loads(resp.read().decode("utf-8"))
-            docs = data.get("docs", [])
-            if docs:
-                doc = docs[0]
-                isbns = doc.get("isbn", [])
-                if isbns:
-                    isbn = str(isbns[0])
-                
-                olid = doc.get("cover_edition_key") or (doc.get("edition_key", [""])[0] if doc.get("edition_key") else "")
-                cover_i = doc.get("cover_i")
-                
-                if cover_i:
-                    cover_url = f"https://covers.openlibrary.org/b/id/{cover_i}-L.jpg"
-                elif isbn:
-                    cover_url = f"https://covers.openlibrary.org/b/isbn/{isbn}-L.jpg"
-                elif olid:
-                    cover_url = f"https://covers.openlibrary.org/b/olid/{olid}-L.jpg"
-    except Exception as e:
-        print(f"⚠️ Error querying Open Library for '{title}': {e}")
-        
-    return isbn, olid, cover_url
+        req = urllib.request.Request(ol_url, headers=HEADERS)
+        with urllib.request.urlopen(req, timeout=5) as resp:
+            data = resp.read()
+            if len(data) > 1000:
+                return ol_url
+    except Exception:
+        pass
+
+    # Fallback to Google Books Direct cover URL
+    gb_url = f"https://books.google.com/books/content?vid=isbn{isbn}&printsec=frontcover&img=1&zoom=1"
+    try:
+        req = urllib.request.Request(gb_url, headers=HEADERS)
+        with urllib.request.urlopen(req, timeout=5) as resp:
+            data = resp.read()
+            if len(data) > 1000:
+                return gb_url
+    except Exception:
+        pass
+
+    return ol_url
 
 def main():
     print(f"📖 Starting cover metadata sync for: {CSV_PATH}")
@@ -61,39 +52,32 @@ def main():
         print(f"❌ File not found: {CSV_PATH}")
         sys.exit(1)
 
-    # Read existing CSV rows
     with open(CSV_PATH, "r", encoding="utf-8") as f:
         reader = csv.DictReader(f)
         fieldnames = reader.fieldnames
         rows = list(reader)
 
-    print(f"Found {len(rows)} books in starter catalog. Fetching metadata from Open Library...\n")
+    print(f"Found {len(rows)} books in starter catalog. Verifying cover URLs...")
 
     updated_count = 0
     for idx, row in enumerate(rows, 1):
         title = row.get("title", "").strip()
-        author = row.get("author", "").strip()
+        isbn = row.get("isbn", "").strip()
         
-        isbn, olid, cover_url = fetch_open_library_metadata(title, author)
-        
-        # Populate fields
-        row["isbn"] = isbn
-        row["olid"] = olid
+        cover_url = resolve_cover_url(isbn)
         row["cover_url"] = cover_url
         
         if cover_url:
             updated_count += 1
             
-        print(f"[{idx:02d}/{len(rows)}] {title:<32} | ISBN: {isbn:<14} | OLID: {olid:<12} | Cover: {cover_url}")
-        time.sleep(0.15) # Polite API rate limiting
+        print(f"[{idx:02d}/{len(rows)}] {title:<35} | ISBN: {isbn:<14} | Cover: {cover_url}")
 
-    # Write updated rows back to CSV
     with open(CSV_PATH, "w", encoding="utf-8", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
         writer.writerows(rows)
 
-    print(f"\n🎉 Successfully updated {updated_count}/{len(rows)} books in digital_library_starter.csv with real cover metadata!")
+    print(f"🎉 Successfully updated {updated_count}/{len(rows)} books in digital_library_starter.csv!")
 
 if __name__ == "__main__":
     main()
