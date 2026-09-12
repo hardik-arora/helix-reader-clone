@@ -1,0 +1,17 @@
+[
+  { "title": "A Brief History of Time", "author": "Stephen Hawking", "category": "Science & Discovery", "cover": "https://covers.openlibrary.org/b/id/12693898-L.jpg" },
+  { "title": "The Origin of Species", "author": "Charles Darwin", "category": "Science & Discovery", "cover": "https://covers.openlibrary.org/b/id/14555891-L.jpg" },
+  { "title": "Cosmos", "author": "Carl Sagan", "category": "Science & Discovery", "cover": "https://covers.openlibrary.org/b/id/8231991-L.jpg" },
+  { "title": "The Selfish Gene", "author": "Richard Dawkins", "category": "Science & Discovery", "cover": "https://covers.openlibrary.org/b/id/10543666-L.jpg" },
+  { "title": "The Double Helix", "author": "James D. Watson", "category": "Science & Discovery", "cover": "https://covers.openlibrary.org/b/id/6512761-L.jpg" },
+  { "title": "Silent Spring", "author": "Rachel Carson", "category": "Science & Discovery", "cover": "https://covers.openlibrary.org/b/id/8259741-L.jpg" },
+  { "title": "Steve Jobs", "author": "Walter Isaacson", "category": "Inspiring Biographies", "cover": "https://covers.openlibrary.org/b/id/8575797-L.jpg" },
+  { "title": "The Diary of a Young Girl", "author": "Anne Frank", "category": "Inspiring Biographies", "cover": "https://covers.openlibrary.org/b/id/10603762-L.jpg" },
+  { "title": "Long Walk to Freedom", "author": "Nelson Mandela", "category": "Inspiring Biographies", "cover": "https://covers.openlibrary.org/b/id/8235116-L.jpg" },
+  { "title": "Einstein: His Life and Universe", "author": "Walter Isaacson", "category": "Inspiring Biographies", "cover": "https://covers.openlibrary.org/b/id/8228691-L.jpg" },
+  { "title": "Alexander Hamilton", "author": "Ron Chernow", "category": "Inspiring Biographies", "cover": "https://covers.openlibrary.org/b/id/8314136-L.jpg" },
+  { "title": "1984", "author": "George Orwell", "category": "World Fiction", "cover": "https://covers.openlibrary.org/b/id/8575745-L.jpg" },
+  { "title": "The Great Gatsby", "author": "F. Scott Fitzgerald", "category": "World Fiction", "cover": "https://covers.openlibrary.org/b/id/8225261-L.jpg" },
+  { "title": "To Kill a Mockingbird", "author": "Harper Lee", "category": "World Fiction", "cover": "https://covers.openlibrary.org/b/id/8225266-L.jpg" },
+  { "title": "The Metamorphosis", "author": "Franz Kafka", "category": "World Fiction", "cover": "https://covers.openlibrary.org/b/id/10515155-L.jpg" }
+]
