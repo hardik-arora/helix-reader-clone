@@ -7078,6 +7078,13 @@ function openBookDetails(bookId, skipAnim = false) {
 
   const hasCover = hasBookCover(book);
   
+  
+  const displayPages = book.pages || book.page_count || 'N/A';
+  const displayRating = book.rating || '4.8';
+  const displayLang = book.language || book.lang || 'English';
+  const rawYear = book.published_year || book.year;
+  const displayYear = (rawYear && !isNaN(rawYear)) ? (rawYear > 0 ? rawYear : Math.abs(rawYear) + ' BC') : (book.published_date ? new Date(book.published_date).getFullYear() : 'N/A');
+
   // Set detail layout (Primary "Read Book" redirects to choices redirect panel)
   target.innerHTML = `
     <button onclick="navigate('home')" style="color:var(--text3);margin-bottom:1.5rem;font-size:0.85rem">← Back to Discover</button>
@@ -7099,10 +7106,10 @@ function openBookDetails(bookId, skipAnim = false) {
           <span style="font-size:0.75rem;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:1px">${book.topic} Overview</span>
           <h2 style="font-family:var(--heading-font);font-size:2.2rem;font-weight:800;margin-top:0.2rem;margin-bottom:0.8rem">${book.title}</h2>
           <div class="detail-meta-group" style="margin-bottom:1.5rem">
-            <span class="detail-meta-chip">📚 ${book.pages || book.page_count || 350} Pages</span>
-            <span class="detail-meta-chip">⭐ ${book.rating || 4.8} Rating</span>
-            <span class="detail-meta-chip">🌐 Language: ${book.lang || book.language || 'English'}</span>
-            <span class="detail-meta-chip">📅 Published: ${(book.year && !isNaN(book.year)) ? (book.year > 0 ? book.year : Math.abs(book.year) + ' BC') : 'N/A'}</span>
+            <span class="detail-meta-chip">📚 ${displayPages} Pages</span>
+            <span class="detail-meta-chip">⭐ ${displayRating} Rating</span>
+            <span class="detail-meta-chip">🌐 Language: ${displayLang}</span>
+            <span class="detail-meta-chip">📅 Published: ${displayYear}</span>
           </div>
           
           <p class="detail-description">${book.summary}</p>
