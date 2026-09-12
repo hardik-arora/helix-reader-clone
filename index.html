@@ -6201,19 +6201,19 @@ function makeCoverStyle(book) {
 }
 
 function renderBookCard(book) {
-  const coverUrl = book.cover_url || (book.cover ? book.cover : (book.isbn ? `https://covers.openlibrary.org/b/isbn/${book.isbn}-L.jpg` : ''));
+  const initialCover = book.cover_url || book.cover || (book.isbn ? `https://covers.openlibrary.org/b/isbn/${book.isbn}-L.jpg` : getFallbackSvg(book.title, book.author));
   const safeTitle = (book.title || '').replace(/'/g, "\'");
   const safeAuthor = (book.author || '').replace(/'/g, "\'");
 
   return `
-    <div class="book-card" onclick="flipAndOpenBook(this, '${book.id}')">
-      <div class="book-cover" data-book-id="${book.id}">
+    <div class="book-card" onclick="flipAndOpenBook(this, '${book.id || ''}')">
+      <div class="book-cover" data-book-id="${book.id || ''}">
         <img 
-          src="${coverUrl}" 
+          src="${initialCover}" 
           alt="${book.title}" 
           class="book-cover-img" 
-          style="width:100%; height:100%; object-fit:cover; border-radius:4px;" 
-          onerror="this.onerror=null; renderSpineFallback(this.parentElement, '${safeTitle}', '${safeAuthor}');" 
+          style="width:100%; height:100%; object-fit:cover; border-radius:6px;" 
+          onerror="this.onerror=null; this.src=getFallbackSvg('${safeTitle}', '${safeAuthor}');" 
         />
       </div>
       <div class="book-card-info">
@@ -6484,19 +6484,19 @@ function makeCoverStyle(book) {
 }
 
 function renderBookCard(book) {
-  const coverUrl = book.cover_url || (book.cover ? book.cover : (book.isbn ? `https://covers.openlibrary.org/b/isbn/${book.isbn}-L.jpg` : ''));
+  const initialCover = book.cover_url || book.cover || (book.isbn ? `https://covers.openlibrary.org/b/isbn/${book.isbn}-L.jpg` : getFallbackSvg(book.title, book.author));
   const safeTitle = (book.title || '').replace(/'/g, "\'");
   const safeAuthor = (book.author || '').replace(/'/g, "\'");
 
   return `
-    <div class="book-card" onclick="flipAndOpenBook(this, '${book.id}')">
-      <div class="book-cover" data-book-id="${book.id}">
+    <div class="book-card" onclick="flipAndOpenBook(this, '${book.id || ''}')">
+      <div class="book-cover" data-book-id="${book.id || ''}">
         <img 
-          src="${coverUrl}" 
+          src="${initialCover}" 
           alt="${book.title}" 
           class="book-cover-img" 
-          style="width:100%; height:100%; object-fit:cover; border-radius:4px;" 
-          onerror="this.onerror=null; renderSpineFallback(this.parentElement, '${safeTitle}', '${safeAuthor}');" 
+          style="width:100%; height:100%; object-fit:cover; border-radius:6px;" 
+          onerror="this.onerror=null; this.src=getFallbackSvg('${safeTitle}', '${safeAuthor}');" 
         />
       </div>
       <div class="book-card-info">
@@ -11108,6 +11108,67 @@ function loadBooksJSON() {
 document.addEventListener('DOMContentLoaded', () => {
   loadBooksJSON();
 });
+
+</script>
+<script>
+
+// Reliable in-memory & localStorage cache to guarantee instant subsequent loads
+const coverCache = JSON.parse(localStorage.getItem('helix_covers') || '{}');
+
+async function resolveAccurateCover(book) {
+  if (!book || !book.title) return '';
+  const key = `${book.title}::${book.author || ''}`.trim().toLowerCase();
+  
+  // 1. Return from cache if already resolved
+  if (coverCache[key]) return coverCache[key];
+
+  // If explicit valid cover_url provided on book object
+  if (book.cover_url && book.cover_url.startsWith('http')) {
+    coverCache[key] = book.cover_url;
+    return book.cover_url;
+  }
+  if (book.cover && book.cover.startsWith('http')) {
+    coverCache[key] = book.cover;
+    return book.cover;
+  }
+
+  // 2. Direct verified ISBN check
+  if (book.isbn && book.isbn.length >= 10 && !book.isbn.startsWith('0000')) {
+    const url = `https://covers.openlibrary.org/b/isbn/${book.isbn}-L.jpg?default=false`;
+    coverCache[key] = url;
+    return url;
+  }
+
+  // 3. High-accuracy Open Library title + author lookup
+  try {
+    const q = encodeURIComponent(`title:"${book.title}" ${book.author ? 'author:"' + book.author + '"' : ''}`);
+    const res = await fetch(`https://openlibrary.org/search.json?q=${q}&limit=1&fields=cover_i,isbn`);
+    const data = await res.json();
+    
+    if (data?.docs?.[0]?.cover_i) {
+      const url = `https://covers.openlibrary.org/b/id/${data.docs[0].cover_i}-L.jpg`;
+      coverCache[key] = url;
+      localStorage.setItem('helix_covers', JSON.stringify(coverCache));
+      return url;
+    }
+  } catch (e) {
+    console.warn('Cover lookup fallback for:', book.title);
+  }
+
+  // 4. Elegant Minimalist Procedural Jacket (NEVER show an unrelated book cover)
+  const cleanTitle = (book.title || 'Untitled').slice(0, 45);
+  const cleanAuthor = (book.author || '').slice(0, 30);
+  const fallbackSvg = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="450" viewBox="0 0 300 450"><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="%231a222d"/><stop offset="100%" stop-color="%230b0f14"/></linearGradient></defs><rect width="100%" height="100%" fill="url(%23g)"/><rect x="12" y="12" width="276" height="426" fill="none" stroke="%2338ef7d" stroke-width="1.5" stroke-opacity="0.3" rx="6"/><text x="50%" y="45%" fill="%23ffffff" font-size="18" font-family="system-ui, -apple-system, sans-serif" font-weight="700" text-anchor="middle" width="240">${encodeURIComponent(cleanTitle)}</text><text x="50%" y="58%" fill="%2300f2fe" font-size="13" font-family="system-ui, -apple-system, sans-serif" text-anchor="middle">${encodeURIComponent(cleanAuthor)}</text></svg>`;
+
+  coverCache[key] = fallbackSvg;
+  return fallbackSvg;
+}
+
+function getFallbackSvg(title, author) {
+  const cleanTitle = (title || 'Untitled').slice(0, 45);
+  const cleanAuthor = (author || '').slice(0, 30);
+  return `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="450" viewBox="0 0 300 450"><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="%231a222d"/><stop offset="100%" stop-color="%230b0f14"/></linearGradient></defs><rect width="100%" height="100%" fill="url(%23g)"/><rect x="12" y="12" width="276" height="426" fill="none" stroke="%2338ef7d" stroke-width="1.5" stroke-opacity="0.3" rx="6"/><text x="50%" y="45%" fill="%23ffffff" font-size="18" font-family="system-ui, -apple-system, sans-serif" font-weight="700" text-anchor="middle" width="240">${encodeURIComponent(cleanTitle)}</text><text x="50%" y="58%" fill="%2300f2fe" font-size="13" font-family="system-ui, -apple-system, sans-serif" text-anchor="middle">${encodeURIComponent(cleanAuthor)}</text></svg>`;
+}
 
 </script>
 </body>
