@@ -6,7 +6,7 @@ A premium, feature-rich, Kindle-inspired digital library application providing a
 
 - 🌐 **Live Website Link:** **[https://hardik-arora.github.io/helix-reader/](https://hardik-arora.github.io/helix-reader/)**
 - 📄 **Presentation PDF Deck:** **[https://hardik-arora.github.io/helix-reader/helix_reader_presentation.pdf](https://hardik-arora.github.io/helix-reader/helix_reader_presentation.pdf)**
-- 📊 **Presentation PowerPoint (PPTX):** **[https://hardik-arora.github.io/helix-reader/helix_reader_presentation.pptx](https://hardik-arora.github.io/helix-reader/helix_reader_presentation.pptx)**
+- 📊 **Presentation Slide Deck (Canva):** **[https://canva.link/44gbix0qr1thavv](https://canva.link/44gbix0qr1thavv)**
 
 ---
 
@@ -16,7 +16,7 @@ This repository contains the complete frontend, database backend, NLP engines, a
 
 *   **[`index.html`](./index.html)**: The main Kindle-style digital reader web app featuring 28 themes, real-time TTS voice reading with word highlights, floating dictionary, and Firebase sync.
 *   **[`helix_reader_presentation.pdf`](./helix_reader_presentation.pdf)**: Official Hackathon presentation slide deck (PDF format).
-*   **[`helix_reader_presentation.pptx`](./helix_reader_presentation.pptx)**: Official Hackathon presentation slide deck (editable PowerPoint format).
+*   **[`helix_reader_presentation.pptx`](./helix_reader_presentation.pptx)**: Official Hackathon presentation slide deck ([Canva Deck Link](https://canva.link/44gbix0qr1thavv)).
 *   **[`app.py`](./app.py)**: Streamlit-based analytics dashboard and fallback reader interface.
 *   **[`search.py`](./search.py)**: Multi-field search engine matching titles, authors, and keywords across catalogs.
 *   **[`reading_support.py`](./reading_support.py)**: NLP readability engine for syllable count, reading difficulty scores, and focus advice.
