@@ -6147,21 +6147,23 @@ window.addEventListener('click', () => {
 // WIKIPEDIA DYNAMIC COVER API INTEGRATION (CORS-friendly REST)
 // ══════════════════════════════════════════════════════════════
 function applyBookCoverImage(el, url, book) {
-  const fallback = getFallbackSvg(book?.title, book?.author, book?.topic);
-  const targetUrl = (url && url !== 'none') ? url : fallback;
-  
-  el.style.backgroundImage = `url('${targetUrl}')`;
-  el.style.backgroundSize = 'cover';
-  el.style.backgroundPosition = 'center';
-  el.classList.add('has-cover-image');
-
-  if (targetUrl !== fallback && targetUrl.startsWith('http')) {
-    const img = new Image();
-    img.onerror = () => {
-      el.style.backgroundImage = `url('${fallback}')`;
-    };
-    img.src = targetUrl;
+  if (!url || url === 'none') {
+    ensureEmojiFallback(el, book);
+    return;
   }
+  const img = new Image();
+  img.onload = () => {
+    el.style.backgroundImage = `url('${url}')`;
+    el.style.backgroundSize = 'cover';
+    el.style.backgroundPosition = 'center';
+    el.classList.add('has-cover-image');
+    const emoji = el.querySelector('.book-cover-emoji');
+    if (emoji) emoji.remove();
+  };
+  img.onerror = () => {
+    ensureEmojiFallback(el, book);
+  };
+  img.src = url;
 }
 
 function renderProgrammaticFallback(el, book) {
@@ -6252,34 +6254,38 @@ function getCoverUrl(book, size = 'L') {
 }
 
 function makeCoverStyle(book) {
-  const coverUrl = getVerifiedBookCover(book) || getFallbackSvg(book?.title, book?.author, book?.topic);
-  return `background-image: url('${coverUrl}'); background-size: cover; background-position: center;`;
+  const cachedCover = state.covers[book?.id];
+  if (cachedCover && cachedCover !== 'none') {
+    return `background-image: url('${cachedCover}'); background-size: cover; background-position: center;`;
+  }
+  const url = book?.cover_url || book?.cover;
+  if (url && url !== 'none' && url.startsWith('http')) {
+    return `background-image: url('${url}'); background-size: cover; background-position: center;`;
+  }
+  const colors = book?.color || ['#1e293b', '#0f172a'];
+  return `background: linear-gradient(135deg, ${colors[0]} 0%, ${colors[1]} 100%);`;
 }
 
 function renderBookCard(book) {
-  const verifiedUrl = getVerifiedBookCover(book);
-  const coverUrl = verifiedUrl || getFallbackSvg(book?.title, book?.author, book?.topic);
-  
+  const coverUrl = book.cover_url || book.cover || (book.isbn ? `https://covers.openlibrary.org/b/isbn/${book.isbn}-L.jpg` : '');
+  const safeTitle = (book.title || '').replace(/'/g, "\'");
+  const safeAuthor = (book.author || '').replace(/'/g, "\'");
+  const initialImg = coverUrl || getFallbackSvg(book.title, book.author);
+
   return `
-    <div class="book-card" onclick="flipAndOpenBook(this, '${book.id}')">
-      <div class="book-cover has-cover-image" data-book-id="${book.id}" style="background-image: url('${coverUrl}'); background-size: cover; background-position: center;">
-        <div class="book-spine-line"></div>
-        <div class="shelf-hover-overlay">
-          <div class="shelf-hover-title">${book.title || ''}</div>
-          <div class="shelf-hover-author">by ${book.author || ''}</div>
-          <div class="shelf-hover-actions">
-            <button class="shelf-hover-btn primary" onclick="event.stopPropagation(); openReader('${book.id}')">▶ Read</button>
-            <button class="shelf-hover-btn secondary" onclick="event.stopPropagation(); flipAndOpenBook(this.closest('.book-card'), '${book.id}')">ℹ Info</button>
-          </div>
-        </div>
+    <div class="book-card" onclick="flipAndOpenBook(this, '${book.id || ''}')">
+      <div class="book-cover" data-book-id="${book.id || ''}">
+        <img 
+          src="${initialImg}" 
+          alt="${book.title}" 
+          class="book-cover-img" 
+          style="width:100%; height:100%; object-fit:cover; border-radius:6px;" 
+          onerror="this.onerror=null; this.src=getFallbackSvg('${safeTitle}', '${safeAuthor}');" 
+        />
       </div>
       <div class="book-card-info">
-        <div class="book-title">${book.title || ''}</div>
-        <div class="book-author">${book.author || ''}</div>
-        <div class="book-rating">
-          <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-          <span>${book.rating || '4.8'}</span>
-        </div>
+        <div class="book-title">${book.title}</div>
+        <div class="book-author">${book.author}</div>
       </div>
     </div>
   `;
@@ -6532,34 +6538,38 @@ function getCoverUrl(book, size = 'L') {
 }
 
 function makeCoverStyle(book) {
-  const coverUrl = getVerifiedBookCover(book) || getFallbackSvg(book?.title, book?.author, book?.topic);
-  return `background-image: url('${coverUrl}'); background-size: cover; background-position: center;`;
+  const cachedCover = state.covers[book?.id];
+  if (cachedCover && cachedCover !== 'none') {
+    return `background-image: url('${cachedCover}'); background-size: cover; background-position: center;`;
+  }
+  const url = book?.cover_url || book?.cover;
+  if (url && url !== 'none' && url.startsWith('http')) {
+    return `background-image: url('${url}'); background-size: cover; background-position: center;`;
+  }
+  const colors = book?.color || ['#1e293b', '#0f172a'];
+  return `background: linear-gradient(135deg, ${colors[0]} 0%, ${colors[1]} 100%);`;
 }
 
 function renderBookCard(book) {
-  const verifiedUrl = getVerifiedBookCover(book);
-  const coverUrl = verifiedUrl || getFallbackSvg(book?.title, book?.author, book?.topic);
-  
+  const coverUrl = book.cover_url || book.cover || (book.isbn ? `https://covers.openlibrary.org/b/isbn/${book.isbn}-L.jpg` : '');
+  const safeTitle = (book.title || '').replace(/'/g, "\'");
+  const safeAuthor = (book.author || '').replace(/'/g, "\'");
+  const initialImg = coverUrl || getFallbackSvg(book.title, book.author);
+
   return `
-    <div class="book-card" onclick="flipAndOpenBook(this, '${book.id}')">
-      <div class="book-cover has-cover-image" data-book-id="${book.id}" style="background-image: url('${coverUrl}'); background-size: cover; background-position: center;">
-        <div class="book-spine-line"></div>
-        <div class="shelf-hover-overlay">
-          <div class="shelf-hover-title">${book.title || ''}</div>
-          <div class="shelf-hover-author">by ${book.author || ''}</div>
-          <div class="shelf-hover-actions">
-            <button class="shelf-hover-btn primary" onclick="event.stopPropagation(); openReader('${book.id}')">▶ Read</button>
-            <button class="shelf-hover-btn secondary" onclick="event.stopPropagation(); flipAndOpenBook(this.closest('.book-card'), '${book.id}')">ℹ Info</button>
-          </div>
-        </div>
+    <div class="book-card" onclick="flipAndOpenBook(this, '${book.id || ''}')">
+      <div class="book-cover" data-book-id="${book.id || ''}">
+        <img 
+          src="${initialImg}" 
+          alt="${book.title}" 
+          class="book-cover-img" 
+          style="width:100%; height:100%; object-fit:cover; border-radius:6px;" 
+          onerror="this.onerror=null; this.src=getFallbackSvg('${safeTitle}', '${safeAuthor}');" 
+        />
       </div>
       <div class="book-card-info">
-        <div class="book-title">${book.title || ''}</div>
-        <div class="book-author">${book.author || ''}</div>
-        <div class="book-rating">
-          <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-          <span>${book.rating || '4.8'}</span>
-        </div>
+        <div class="book-title">${book.title}</div>
+        <div class="book-author">${book.author}</div>
       </div>
     </div>
   `;
@@ -11262,11 +11272,6 @@ async function resolveAccurateCover(book) {
   return fallbackSvg;
 }
 
-function getFallbackSvg(title, author) {
-  const cleanTitle = (title || 'Untitled').slice(0, 45);
-  const cleanAuthor = (author || '').slice(0, 30);
-  return `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="450" viewBox="0 0 300 450"><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="%231a222d"/><stop offset="100%" stop-color="%230b0f14"/></linearGradient></defs><rect width="100%" height="100%" fill="url(%23g)"/><rect x="12" y="12" width="276" height="426" fill="none" stroke="%2338ef7d" stroke-width="1.5" stroke-opacity="0.3" rx="6"/><text x="50%" y="45%" fill="%23ffffff" font-size="18" font-family="system-ui, -apple-system, sans-serif" font-weight="700" text-anchor="middle" width="240">${encodeURIComponent(cleanTitle)}</text><text x="50%" y="58%" fill="%2300f2fe" font-size="13" font-family="system-ui, -apple-system, sans-serif" text-anchor="middle">${encodeURIComponent(cleanAuthor)}</text></svg>`;
-}
 
 </script>
 </body>
