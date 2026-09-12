@@ -4344,6 +4344,18 @@
 </div>
 
 <script>
+
+function handleCoverError(imgElement, isbn, safeTitle, safeAuthor) {
+  const gbUrl = (isbn && !isbn.startsWith('000')) ? `https://books.google.com/books/content?vid=isbn${isbn}&printsec=frontcover&img=1&zoom=1` : '';
+  if (gbUrl && !imgElement.dataset.triedGb) {
+    imgElement.dataset.triedGb = 'true';
+    imgElement.src = gbUrl;
+  } else {
+    imgElement.onerror = null;
+    imgElement.src = getFallbackSvg(safeTitle, safeAuthor);
+  }
+}
+
 // ══════════════════════════════════════════════════════════════
 const BOOK_METADATA_ENRICHMENT = {
   "War and Peace": {
@@ -6267,7 +6279,8 @@ function makeCoverStyle(book) {
 }
 
 function renderBookCard(book) {
-  const coverUrl = book.cover_url || book.cover || (book.isbn ? `https://covers.openlibrary.org/b/isbn/${book.isbn}-L.jpg` : '');
+  const isbn = book.isbn || '';
+  const coverUrl = book.cover_url || book.cover || (isbn ? `https://covers.openlibrary.org/b/isbn/${isbn}-L.jpg?default=false` : '');
   const safeTitle = (book.title || '').replace(/'/g, "\'");
   const safeAuthor = (book.author || '').replace(/'/g, "\'");
   const initialImg = coverUrl || getFallbackSvg(book.title, book.author);
@@ -6280,7 +6293,7 @@ function renderBookCard(book) {
           alt="${book.title}" 
           class="book-cover-img" 
           style="width:100%; height:100%; object-fit:cover; border-radius:6px;" 
-          onerror="this.onerror=null; this.src=getFallbackSvg('${safeTitle}', '${safeAuthor}');" 
+          onerror="handleCoverError(this, '${isbn}', '${safeTitle}', '${safeAuthor}')" 
         />
       </div>
       <div class="book-card-info">
@@ -6551,7 +6564,8 @@ function makeCoverStyle(book) {
 }
 
 function renderBookCard(book) {
-  const coverUrl = book.cover_url || book.cover || (book.isbn ? `https://covers.openlibrary.org/b/isbn/${book.isbn}-L.jpg` : '');
+  const isbn = book.isbn || '';
+  const coverUrl = book.cover_url || book.cover || (isbn ? `https://covers.openlibrary.org/b/isbn/${isbn}-L.jpg?default=false` : '');
   const safeTitle = (book.title || '').replace(/'/g, "\'");
   const safeAuthor = (book.author || '').replace(/'/g, "\'");
   const initialImg = coverUrl || getFallbackSvg(book.title, book.author);
@@ -6564,7 +6578,7 @@ function renderBookCard(book) {
           alt="${book.title}" 
           class="book-cover-img" 
           style="width:100%; height:100%; object-fit:cover; border-radius:6px;" 
-          onerror="this.onerror=null; this.src=getFallbackSvg('${safeTitle}', '${safeAuthor}');" 
+          onerror="handleCoverError(this, '${isbn}', '${safeTitle}', '${safeAuthor}')" 
         />
       </div>
       <div class="book-card-info">
@@ -11169,6 +11183,18 @@ setTimeout(initSiriHudDraggable, 500);
 
 <script>
 
+function handleCoverError(imgElement, isbn, safeTitle, safeAuthor) {
+  const gbUrl = (isbn && !isbn.startsWith('000')) ? `https://books.google.com/books/content?vid=isbn${isbn}&printsec=frontcover&img=1&zoom=1` : '';
+  if (gbUrl && !imgElement.dataset.triedGb) {
+    imgElement.dataset.triedGb = 'true';
+    imgElement.src = gbUrl;
+  } else {
+    imgElement.onerror = null;
+    imgElement.src = getFallbackSvg(safeTitle, safeAuthor);
+  }
+}
+
+
 
 function bindCardCover(card, book) {
   const img = card.querySelector('img.book-cover, .cover-img, img, .book-cover-img');
@@ -11219,6 +11245,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
 </script>
 <script>
+
+function handleCoverError(imgElement, isbn, safeTitle, safeAuthor) {
+  const gbUrl = (isbn && !isbn.startsWith('000')) ? `https://books.google.com/books/content?vid=isbn${isbn}&printsec=frontcover&img=1&zoom=1` : '';
+  if (gbUrl && !imgElement.dataset.triedGb) {
+    imgElement.dataset.triedGb = 'true';
+    imgElement.src = gbUrl;
+  } else {
+    imgElement.onerror = null;
+    imgElement.src = getFallbackSvg(safeTitle, safeAuthor);
+  }
+}
+
 
 // Reliable in-memory & localStorage cache to guarantee instant subsequent loads
 const coverCache = JSON.parse(localStorage.getItem('helix_covers') || '{}');
