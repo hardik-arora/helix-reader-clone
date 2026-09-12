@@ -23,7 +23,7 @@ CATALOG = {
   "The Diary of a Young Girl": "https://covers.openlibrary.org/b/isbn/9780553296983-L.jpg?default=false",
   "The Republic": "https://covers.openlibrary.org/b/isbn/9780140449143-L.jpg?default=false",
   "Meditations": "https://covers.openlibrary.org/b/isbn/9780140449334-L.jpg?default=false",
-  "Beyond Good and Evil": "https://books.google.com/books/content?vid=isbn9780140449233&printsec=frontcover&img=1&zoom=1",
+  "Beyond Good and Evil": "https://covers.openlibrary.org/b/id/526786-L.jpg",
   "Critique of Pure Reason": "https://covers.openlibrary.org/b/isbn/9780140447477-L.jpg?default=false",
   "The Prince": "https://covers.openlibrary.org/b/isbn/9780140449150-L.jpg?default=false",
   "1984": "https://covers.openlibrary.org/b/isbn/9780451524935-L.jpg?default=false",
