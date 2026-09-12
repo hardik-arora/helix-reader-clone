@@ -13,6 +13,7 @@
     "lang": "English",
     "language": "English",
     "year": 1988,
+    "published_year": 1988,
     "summary": "An landmark book by physicist Stephen Hawking that explains complex concepts of cosmology, including the Big Bang, black holes, and light cones, to non-specialist readers."
   },
   {
@@ -29,6 +30,7 @@
     "lang": "English",
     "language": "English",
     "year": 1859,
+    "published_year": 1859,
     "summary": "Charles Darwin's seminal work introducing the scientific theory of evolution by natural selection, which serves as the foundation of modern evolutionary biology."
   },
   {
@@ -45,6 +47,7 @@
     "lang": "English",
     "language": "English",
     "year": 1980,
+    "published_year": 1980,
     "summary": "Carl Sagan explores the universe, the history of science, and the human search for our place in the cosmos, highlighting the interconnection of science, philosophy, and history."
   },
   {
@@ -61,6 +64,7 @@
     "lang": "English",
     "language": "English",
     "year": 1976,
+    "published_year": 1976,
     "summary": "Richard Dawkins introduces the gene-centered view of evolution, explaining how genes use organisms as vehicles to replicate themselves, and introduces the term 'meme'."
   },
   {
@@ -77,6 +81,7 @@
     "lang": "English",
     "language": "English",
     "year": 1968,
+    "published_year": 1968,
     "summary": "An autobiographical account of the discovery of the double helix structure of DNA by James Watson and Francis Crick, detailing the personal and academic rivalry behind the breakthrough."
   },
   {
@@ -93,6 +98,7 @@
     "lang": "English",
     "language": "English",
     "year": 1962,
+    "published_year": 1962,
     "summary": "A landmark environmental science book detailing the adverse effects of indiscriminate pesticide use on the ecosystem, which helped launch the modern environmental movement."
   },
   {
@@ -109,6 +115,7 @@
     "lang": "English",
     "language": "English",
     "year": 2014,
+    "published_year": 2014,
     "summary": "Yuval Noah Harari surveys the history of humankind from the evolutionary origins of Homo sapiens to the present day, focusing on the cognitive, agricultural, and scientific revolutions."
   },
   {
@@ -125,6 +132,7 @@
     "lang": "English",
     "language": "English",
     "year": 1997,
+    "published_year": 1997,
     "summary": "Jared Diamond argues that geographical and environmental factors, rather than genetic differences, shaped the modern world and the unequal development of human societies."
   },
   {
@@ -141,6 +149,7 @@
     "lang": "English",
     "language": "English",
     "year": 1980,
+    "published_year": 1980,
     "summary": "Howard Zinn re-examines American history from the perspective of marginalized groups, including Native Americans, slaves, women, and workers, rather than political elites."
   },
   {
@@ -157,6 +166,7 @@
     "lang": "English",
     "language": "English",
     "year": 1960,
+    "published_year": 1960,
     "summary": "A detailed history of Nazi Germany from its origins to its defeat in World War II, based on captured German archives and personal observations."
   },
   {
@@ -173,6 +183,7 @@
     "lang": "English",
     "language": "English",
     "year": 1947,
+    "published_year": 1947,
     "summary": "The personal diary of Anne Frank, a Jewish girl who went into hiding with her family during the Nazi occupation of the Netherlands in World War II."
   },
   {
@@ -189,6 +200,7 @@
     "lang": "English",
     "language": "English",
     "year": -380,
+    "published_year": -380,
     "summary": "Plato's classic Socratic dialogue concerning justice, the order and character of the just city-state, and the nature of the philosopher king."
   },
   {
@@ -205,6 +217,7 @@
     "lang": "English",
     "language": "English",
     "year": 161,
+    "published_year": 161,
     "summary": "A series of personal writings by the Roman Emperor Marcus Aurelius, offering Stoic philosophy and practical guidance on self-discipline, duty, and resilience."
   },
   {
@@ -218,9 +231,10 @@
     "cover_url": "https://books.google.com/books/content?vid=isbn9780140449233&printsec=frontcover&img=1&zoom=1",
     "pages": 240,
     "rating": 4.6,
-    "lang": "English",
-    "language": "English",
+    "lang": "German",
+    "language": "German",
     "year": 1886,
+    "published_year": 1886,
     "summary": "Friedrich Nietzsche critiques traditional morality and Western philosophy, advocating for the 'free spirit' and introducing concepts like the will to power."
   },
   {
@@ -237,6 +251,7 @@
     "lang": "English",
     "language": "English",
     "year": 1781,
+    "published_year": 1781,
     "summary": "Immanuel Kant's foundational philosophical work investigating the limits and scope of human understanding and the relationship between rationalism and empiricism."
   },
   {
@@ -253,6 +268,7 @@
     "lang": "English",
     "language": "English",
     "year": 1532,
+    "published_year": 1532,
     "summary": "A 16th-century political treatise offering pragmatic, sometimes ruthless advice to rulers on how to acquire and maintain political power."
   },
   {
@@ -269,6 +285,7 @@
     "lang": "English",
     "language": "English",
     "year": 1949,
+    "published_year": 1949,
     "summary": "A dystopian novel depicting a totalitarian regime led by Big Brother, exploring themes of mass surveillance, censorship, and the manipulation of truth and language."
   },
   {
@@ -285,6 +302,7 @@
     "lang": "English",
     "language": "English",
     "year": 1960,
+    "published_year": 1960,
     "summary": "Set in the American South, this novel follows young Scout Finch and her lawyer father Atticus as they confront racial injustice and the loss of innocence in their small town."
   },
   {
@@ -301,6 +319,7 @@
     "lang": "English",
     "language": "English",
     "year": 1925,
+    "published_year": 1925,
     "summary": "A story of the mysterious millionaire Jay Gatsby and his tragic obsession with the beautiful Daisy Buchanan, exploring themes of wealth, love, and the American Dream in the 1920s."
   },
   {
@@ -317,6 +336,7 @@
     "lang": "English",
     "language": "English",
     "year": 1813,
+    "published_year": 1813,
     "summary": "A romantic novel of manners following the turbulent relationship between Elizabeth Bennet and the wealthy, proud Mr. Darcy in 19th-century England."
   },
   {
@@ -333,6 +353,7 @@
     "lang": "English",
     "language": "English",
     "year": 1818,
+    "published_year": 1818,
     "summary": "Mary Shelley's classic gothic novel detailing the tragic experiment of Victor Frankenstein as he creates a sentient creature, exploring the bounds of science and humanity."
   },
   {
@@ -349,6 +370,7 @@
     "lang": "English",
     "language": "English",
     "year": 1851,
+    "published_year": 1851,
     "summary": "A classic American novel recounting the quest of the obsessive Captain Ahab for revenge on Moby Dick, the giant white whale that bit off his leg."
   },
   {
@@ -365,6 +387,7 @@
     "lang": "English",
     "language": "English",
     "year": 1975,
+    "published_year": 1975,
     "summary": "A classic collection of essays on software engineering project management, highlighting the famous law that adding programmers to a late project makes it later."
   },
   {
@@ -381,6 +404,7 @@
     "lang": "English",
     "language": "English",
     "year": 2008,
+    "published_year": 2008,
     "summary": "A handbook of agile software craftsmanship that guides developers on how to write professional, clean, and maintainable code with practical examples."
   },
   {
@@ -397,6 +421,7 @@
     "lang": "English",
     "language": "English",
     "year": 1990,
+    "published_year": 1990,
     "summary": "A comprehensive, rigorous introduction to the design and analysis of computer algorithms, widely used as a standard textbook in universities."
   },
   {
@@ -413,6 +438,7 @@
     "lang": "English",
     "language": "English",
     "year": 1994,
+    "published_year": 1994,
     "summary": "A landmark computer science textbook describing 23 classic design patterns in object-oriented programming to solve common software design problems."
   },
   {
@@ -429,6 +455,7 @@
     "lang": "English",
     "language": "English",
     "year": 2011,
+    "published_year": 2011,
     "summary": "The definitive biography of Apple co-founder Steve Jobs, detailing his intense personality, creative drive, and revolutionary impact on technology and media industries."
   },
   {
@@ -445,6 +472,7 @@
     "lang": "English",
     "language": "English",
     "year": 1994,
+    "published_year": 1994,
     "summary": "The autobiography of Nelson Mandela, tracing his early life, his resistance against apartheid in South Africa, his 27 years of imprisonment, and his ultimate presidency."
   },
   {
@@ -461,6 +489,7 @@
     "lang": "English",
     "language": "English",
     "year": 1965,
+    "published_year": 1965,
     "summary": "The life story of the prominent African American activist Malcolm X, detailing his journey from street hustler to leader in the Nation of Islam and advocate for Black empowerment."
   },
   {
@@ -477,6 +506,7 @@
     "lang": "English",
     "language": "English",
     "year": 2004,
+    "published_year": 2004,
     "summary": "A comprehensive biography of the first U.S. Treasury Secretary, Alexander Hamilton, detailing his role in the American Revolution, the Constitution, and his legendary duel with Aaron Burr."
   },
   {
@@ -493,6 +523,7 @@
     "lang": "English",
     "language": "English",
     "year": 1776,
+    "published_year": 1776,
     "summary": "Adam Smith's foundational work on economics, describing the division of labor, productivity, and free markets as the key drivers of national wealth."
   },
   {
@@ -509,6 +540,7 @@
     "lang": "English",
     "language": "English",
     "year": 1867,
+    "published_year": 1867,
     "summary": "Karl Marx's critical analysis of capitalism, examining how capital is accumulated, the exploitation of labor, and the division of classes."
   },
   {
@@ -525,6 +557,7 @@
     "lang": "English",
     "language": "English",
     "year": 1899,
+    "published_year": 1899,
     "summary": "Sigmund Freud introduces his theory of the unconscious mind, arguing that dreams are forms of wish-fulfillment that can be systematically analyzed."
   },
   {
@@ -541,6 +574,7 @@
     "lang": "English",
     "language": "English",
     "year": 1910,
+    "published_year": 1910,
     "summary": "A collection of spiritual poems by Rabindranath Tagore, exploring devotion, humanity, nature, and the connection between the soul and the divine."
   },
   {
@@ -557,6 +591,7 @@
     "lang": "English",
     "language": "English",
     "year": -800,
+    "published_year": -800,
     "summary": "Homer's ancient Greek epic poem telling the story of Odysseus' ten-year journey home to Ithaca after the fall of Troy."
   },
   {
@@ -573,6 +608,7 @@
     "lang": "English",
     "language": "English",
     "year": 1881,
+    "published_year": 1881,
     "summary": "A classic novel where a young beggar named Tom Canty and Edward Tudor, the Prince of Wales, exchange identities, experiencing each other's lives."
   },
   {
@@ -589,6 +625,7 @@
     "lang": "English",
     "language": "English",
     "year": -500,
+    "published_year": -500,
     "summary": "An ancient Chinese military treatise attributed to Sun Tzu, detailing strategies for warfare, diplomacy, and conflict resolution."
   },
   {
@@ -605,6 +642,7 @@
     "lang": "English",
     "language": "English",
     "year": -300,
+    "published_year": -300,
     "summary": "An ancient mathematical treatise consisting of 13 books containing geometry definitions, axioms, theorems, and proofs that laid the foundation of mathematics."
   },
   {
@@ -621,6 +659,7 @@
     "lang": "English",
     "language": "English",
     "year": 1854,
+    "published_year": 1854,
     "summary": "Thoreau's reflection upon simple living in natural surroundings at Walden Pond, exploring self-reliance and transcendentalist philosophy."
   },
   {
@@ -637,6 +676,7 @@
     "lang": "English",
     "language": "English",
     "year": 1964,
+    "published_year": 1964,
     "summary": "Marshall McLuhan introduces the concept that the form of a medium embeds itself in any message it transmits, creating a symbiotic relationship."
   }
 ]
