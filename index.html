@@ -3299,7 +3299,7 @@
     <!-- Shelf: Fiction -->
     <div class="shelf-wrap">
       <div class="section-header">
-        <div class="section-title">📖 World Fiction</div>
+        <div class="section-title"> World Fiction</div>
         <span class="section-more" onclick="filterByTopic('Fiction')">See all →</span>
       </div>
       <div class="shelf" id="shelf-fiction"></div>
@@ -3450,7 +3450,7 @@
       <!-- Searchable Dictionary -->
       <div style="background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.1)">
         <h3 style="font-family:var(--heading-font);font-size:1.3rem;font-weight:800;color:var(--text);margin-bottom:0.4rem;display:flex;align-items:center;gap:0.5rem">
-          <span>📖 Searchable Dictionary</span>
+          <span> Searchable Dictionary</span>
         </h3>
         <p style="font-size:0.8rem;color:var(--text3);margin-bottom:1rem">Search definitions, phonetics, and examples for any word.</p>
         
@@ -3630,7 +3630,7 @@
 
     <!-- Tab filters -->
     <div class="filters-row" style="margin-bottom:2rem;border-bottom:1px solid var(--border);padding-bottom:0.5rem">
-      <button class="filter-chip active" id="lib-tab-reading" onclick="switchLibTab('reading')">📖 Active Reading</button>
+      <button class="filter-chip active" id="lib-tab-reading" onclick="switchLibTab('reading')"> Active Reading</button>
       <button class="filter-chip" id="lib-tab-favorites" onclick="switchLibTab('favorites')">❤️ Favorites</button>
       <button class="filter-chip" id="lib-tab-completed" onclick="switchLibTab('completed')">✅ Completed Books</button>
       <button class="filter-chip" id="lib-tab-vocab" onclick="switchLibTab('vocab')">🎒 Custom Vocabulary</button>
@@ -3715,7 +3715,7 @@
     <div style="display:flex;flex-direction:column;gap:0.8rem">
       <!-- Read Online (Free) -->
       <a id="read-link-online" href="#" target="_blank" onclick="setTimeout(closeReadOptionsModal, 150); addXP(10);" class="platform-option" style="border: 1px solid var(--accent); background: rgba(0, 255, 187, 0.04);">
-        <span class="option-emoji" style="font-size: 1.4rem;">📖</span>
+        <span class="option-emoji" style="font-size: 1.4rem;"></span>
         <div style="text-align:left">
           <div style="font-weight:700; color: var(--accent);">Read Online (Free)</div>
           <div style="font-size:0.75rem;color:var(--text3)">Access page-flips, scans, or text directly</div>
@@ -7275,7 +7275,7 @@ function openReader(bookId, skipAnim = false) {
 
   const mainText = [
     `📚 PREFACE: NARRATIVE OVERVIEW\n\n${readerBook.summary || 'No summary available.'}`,
-    `📖 CHAPTER I: THE INAUGURAL EXCERPT\n\n${readerBook.excerpt || 'No excerpt available.'}`,
+    ` CHAPTER I: THE INAUGURAL EXCERPT\n\n${readerBook.excerpt || 'No excerpt available.'}`,
     `✨ NOTABLE QUOTES & FAMOUS PHRASES\n\n${quotesBlock || 'No quotes archived for this edition.'}`,
     `🎯 CRITICAL ANALYSIS & KEY THEMES\n\nThis selection explores fundamental questions of ${readerBook.topic ? readerBook.topic.toLowerCase() : 'literature'}, focusing on its cultural impact, historical context, and thematic depth.`
   ].join('\n\n════════════════════════════════\n\n');
@@ -8119,7 +8119,7 @@ function deleteHighlightItem(idx) {
 const ALL_BADGES = [
   {id:'b1', icon:'🎖️', title:'First Step', desc:'Complete your first quiz question correctly.'},
   {id:'b2', icon:'🎓', title:'Scholar', desc:'Earn 300 XP knowledge points total.'},
-  {id:'b3', icon:'📖', title:'Bookworm', desc:'Mark at least one classic book completed.'},
+  {id:'b3', icon:'', title:'Bookworm', desc:'Mark at least one classic book completed.'},
   {id:'b4', icon:'🎒', title:'Lexicographer', desc:'Save 5 vocabulary meanings to your sanctuary.'},
   {id:'b5', icon:'🖊️', title:'Highlighter', desc:'Highlight 3 beautiful passages from books.'},
   {id:'b6', icon:'👑', title:'Legend', desc:'Gain 1000 XP knowledge points.'}
@@ -8776,7 +8776,7 @@ function renderAuthorProfileHTML(author, targetElement) {
   const worksHtml = author.works.map(w => `
     <div style="margin-bottom:0.6rem; background:var(--bg3); padding:0.6rem; border-radius:6px; border:1px solid var(--border)">
       <div style="font-size:0.85rem; font-weight:700; color:var(--text); display:flex; justify-content:space-between">
-        <span>📖 ${w.title}</span>
+        <span> ${w.title}</span>
         <span style="font-size:0.75rem; color:var(--text3)">📅 ${w.year}</span>
       </div>
       <div style="font-size:0.78rem; color:var(--text2); margin-top:0.25rem">${w.desc}</div>
@@ -9292,7 +9292,7 @@ function toggleFocusRuler() {
         <!-- Quick Presets Row -->
         <div class="ruler-dock-row" style="gap:0.4rem;">
           <button class="ruler-preset-chip" id="ruler-chip-28" onclick="setRulerPreset(28)">📐 Line (28px)</button>
-          <button class="ruler-preset-chip" id="ruler-chip-52" onclick="setRulerPreset(52)">📖 Para (52px)</button>
+          <button class="ruler-preset-chip" id="ruler-chip-52" onclick="setRulerPreset(52)"> Para (52px)</button>
           <button class="ruler-preset-chip" id="ruler-chip-84" onclick="setRulerPreset(84)">📜 Block (84px)</button>
         </div>
 
@@ -11080,6 +11080,36 @@ setTimeout(initSiriHudDraggable, 500);
   </div>
 </div>
 
+<script>
+
+function loadBooksJSON() {
+  fetch('books.json?v=' + Date.now())
+    .then(res => res.json())
+    .then(books => {
+      // Map each category to its shelf container
+      document.querySelectorAll('[data-shelf], .book-carousel, .carousel-row, .shelf').forEach(row => {
+        const catTitle = row.closest('section')?.querySelector('h2, h3, .section-title')?.innerText || '';
+        row.innerHTML = '';
+        
+        const filtered = books.filter(b => catTitle.toLowerCase().includes(b.category.toLowerCase().split(' ')[0]))
+                             .length ? books.filter(b => catTitle.toLowerCase().includes(b.category.toLowerCase().split(' ')[0])) : books;
+
+        filtered.forEach(book => {
+          const card = document.createElement('div');
+          card.className = 'book-card';
+          card.innerHTML = `<img src="${book.cover}" alt="${book.title}" style="width:100%; height:100%; object-fit:cover; border-radius:6px;" />`;
+          row.appendChild(card);
+        });
+      });
+    })
+    .catch(err => console.error("Error loading books.json:", err));
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  loadBooksJSON();
+});
+
+</script>
 </body>
 </html>
 <!-- Build Force Timestamp: 2026-09-03T23:50:00Z -->
