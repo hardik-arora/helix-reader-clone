@@ -6201,24 +6201,37 @@ function makeCoverStyle(book) {
 }
 
 function renderBookCard(book) {
-  const initialCover = book.cover_url || book.cover || (book.isbn ? `https://covers.openlibrary.org/b/isbn/${book.isbn}-L.jpg` : getFallbackSvg(book.title, book.author));
+  const coverUrl = book.cover_url || book.cover || (book.isbn ? `https://covers.openlibrary.org/b/isbn/${book.isbn}-L.jpg` : '');
   const safeTitle = (book.title || '').replace(/'/g, "\'");
   const safeAuthor = (book.author || '').replace(/'/g, "\'");
+  const initialImg = coverUrl || getFallbackSvg(book.title, book.author);
 
   return `
     <div class="book-card" onclick="flipAndOpenBook(this, '${book.id || ''}')">
       <div class="book-cover" data-book-id="${book.id || ''}">
         <img 
-          src="${initialCover}" 
+          src="${initialImg}" 
           alt="${book.title}" 
           class="book-cover-img" 
           style="width:100%; height:100%; object-fit:cover; border-radius:6px;" 
           onerror="this.onerror=null; this.src=getFallbackSvg('${safeTitle}', '${safeAuthor}');" 
         />
+        <div class="shelf-hover-overlay">
+          <div class="shelf-hover-title">${book.title}</div>
+          <div class="shelf-hover-author">by ${book.author}</div>
+          <div class="shelf-hover-actions">
+            <button class="shelf-hover-btn primary" onclick="event.stopPropagation(); openReader('${book.id || ''}')">▶ Read</button>
+            <button class="shelf-hover-btn secondary" onclick="event.stopPropagation(); flipAndOpenBook(this.closest('.book-card'), '${book.id || ''}')">ℹ Info</button>
+          </div>
+        </div>
       </div>
       <div class="book-card-info">
         <div class="book-title">${book.title}</div>
         <div class="book-author">${book.author}</div>
+        <div class="book-rating">
+          <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:#fbbf24;display:inline-block;vertical-align:middle;"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+          <span style="font-size:0.8rem;color:var(--text2);margin-left:2px;">${book.rating || '4.8'}</span>
+        </div>
       </div>
     </div>
   `;
@@ -6484,24 +6497,37 @@ function makeCoverStyle(book) {
 }
 
 function renderBookCard(book) {
-  const initialCover = book.cover_url || book.cover || (book.isbn ? `https://covers.openlibrary.org/b/isbn/${book.isbn}-L.jpg` : getFallbackSvg(book.title, book.author));
+  const coverUrl = book.cover_url || book.cover || (book.isbn ? `https://covers.openlibrary.org/b/isbn/${book.isbn}-L.jpg` : '');
   const safeTitle = (book.title || '').replace(/'/g, "\'");
   const safeAuthor = (book.author || '').replace(/'/g, "\'");
+  const initialImg = coverUrl || getFallbackSvg(book.title, book.author);
 
   return `
     <div class="book-card" onclick="flipAndOpenBook(this, '${book.id || ''}')">
       <div class="book-cover" data-book-id="${book.id || ''}">
         <img 
-          src="${initialCover}" 
+          src="${initialImg}" 
           alt="${book.title}" 
           class="book-cover-img" 
           style="width:100%; height:100%; object-fit:cover; border-radius:6px;" 
           onerror="this.onerror=null; this.src=getFallbackSvg('${safeTitle}', '${safeAuthor}');" 
         />
+        <div class="shelf-hover-overlay">
+          <div class="shelf-hover-title">${book.title}</div>
+          <div class="shelf-hover-author">by ${book.author}</div>
+          <div class="shelf-hover-actions">
+            <button class="shelf-hover-btn primary" onclick="event.stopPropagation(); openReader('${book.id || ''}')">▶ Read</button>
+            <button class="shelf-hover-btn secondary" onclick="event.stopPropagation(); flipAndOpenBook(this.closest('.book-card'), '${book.id || ''}')">ℹ Info</button>
+          </div>
+        </div>
       </div>
       <div class="book-card-info">
         <div class="book-title">${book.title}</div>
         <div class="book-author">${book.author}</div>
+        <div class="book-rating">
+          <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:#fbbf24;display:inline-block;vertical-align:middle;"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+          <span style="font-size:0.8rem;color:var(--text2);margin-left:2px;">${book.rating || '4.8'}</span>
+        </div>
       </div>
     </div>
   `;
@@ -11101,35 +11127,28 @@ function bindCardCover(card, book) {
 function loadBooksJSON() {
   fetch('books.json?v=' + Date.now())
     .then(res => res.json())
-    .then(books => {
-      document.querySelectorAll('[data-shelf], .book-carousel, .carousel-row, .shelf').forEach(row => {
-        const catTitle = row.closest('section')?.querySelector('h2, h3, .section-title')?.innerText || '';
-        row.innerHTML = '';
-        
-        const filtered = books.filter(b => catTitle.toLowerCase().includes(b.category.toLowerCase().split(' ')[0]))
-                             .length ? books.filter(b => catTitle.toLowerCase().includes(b.category.toLowerCase().split(' ')[0])) : books;
-
-        filtered.forEach(book => {
-          const card = document.createElement('div');
-          card.className = 'book-card';
-          card.innerHTML = `<img alt="${book.title}" style="width:100%; height:100%; object-fit:cover; border-radius:6px;" />`;
-          row.appendChild(card);
-          
-          const img = card.querySelector('img.book-cover, .cover-img, img');
-          if (img) {
-            resolveAccurateCover(book).then(url => {
-              img.src = url;
-              img.onload = () => img.classList.add('loaded'); // keeps CSS fade-in animations active
-              img.onerror = () => {
-                // Switch to procedural jacket if the remote asset 404s
-                img.src = coverCache[`${book.title}::${book.author || ''}`.trim().toLowerCase()] || getFallbackSvg(book.title, book.author);
-              };
-            });
-          }
-        });
+    .then(jsonBooks => {
+      jsonBooks.forEach((jb, i) => {
+        const exists = MASTER_BOOKS.some(mb => mb.title.toLowerCase().trim() === jb.title.toLowerCase().trim());
+        if (!exists) {
+          MASTER_BOOKS.push({
+            id: 'json-' + (i + 1),
+            title: jb.title,
+            author: jb.author,
+            topic: jb.category.includes('Science') ? 'Science' : (jb.category.includes('Biographies') ? 'Biography' : 'Fiction'),
+            cover_url: jb.cover,
+            cover: jb.cover,
+            summary: jb.title + ' by ' + jb.author,
+            rating: 4.8
+          });
+        }
       });
+      renderDiscoverPage();
     })
-    .catch(err => console.error("Error loading books.json:", err));
+    .catch(err => {
+      console.warn("Error loading books.json:", err);
+      renderDiscoverPage();
+    });
 }
 
 
