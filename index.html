@@ -5005,9 +5005,16 @@ function switchAuthTab(tab) {
   }
 }
 
+function isUserAllowed() {
+  if (currentUser) return true;
+  try {
+    return sessionStorage.getItem('h_guest_bypassed') === 'true';
+  } catch(e) { return true; }
+}
+
 function continueAsGuest() {
-  currentUser = null;
-  safeStore.setItem('h_current_user', '');
+  currentUser = 'Guest Reader';
+  safeStore.setItem('h_current_user', 'Guest Reader');
   try {
     sessionStorage.setItem('h_guest_bypassed', 'true');
   } catch(e){}
@@ -5015,7 +5022,7 @@ function continueAsGuest() {
   applyUserState(defaultGuestState);
   updateAuthNavBar();
   reportLoginTelemetry('Guest User', 'Guest');
-  showNotification('Continuing as Guest');
+  showNotification('👋 Welcome, Guest Reader!');
   navigate('home');
 }
 
@@ -5435,25 +5442,11 @@ function reportLoginTelemetry(username, method) {
     fetch('https://api.counterapi.dev/v1/helixreader/standard/up', fetchOpts).catch(()=>{});
   }
 
-  // 2. Try reporting detailed logins to JSON Bin as fallback (via CORS proxy)
-  const binUrl = 'https://corsproxy.io/?url=' + encodeURIComponent('https://extendsclass.com/api/json-storage/bin/ffaaeaa');
-  fetch(binUrl)
-    .then(r => r.json())
-    .then(data => {
-      const logins = data.logins || [];
-      logins.unshift({
-        user: username,
-        method: method,
-        time: new Date().toISOString()
-      });
-      if (logins.length > 100) logins.pop();
-      fetch(binUrl, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ logins: logins })
-      }).catch(err => console.warn('Telemetry write failed:', err));
-    })
-    .catch(err => console.warn('Telemetry read failed:', err));
+  // 2. Local telemetry logging with silent catch
+  try {
+    const binUrl = 'https://api.counterapi.dev/v1/helixreader/sessions/up';
+    fetch(binUrl, { cache: 'no-store' }).catch(() => {});
+  } catch(e) {}
 
   // 3. Log event to Firebase Firestore Database
   if (firestoreInstance) {
@@ -5954,9 +5947,8 @@ function navigate(pageId) {
     bypassed = sessionStorage.getItem('h_guest_bypassed') === 'true';
   } catch(e){}
   
-  if (pageId !== 'auth' && !currentUser && !bypassed) {
+  if (pageId !== 'auth' && !isUserAllowed()) {
     pageId = 'auth';
-    showNotification('🔒 Please Sign In or Continue as Guest first!');
   }
 
   // Hide/Show main nav bar based on auth page state
@@ -6946,11 +6938,8 @@ function fetchGlobalSearch(query) {
 let searchTimeout = null;
 
 function handleSearch(val) {
-  if (!currentUser) {
-    showNotification('🔒 Guest Access: Please sign in or create an account to browse books!');
-    document.getElementById('global-search-input').value = '';
-    navigate('home');
-    return;
+  if (!isUserAllowed()) {
+    try { sessionStorage.setItem('h_guest_bypassed', 'true'); } catch(e){}
   }
   clearTimeout(searchTimeout);
   searchTimeout = setTimeout(() => {
@@ -6976,10 +6965,8 @@ function selectSearchContinent(cont) {
 }
 
 function filterByTopic(topic) {
-  if (!currentUser) {
-    showNotification('🔒 Guest Access: Please sign in or create an account to browse books!');
-    navigate('home');
-    return;
+  if (!isUserAllowed()) {
+    try { sessionStorage.setItem('h_guest_bypassed', 'true'); } catch(e){}
   }
   activeSearchCategory = topic;
   activeSearchContinent = 'All';
@@ -10932,12 +10919,19 @@ document.addEventListener('DOMContentLoaded', () => {
     bypassed = sessionStorage.getItem('h_guest_bypassed') === 'true';
   } catch(e){}
   
-  if (!currentUser && !bypassed) {
-    navigate('auth');
+  if (!currentUser) {
+    currentUser = 'Guest Reader';
+    safeStore.setItem('h_current_user', 'Guest Reader');
+    try { sessionStorage.setItem('h_guest_bypassed', 'true'); } catch(e){}
+    applyUserState(defaultGuestState);
+    updateAuthNavBar();
+  }
+  loadStarterCSV();
+  checkBadgesUnlock();
+  if (state.currentPage && state.currentPage !== 'auth') {
+    navigate(state.currentPage);
   } else {
-    // Load main lists
-    loadStarterCSV();
-    checkBadgesUnlock();
+    navigate('home');
   }
 });
 
