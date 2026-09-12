@@ -11082,11 +11082,26 @@ setTimeout(initSiriHudDraggable, 500);
 
 <script>
 
+
+function bindCardCover(card, book) {
+  const img = card.querySelector('img.book-cover, .cover-img, img, .book-cover-img');
+  if (img) {
+    resolveAccurateCover(book).then(url => {
+      img.src = url;
+      img.onload = () => img.classList.add('loaded'); // keeps CSS fade-in animations active
+      img.onerror = () => {
+        // Switch to procedural jacket if the remote asset 404s
+        const key = `${book.title}::${book.author || ''}`.trim().toLowerCase();
+        img.src = coverCache[key] || getFallbackSvg(book.title, book.author);
+      };
+    });
+  }
+}
+
 function loadBooksJSON() {
   fetch('books.json?v=' + Date.now())
     .then(res => res.json())
     .then(books => {
-      // Map each category to its shelf container
       document.querySelectorAll('[data-shelf], .book-carousel, .carousel-row, .shelf').forEach(row => {
         const catTitle = row.closest('section')?.querySelector('h2, h3, .section-title')?.innerText || '';
         row.innerHTML = '';
@@ -11097,13 +11112,26 @@ function loadBooksJSON() {
         filtered.forEach(book => {
           const card = document.createElement('div');
           card.className = 'book-card';
-          card.innerHTML = `<img src="${book.cover}" alt="${book.title}" style="width:100%; height:100%; object-fit:cover; border-radius:6px;" />`;
+          card.innerHTML = `<img alt="${book.title}" style="width:100%; height:100%; object-fit:cover; border-radius:6px;" />`;
           row.appendChild(card);
+          
+          const img = card.querySelector('img.book-cover, .cover-img, img');
+          if (img) {
+            resolveAccurateCover(book).then(url => {
+              img.src = url;
+              img.onload = () => img.classList.add('loaded'); // keeps CSS fade-in animations active
+              img.onerror = () => {
+                // Switch to procedural jacket if the remote asset 404s
+                img.src = coverCache[`${book.title}::${book.author || ''}`.trim().toLowerCase()] || getFallbackSvg(book.title, book.author);
+              };
+            });
+          }
         });
       });
     })
     .catch(err => console.error("Error loading books.json:", err));
 }
+
 
 document.addEventListener('DOMContentLoaded', () => {
   loadBooksJSON();
