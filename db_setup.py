@@ -22,6 +22,7 @@ def create_database(db_path):
 
     # 1. Create resources table
     print("Creating 'resources' table...")
+    cursor.execute("DROP TABLE IF EXISTS resources;")
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS resources (
             resource_id TEXT PRIMARY KEY,
@@ -81,10 +82,13 @@ def seed_database(conn, csv_path):
 
             cursor.execute("""
                 INSERT OR REPLACE INTO resources (
-                    resource_id, title, author, topic, excerpt, reading_level, summary, source_url, keywords, dictionary
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+                    resource_id, isbn, olid, cover_url, title, author, topic, excerpt, reading_level, summary, source_url, keywords, dictionary
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
             """, (
                 row.get("resource_id"),
+                row.get("isbn"),
+                row.get("olid"),
+                row.get("cover_url"),
                 row.get("title"),
                 row.get("author"),
                 row.get("topic"),
