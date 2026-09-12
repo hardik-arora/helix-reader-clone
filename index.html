@@ -1347,31 +1347,49 @@
       font-size: 0.85rem; color: var(--accent); font-weight: 600; cursor: pointer;
       display: flex; align-items: center; gap: 0.2rem;
     }
-    .shelf, .book-shelf, .books-row, .carousel {
-      display: flex; gap: 20px; overflow-x: auto; overflow-y: hidden; scroll-behavior: smooth; padding: 10px 4px;
-      scrollbar-width: thin;
+    .shelf, .book-shelf, .books-row, .category-row, .carousel {
+      display: flex !important;
+      flex-direction: row !important;
+      flex-wrap: nowrap !important;
+      gap: 24px !important;
+      overflow-x: auto !important;
+      overflow-y: hidden !important;
+      padding: 16px 8px !important;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .shelf::-webkit-scrollbar, .book-shelf::-webkit-scrollbar, .books-row::-webkit-scrollbar, .category-row::-webkit-scrollbar, .carousel::-webkit-scrollbar {
+      display: none;
     }
     
     /* ─── PREMIUM BOOK COVER DESIGN ─────────────────── */
-    .book-card {
-      flex: 0 0 160px; max-width: 160px; width: 160px; position: relative; box-sizing: border-box; cursor: pointer;
+    .book-card, .book-item, .shelf .book-card, .book-shelf .book-card, .books-row .book-card, .category-row .book-card {
+      flex: 0 0 170px !important; /* Forces strict fixed width, strictly prevents shrinking or overlapping */
+      width: 170px !important;
+      min-width: 170px !important;
+      max-width: 170px !important;
+      position: relative !important;
+      scroll-snap-align: start;
+      box-sizing: border-box !important;
+      margin: 0 !important;
+      cursor: pointer;
       transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.3s ease;
       animation: bookMaterialise 0.6s ease both;
     }
     .book-card:hover { transform: translateY(-10px); }
     
-    .book-cover-img {
-      width: 100%;
-      height: 240px;
-      aspect-ratio: 2 / 3;
-      object-fit: cover;
-      border-radius: 6px;
-      display: block;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.35);
+    .book-cover-img, .book-card img, .book-item img, .book-cover img, .shelf .book-cover-img {
+      width: 100% !important;
+      height: 250px !important;
+      object-fit: cover !important;
+      border-radius: 8px !important;
+      display: block !important;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4) !important;
     }
 
     .book-cover {
-      width: 100%; height: 240px; border-radius: 10px;
+      width: 100% !important; height: 250px !important; border-radius: 8px !important;
       padding: 0; position: relative; overflow: hidden;
       box-shadow: var(--shadow); transition: all var(--transition);
       display: flex; flex-direction: column; justify-content: center; align-items: center;
@@ -1459,18 +1477,29 @@
       padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.65rem; color: #fff; font-weight: 700;
     }
     
-    .shelf, .book-shelf, .books-row {
-      display: flex; gap: 20px; overflow-x: auto; overflow-y: hidden; scroll-behavior: smooth; padding: 10px 4px;
+    .shelf, .book-shelf, .books-row, .category-row, .carousel {
+      display: flex !important;
+      flex-direction: row !important;
+      flex-wrap: nowrap !important;
+      gap: 24px !important;
+      overflow-x: auto !important;
+      overflow-y: hidden !important;
+      padding: 16px 8px !important;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
       scrollbar-width: none; /* Hide scrollbar for clean Netflix look */
     }
-    .shelf::-webkit-scrollbar, .book-shelf::-webkit-scrollbar, .books-row::-webkit-scrollbar { display: none; }
+    .shelf::-webkit-scrollbar, .book-shelf::-webkit-scrollbar, .books-row::-webkit-scrollbar, .category-row::-webkit-scrollbar, .carousel::-webkit-scrollbar { display: none; }
     
-    .shelf .book-card, .results-grid .book-card {
-      flex: 0 0 160px;
-      max-width: 160px;
-      width: 160px;
-      position: relative;
-      box-sizing: border-box;
+    .shelf .book-card, .book-shelf .book-card, .books-row .book-card, .category-row .book-card, .carousel .book-card, .book-card, .book-item {
+      flex: 0 0 170px !important;
+      width: 170px !important;
+      min-width: 170px !important;
+      max-width: 170px !important;
+      position: relative !important;
+      scroll-snap-align: start;
+      box-sizing: border-box !important;
+      margin: 0 !important;
       cursor: pointer;
       border-radius: 8px;
       transition: transform 0.35s cubic-bezier(0.34, 1.3, 0.64, 1), z-index 0s 0.3s;
@@ -1481,7 +1510,6 @@
       overflow: visible;
       animation: shelfSpinIn 0.65s cubic-bezier(0.34, 1.3, 0.64, 1) both;
     }
-    .shelf .book-card { flex: 0 0 160px; max-width: 160px; width: 160px; position: relative; box-sizing: border-box; }
     /* Stagger each book card in a shelf row or results grid */
     .shelf .book-card:nth-child(1), .results-grid .book-card:nth-child(1)   { animation-delay: 0.04s; }
     .shelf .book-card:nth-child(2), .results-grid .book-card:nth-child(2)   { animation-delay: 0.11s; }
@@ -1711,12 +1739,19 @@
     }
     
     .shelf .book-card-info {
-      display: none !important;
+      display: block !important;
     }
     
-    .book-card-info { padding: 0.75rem 0.25rem 0; }
-    .book-title { font-size: 0.9rem; font-weight: 700; color: var(--text); line-height: 1.3; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .book-author { font-size: 0.78rem; color: var(--text3); margin-top: 0.15rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .book-card-info { padding: 0.5rem 0.25rem 0; width: 100% !important; box-sizing: border-box !important; }
+    .book-title, .book-author, .book-card-info .book-title, .book-card-info .book-author, .book-cover-title, .book-cover-author {
+      white-space: nowrap !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+      width: 100% !important;
+      display: block !important;
+    }
+    .book-title { font-size: 0.9rem; font-weight: 700; color: var(--text); line-height: 1.3; }
+    .book-author { font-size: 0.78rem; color: var(--text3); margin-top: 0.15rem; }
     .book-rating { display: flex; align-items: center; gap: 0.25rem; margin-top: 0.35rem; }
     .book-rating svg { width: 12px; height: 12px; fill: var(--gold); }
     .book-rating span { font-size: 0.72rem; color: var(--text3); font-weight: 600; }
@@ -6330,12 +6365,12 @@ function renderBookCard(book) {
           data-isbn="${isbn}" 
           alt="${title}" 
           class="book-cover-img"
-          style="width:100%; height:240px; aspect-ratio:2 / 3; object-fit:cover; border-radius:6px; display:block; box-shadow: 0 4px 12px rgba(0,0,0,0.35);"
+          style="width:100% !important; height:250px !important; object-fit:cover !important; border-radius:8px !important; display:block !important; box-shadow: 0 6px 16px rgba(0,0,0,0.4) !important;"
         />
       </div>
-      <div class="book-card-info">
-        <div class="book-title" style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${title}</div>
-        <div class="book-author" style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${book.author}</div>
+      <div class="book-card-info" style="padding:0.5rem 0.25rem 0; width:100% !important; box-sizing:border-box !important;">
+        <div class="book-title" style="white-space:nowrap !important; overflow:hidden !important; text-overflow:ellipsis !important; width:100% !important; display:block !important;">${title}</div>
+        <div class="book-author" style="white-space:nowrap !important; overflow:hidden !important; text-overflow:ellipsis !important; width:100% !important; display:block !important;">${book.author}</div>
       </div>
     </div>
   `;
