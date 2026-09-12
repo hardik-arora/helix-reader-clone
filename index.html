@@ -8410,7 +8410,7 @@ function executeAISummary() {
 
 const REAL_DICTIONARY_DB = {
   serendipity: { word: "serendipity", pos: "noun", phonetic: "/ˌser.ənˈdɪp.ə.ti/", def: "The occurrence and development of events by chance in a happy or beneficial way; an unexpected fortunate discovery.", example: "Finding the rare first-edition book in a small shop was pure serendipity." },
-  ephemeral: { word: "ephemeral", pos: "adjective", phonetic: "/Iˈfem.ər.əl/", def: "Lasting for a very short time; transitory; fleeting.", example: "Fame in the digital age can be surprisingly ephemeral." },
+  ephemeral: { word: "ephemeral", pos: "adjective", phonetic: "/ɪˈfem.ər.əl/", def: "Lasting for a very short time; transitory; fleeting.", example: "Fame in the digital age can be surprisingly ephemeral." },
   ubiquitous: { word: "ubiquitous", pos: "adjective", phonetic: "/juːˈbɪk.wə.təs/", def: "Present, appearing, or found everywhere; omnipresent.", example: "Smartphones have become ubiquitous in modern society." },
   perspicacity: { word: "perspicacity", pos: "noun", phonetic: "/ˌpɜː.spɪˈkæs.ə.ti/", def: "The quality of having a ready insight into things; shrewdness and keen mental discernment.", example: "The detective's perspicacity allowed him to solve the mystery quickly." },
   cosmos: { word: "cosmos", pos: "noun", phonetic: "/ˈkɒz.mɒs/", def: "The universe seen as a well-ordered, harmonious whole.", example: "Astronomers study the vast mysteries of the cosmos." },
@@ -8438,18 +8438,37 @@ const REAL_DICTIONARY_DB = {
   zealous: { word: "zealous", pos: "adjective", phonetic: "/ˈzel.əs/", def: "Having or showing zeal; fervent; passionately devoted to a cause.", example: "The zealous volunteers worked tirelessly throughout the campaign." },
   zenith: { word: "zenith", pos: "noun", phonetic: "/ˈzen.ɪθ/", def: "The time at which something is most powerful or successful; the highest point reached by a celestial body.", example: "His career reached its zenith when he won the Nobel Prize." },
   altruism: { word: "altruism", pos: "noun", phonetic: "/ˈæl.tru.ɪ.zəm/", def: "The belief in or practice of disinterested and selfless concern for the well-being of others.", example: "Organ donation is an act of pure altruism." },
-  juxtaposition: { word: "juxtaposition", pos: "noun", phonetic: "/ˌdʒʌk.stə.pəˈzɪʃ.ən/", def: "The fact of two things being seen or placed close together with contrasting effect.", example: "The film uses a striking juxtaposition of wealth and poverty." }
+  juxtaposition: { word: "juxtaposition", pos: "noun", phonetic: "/ˌdʒʌk.stə.pəˈzɪʃ.ən/", def: "The fact of two things being seen or placed close together with contrasting effect.", example: "The film uses a striking juxtaposition of wealth and poverty." },
+  time: { word: "time", pos: "noun", phonetic: "/taɪm/", def: "The indefinite continued progress of existence and events in the past, present, and future regarded as a whole.", example: "Time waits for no man." },
+  read: { word: "read", pos: "verb", phonetic: "/riːd/", def: "Look at and comprehend the meaning of written or printed matter by mentally interpreting the characters or symbols of which it is composed.", example: "She loves to read classic novels in the evening." },
+  book: { word: "book", pos: "noun", phonetic: "/bʊk/", def: "A written or printed work consisting of pages bound together along one side within covers.", example: "He published a new book on European history." },
+  physics: { word: "physics", pos: "noun", phonetic: "/ˈfɪz.ɪks/", def: "The branch of science concerned with the nature and properties of matter and energy.", example: "Albert Einstein made revolutionary contributions to theoretical physics." },
+  genetics: { word: "genetics", pos: "noun", phonetic: "/dʒəˈnet.ɪks/", def: "The study of heredity and the variation of inherited characteristics in living organisms.", example: "Modern medicine relies heavily on advances in genetics." },
+  biology: { word: "biology", pos: "noun", phonetic: "/baɪˈɒl.ə.dʒi/", def: "The study of living organisms, divided into many specialized fields such as anatomy, physiology, behavior, and origin.", example: "She is majoring in molecular biology at the university." },
+  philosophy: { word: "philosophy", pos: "noun", phonetic: "/fɪˈlɒs.ə.fi/", def: "The study of the fundamental nature of knowledge, reality, and existence, especially when considered as an academic discipline.", example: "Socratic philosophy emphasizes questioning assumptions." },
+  history: { word: "history", pos: "noun", phonetic: "/ˈhɪs.tər.i/", def: "The study of past events, particularly in human affairs.", example: "Learning history helps us understand the present world." },
+  science: { word: "science", pos: "noun", phonetic: "/ˈsaɪ.əns/", def: "A systematically organized body of knowledge on any subject, derived through observation, experimentation, and logic.", example: "Advances in science have transformed human healthcare." }
 };
 
+window.LAST_DICT_RESULT = null;
+
+function searchDictWord(w) {
+  const input = document.getElementById('dictionary-search-input');
+  if (input) {
+    input.value = w;
+    executeDictionarySearch();
+  }
+}
 
 async function lookupWordMeaning(rawWord) {
   if (!rawWord) return null;
-  const cleanWord = rawWord.toLowerCase().trim().replace(/[^a-z]/g, '');
-  if (!cleanWord) return null;
+  const cleanKey = rawWord.toLowerCase().trim().replace(/[^a-z0-9]/g, '');
+  const cleanQuery = rawWord.toLowerCase().trim().replace(/[^a-z0-9\s\-]/g, '');
+  if (!cleanQuery) return null;
 
-  // Tier 1: Check embedded dictionary database
-  if (REAL_DICTIONARY_DB[cleanWord]) {
-    const item = REAL_DICTIONARY_DB[cleanWord];
+  // 1. Embedded Dictionary Lookup
+  if (REAL_DICTIONARY_DB[cleanKey]) {
+    const item = REAL_DICTIONARY_DB[cleanKey];
     return {
       word: item.word,
       phonetic: item.phonetic,
@@ -8459,17 +8478,17 @@ async function lookupWordMeaning(rawWord) {
     };
   }
 
-  if (typeof STATIC_WORLD_DICT !== 'undefined' && STATIC_WORLD_DICT[cleanWord]) {
+  if (typeof STATIC_WORLD_DICT !== 'undefined' && STATIC_WORLD_DICT[cleanKey]) {
     return {
       word: rawWord,
       phonetic: '/lexical/',
       audioUrl: '',
-      meanings: [{ pos: 'definition', def: STATIC_WORLD_DICT[cleanWord], example: '' }],
-      primaryDef: STATIC_WORLD_DICT[cleanWord]
+      meanings: [{ pos: 'definition', def: STATIC_WORLD_DICT[cleanKey], example: '' }],
+      primaryDef: STATIC_WORLD_DICT[cleanKey]
     };
   }
 
-  const bookDef = findLocalBookDict(cleanWord);
+  const bookDef = findLocalBookDict(cleanKey);
   if (bookDef) {
     return {
       word: rawWord,
@@ -8480,9 +8499,34 @@ async function lookupWordMeaning(rawWord) {
     };
   }
 
-  // Tier 2: Free Dictionary API (api.dictionaryapi.dev)
+  // 2. Datamuse Lexical API (Highly reliable, fast, zero CORS/522 issues)
   try {
-    const res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(cleanWord)}`);
+    const dmUrl = `https://api.datamuse.com/words?sp=${encodeURIComponent(cleanQuery)}&md=d&max=1`;
+    const resDm = await fetch(dmUrl);
+    if (resDm.ok) {
+      const dmData = await resDm.json();
+      if (dmData && dmData.length > 0 && dmData[0].defs && dmData[0].defs.length > 0) {
+        const posMap = { n: 'noun', v: 'verb', adj: 'adjective', adv: 'adverb' };
+        const meanings = dmData[0].defs.map(d => {
+          const parts = d.split('\t');
+          const rawPos = parts[0] || 'n';
+          const text = parts[1] || d;
+          return { pos: posMap[rawPos] || rawPos || 'definition', def: text.trim(), example: '' };
+        });
+        return {
+          word: dmData[0].word || rawWord,
+          phonetic: '/lexical/',
+          audioUrl: '',
+          meanings: meanings,
+          primaryDef: meanings[0].def
+        };
+      }
+    }
+  } catch (e) {}
+
+  // 3. Free Dictionary API (api.dictionaryapi.dev)
+  try {
+    const res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(cleanQuery)}`);
     if (res.ok) {
       const data = await res.json();
       if (data && data[0]) {
@@ -8508,27 +8552,9 @@ async function lookupWordMeaning(rawWord) {
     }
   } catch (e) {}
 
-  // Tier 3: Datamuse API (api.datamuse.com - returns real dictionary definitions)
+  // 4. Wikipedia REST API Summary (for names, places, concepts, scientific terms)
   try {
-    const res = await fetch(`https://api.datamuse.com/words?sp=${encodeURIComponent(cleanWord)}&md=d&max=1`);
-    if (res.ok) {
-      const dmData = await res.json();
-      if (dmData && dmData[0] && dmData[0].defs && dmData[0].defs.length > 0) {
-        const posMap = { n: 'noun', v: 'verb', adj: 'adjective', adv: 'adverb' };
-        const meanings = dmData[0].defs.map(d => {
-          const parts = d.split('\t');
-          const rawPos = parts[0] || 'n';
-          const text = parts[1] || d;
-          return { pos: posMap[rawPos] || rawPos || 'definition', def: text, example: '' };
-        });
-        return { word: rawWord, phonetic: '/lexical/', audioUrl: '', meanings: meanings, primaryDef: meanings[0].def };
-      }
-    }
-  } catch (e) {}
-
-  // Tier 4: Wikipedia REST API Summary (for terms, concepts, places, and names)
-  try {
-    const res = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(rawWord)}`);
+    const res = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(cleanQuery)}`);
     if (res.ok) {
       const wData = await res.json();
       if (wData && wData.extract) {
@@ -8546,6 +8572,18 @@ async function lookupWordMeaning(rawWord) {
   return null;
 }
 
+function findLocalBookDict(cleanKey) {
+  if (typeof MASTER_BOOKS !== 'undefined') {
+    for (const b of MASTER_BOOKS) {
+      if (b.dictionary) {
+        for (const [k, v] of Object.entries(b.dictionary)) {
+          if (k.toLowerCase().replace(/[^a-z0-9]/g, '') === cleanKey) return v;
+        }
+      }
+    }
+  }
+  return null;
+}
 
 async function executeDictionarySearch() {
   const input = document.getElementById('dictionary-search-input');
@@ -8568,21 +8606,25 @@ async function executeDictionarySearch() {
   if (!wordData || !wordData.primaryDef) {
     result.innerHTML = `
       <div style="text-align:center;padding:2.5rem 0;color:var(--text3)">
-        🔍 Definition for "${rawWord}" not found in lexical database. Try searching root words like <i>"serendipity"</i>, <i>"cosmos"</i>, or <i>"solitude"</i>.
+        🔍 Definition for "${rawWord}" not found in lexical database. Try searching words like <i>"serendipity"</i>, <i>"cosmos"</i>, or <i>"solitude"</i>.
       </div>
     `;
     return;
   }
 
+  window.LAST_DICT_RESULT = {
+    word: wordData.word || rawWord,
+    def: wordData.primaryDef
+  };
+
   const wordName = wordData.word || rawWord;
   const phoneticText = wordData.phonetic || '';
   const audioUrl = wordData.audioUrl || '';
-  const safeWord = wordName.replace(/'/g, "\'");
-  const safeDef = (wordData.primaryDef || 'Definition').replace(/'/g, "\'");
+  const safeWordForAudio = wordName.replace(/'/g, "\\'");
 
   const playOnClick = audioUrl 
     ? `new Audio('${audioUrl}').play()` 
-    : `speechSynthesis.speak(new SpeechSynthesisUtterance('${safeWord}'))`;
+    : `speechSynthesis.speak(new SpeechSynthesisUtterance('${safeWordForAudio}'))`;
 
   const playBtnHtml = `<button onclick="${playOnClick}" style="background:var(--bg3); border:1px solid var(--border); border-radius:50%; width:32px; height:32px; display:inline-flex; align-items:center; justify-content:center; cursor:pointer" title="Listen Pronunciation">🔊</button>`;
 
@@ -8615,11 +8657,16 @@ async function executeDictionarySearch() {
         ${meaningsHtml}
       </div>
       
-      <button id="save-dict-vocab-btn" class="${isSaved ? 'btn-secondary' : 'btn-primary'}" style="width:100%; padding: 0.6rem; font-size: 0.85rem" onclick="saveWordToSanctuary('${safeWord}', '${safeDef}')">
+      <button id="save-dict-vocab-btn" class="${isSaved ? 'btn-secondary' : 'btn-primary'}" style="width:100%; padding: 0.6rem; font-size: 0.85rem" onclick="saveLastDictWordToSanctuary()">
         ${isSaved ? '✓ Already Saved in Sanctuary' : '📥 Save Word to Vocabulary Sanctuary (+10 XP)'}
       </button>
     </div>
   `;
+}
+
+function saveLastDictWordToSanctuary() {
+  if (!window.LAST_DICT_RESULT) return;
+  saveWordToSanctuary(window.LAST_DICT_RESULT.word, window.LAST_DICT_RESULT.def);
 }
 
 
