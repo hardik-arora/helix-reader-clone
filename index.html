@@ -3450,19 +3450,30 @@
       <!-- Searchable Dictionary -->
       <div style="background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.1)">
         <h3 style="font-family:var(--heading-font);font-size:1.3rem;font-weight:800;color:var(--text);margin-bottom:0.4rem;display:flex;align-items:center;gap:0.5rem">
-          <span> Searchable Dictionary</span>
+          <span>📖 Searchable Dictionary</span>
         </h3>
-        <p style="font-size:0.8rem;color:var(--text3);margin-bottom:1rem">Search definitions, phonetics, and examples for any word.</p>
+        <p style="font-size:0.8rem;color:var(--text3);margin-bottom:1rem">Search definitions, phonetics, audio pronunciations, and examples for any word.</p>
         
-        <div style="display:flex;gap:0.5rem;margin-bottom:1.5rem">
-          <input type="text" id="dictionary-search-input" placeholder="e.g. Serendipity or Ephemeral" style="flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:0.6rem 0.8rem;color:var(--text);font-size:0.9rem" onkeydown="if(event.key==='Enter') executeDictionarySearch()" />
+        <div style="display:flex;gap:0.5rem;margin-bottom:0.8rem">
+          <input type="text" id="dictionary-search-input" placeholder="e.g. Serendipity, Ephemeral, or Ubiquitous" style="flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:0.6rem 0.8rem;color:var(--text);font-size:0.9rem" onkeydown="if(event.key==='Enter') executeDictionarySearch()" />
           <button class="btn-primary" onclick="executeDictionarySearch()" style="padding: 0.6rem 1.2rem; font-size:0.9rem">Define</button>
+        </div>
+
+        <!-- Quick Word Chips -->
+        <div style="display:flex;flex-wrap:wrap;gap:0.4rem;margin-bottom:1.5rem">
+          <span style="font-size:0.75rem;color:var(--text3);align-self:center;margin-right:0.2rem">Try:</span>
+          <button class="filter-chip" onclick="searchDictWord('Serendipity')" style="padding:0.2rem 0.6rem;font-size:0.75rem">Serendipity</button>
+          <button class="filter-chip" onclick="searchDictWord('Ephemeral')" style="padding:0.2rem 0.6rem;font-size:0.75rem">Ephemeral</button>
+          <button class="filter-chip" onclick="searchDictWord('Ubiquitous')" style="padding:0.2rem 0.6rem;font-size:0.75rem">Ubiquitous</button>
+          <button class="filter-chip" onclick="searchDictWord('Perspicacity')" style="padding:0.2rem 0.6rem;font-size:0.75rem">Perspicacity</button>
+          <button class="filter-chip" onclick="searchDictWord('Cosmology')" style="padding:0.2rem 0.6rem;font-size:0.75rem">Cosmology</button>
+          <button class="filter-chip" onclick="searchDictWord('Magnanimous')" style="padding:0.2rem 0.6rem;font-size:0.75rem">Magnanimous</button>
         </div>
         
         <!-- Dictionary Loading State -->
         <div id="dictionary-loading" style="display:none;text-align:center;padding:3rem 0;color:var(--text3)">
           <div style="border: 3px solid var(--border); border-top: 3px solid var(--accent); border-radius: 50%; width: 32px; height: 32px; animation: spin 1s linear infinite; margin: 0 auto 1rem;"></div>
-          Searching definitions in english lexical database...
+          Searching definitions across English lexical databases...
         </div>
         
         <!-- Dictionary Result Target -->
@@ -8393,461 +8404,210 @@ function executeAISummary() {
     }
   }
 
+function searchDictWord(w) {
+  const input = document.getElementById('dictionary-search-input');
+  if (input) {
+    input.value = w;
+    executeDictionarySearch();
+  }
+}
+
 function executeDictionarySearch() {
   const input = document.getElementById('dictionary-search-input');
-  const word = input.value.trim();
-  if (!word) return;
+  if (!input) return;
+  const rawWord = input.value.trim();
+  if (!rawWord) return;
+  const word = rawWord.toLowerCase();
   
   const loading = document.getElementById('dictionary-loading');
   const result = document.getElementById('dictionary-result');
   
-  loading.style.display = 'block';
-  result.style.display = 'none';
+  if (loading) loading.style.display = 'block';
+  if (result) result.style.display = 'none';
   
-  const dictUrl = `https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`;
+  const primaryApiUrl = `https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`;
   
-  fetch(dictUrl)
+  fetch(primaryApiUrl)
     .then(res => {
-      if (!res.ok) throw new Error("Word not found");
+      if (!res.ok) throw new Error("FreeDictionary API miss");
       return res.json();
     })
     .then(data => {
-      loading.style.display = 'none';
-      result.style.display = 'block';
-      
-      const entry = data[0];
-      const wordName = entry.word;
-      const phoneticText = entry.phonetic || (entry.phonetics && entry.phonetics.map(p => p.text).filter(Boolean)[0]) || '';
-      
-      // Find audio url if any
-      const audioObj = entry.phonetics && entry.phonetics.find(p => p.audio && p.audio.trim() !== '');
-      const audioUrl = audioObj ? audioObj.audio : '';
-      
-      let meaningsHtml = '';
-      let primaryDef = '';
-      
-      entry.meanings.forEach(m => {
-        const partOfSpeech = m.partOfSpeech;
-        const definitions = m.definitions.slice(0, 2);
-        
-        meaningsHtml += `
-          <div style="margin-bottom: 0.8rem">
-            <span style="font-size: 0.72rem; font-weight:800; color: var(--teal); text-transform: uppercase; background: rgba(20,184,166,0.1); padding: 0.15rem 0.4rem; border-radius: 4px">${partOfSpeech}</span>
-            <ul style="padding-left:1.2rem; margin-top:0.4rem; font-size:0.85rem; color:var(--text); line-height:1.4">
-              ${definitions.map(d => {
-                if (!primaryDef) primaryDef = d.definition;
-                return `
-                  <li style="margin-bottom:0.25rem">
-                    <div>${d.definition}</div>
-                    ${d.example ? `<div style="font-size:0.78rem; color:var(--text3); font-style:italic">"${d.example}"</div>` : ''}
-                  </li>
-                `;
-              }).join('')}
-            </ul>
-          </div>
-        `;
-      });
-      
-      const playBtnHtml = audioUrl 
-        ? `<button onclick="new Audio('${audioUrl}').play()" style="background:var(--bg3); border:1px solid var(--border); border-radius:50%; width:30px; height:30px; display:inline-flex; align-items:center; justify-content:center; cursor:pointer" title="Listen Pronunciation">🔊</button>`
-        : '';
-        
-      result.innerHTML = `
-        <div style="margin-top: 1.5rem; border-top: 1px solid var(--border); padding-top: 1.5rem">
-          <div style="display:flex; align-items:center; gap: 0.8rem; margin-bottom: 1rem">
-            <h4 style="font-family:var(--heading-font);font-size:1.6rem;font-weight:900;color:var(--text);margin:0">${wordName}</h4>
-            <span style="font-size:0.9rem; color:var(--text3); font-style:italic">${phoneticText}</span>
-            ${playBtnHtml}
-          </div>
-          
-          <div style="margin-bottom: 1.5rem">
-            ${meaningsHtml}
-          </div>
-          
-          <button id="save-dict-vocab-btn" class="btn-primary" style="width:100%; padding: 0.6rem; font-size: 0.85rem" onclick="saveWordToSanctuary('${wordName.replace(/'/g, "\\'")}', '${primaryDef.replace(/'/g, "\\'")}')">
-            📥 Save Word to Vocabulary Sanctuary
-          </button>
-        </div>
-      `;
+      renderDictData(data[0]);
     })
-    .catch(err => {
-      loading.style.display = 'none';
-      result.style.display = 'block';
-      result.innerHTML = `
-        <div style="text-align:center;padding:2rem 0;color:var(--text3)">
-          🔍 Word "${word}" not found in lexical database.
-        </div>
-      `;
-    });
-}
-
-const CURATED_AUTHORS = {
-  'leo tolstoy': {
-    name: 'Leo Tolstoy',
-    lifespan: '1828 – 1910 (Tula, Russia)',
-    bio: 'Count Lev Nikolayevich Tolstoy was a Russian writer who is widely regarded as one of the greatest authors of all time. Born into an aristocratic family, he served in the Crimean War before dedicating his life to literature and philosophical anarchy. His epic realism captures the vast social structures of imperial Russia and the moral struggles of human existence.',
-    style: 'Immersive realism, psychological depth, moral self-examination, and sweeping historical narratives.',
-    works: [
-      { title: 'War and Peace', year: 1869, desc: 'A monumental epic chronicling Russian society during the Napoleonic wars.' },
-      { title: 'Anna Karenina', year: 1878, desc: 'A tragic tale of romance, class structures, and agrarian philosophy.' },
-      { title: 'The Death of Ivan Ilyich', year: 1886, desc: 'A profound novella exploring mortality and the meaning of a life well lived.' }
-    ],
-    quotes: [
-      "The two most powerful warriors are patience and time.",
-      "If you want to be happy, be."
-    ]
-  },
-  'fyodor dostoevsky': {
-    name: 'Fyodor Dostoevsky',
-    lifespan: '1821 – 1881 (St. Petersburg, Russia)',
-    bio: 'Fyodor Mikhailovich Dostoevsky was a Russian novelist, short story writer, and philosopher. His literary works explore psychology in the troubled political, social, and spiritual atmospheres of 19th-century Russia, engaging with a variety of philosophical and religious themes. After surviving a mock execution and years of Siberian hard labor, Dostoevsky returned to write masterpieces that laid the foundations for existentialism.',
-    style: 'Deep psychological realism, polyphonic dialogue, existential anguish, and spiritual redemption.',
-    works: [
-      { title: 'Crime and Punishment', year: 1866, desc: 'A psychological thriller tracking the guilt and redemption of Rodion Raskolnikov.' },
-      { title: 'The Brothers Karamazov', year: 1880, desc: 'A complex philosophical drama dealing with faith, free will, and familial murder.' },
-      { title: 'Notes from Underground', year: 1864, desc: 'A foundational existential novella challenging rationalist theories of humanity.' }
-    ],
-    quotes: [
-      "Pain and suffering are always inevitable for a large intelligence and a deep heart.",
-      "The soul is healed by being with children."
-    ]
-  },
-  'william shakespeare': {
-    name: 'William Shakespeare',
-    lifespan: '1564 – 1616 (Stratford-upon-Avon, England)',
-    bio: 'William Shakespeare was an English playwright, poet, and actor, widely regarded as the greatest writer in the English language and the world\'s pre-eminent dramatist. Often called England\'s national poet, his plays explore the heights of human ambition, tragedy, comedy, and historical power struggles, inventing thousands of words in the process.',
-    style: 'Blank verse poetry, dramatic pacing, complex character flaws, and philosophical soliloquies.',
-    works: [
-      { title: 'Hamlet', year: 1603, desc: 'The defining tragedy of revenge, doubt, and existential dread.' },
-      { title: 'Macbeth', year: 1606, desc: 'A study of corruptive ambition and moral decay.' },
-      { title: 'Romeo and Juliet', year: 1597, desc: 'The timeless archetypal story of star-crossed young lovers.' }
-    ],
-    quotes: [
-      "To be, or not to be, that is the question.",
-      "To thine own self be true."
-    ]
-  },
-  'marcus aurelius': {
-    name: 'Marcus Aurelius',
-    lifespan: '121 – 180 (Rome, Italy)',
-    bio: 'Marcus Aurelius Antoninus Augustus was Roman emperor from 161 to 180 and a Stoic philosopher. He was the last of the rulers known as the Five Good Emperors. His private journal, written while on military campaigns, has become one of the greatest guides to self-discipline and Stoic resilience in history.',
-    style: 'Aphoristic journal reflections, Stoic logic, contemplation of nature, and duty-bound ethics.',
-    works: [
-      { title: 'Meditations', year: 170, desc: 'Personal diaries contemplating self-control, mortality, and the universal order.' }
-    ],
-    quotes: [
-      "You have power over your mind, not outside events. Realize this, and you will find strength.",
-      "The happiness of your life depends upon the quality of your thoughts."
-    ]
-  },
-  'charles darwin': {
-    name: 'Charles Darwin',
-    lifespan: '1809 – 1882 (Shropshire, England)',
-    bio: 'Charles Robert Darwin was an English naturalist, geologist, and biologist, best known for his contributions to evolutionary biology. His proposition that all species of life have descended over time from common ancestors is now widely accepted and considered a foundational concept in science, formulated during his famous voyage on the HMS Beagle.',
-    style: 'Empirical description, geological analysis, objective observation, and deductive cataloging.',
-    works: [
-      { title: 'The Origin of Species', year: 1859, desc: 'The seminal work introducing the theory of evolution by natural selection.' },
-      { title: 'The Descent of Man', year: 1871, desc: 'Applying evolutionary theory directly to human development and sexual selection.' }
-    ],
-    quotes: [
-      "It is not the strongest of the species that survives, nor the most intelligent, but the one most responsive to change."
-    ]
-  },
-  'stephen hawking': {
-    name: 'Stephen Hawking',
-    lifespan: '1942 – 2018 (Oxford, England)',
-    bio: 'Stephen William Hawking was an English theoretical physicist, cosmologist, and author. He was Lucasian Professor of Mathematics at the University of Cambridge and director of research at the Center for Theoretical Cosmology. He made groundbreaking contributions to the study of black holes and relativity, while inspiring millions through his battle with ALS.',
-    style: 'Cosmological physics, popular science exposition, and mathematical modeling.',
-    works: [
-      { title: 'A Brief History of Time', year: 1988, desc: 'A popular science masterpiece explaining the cosmos to lay readers.' },
-      { title: 'The Universe in a Nutshell', year: 2001, desc: 'An illustrated guide to supergravity, quantum mechanics, and M-theory.' }
-    ],
-    quotes: [
-      "Remember to look up at the stars and not down at your feet.",
-      "Intelligence is the ability to adapt to change."
-    ]
-  },
-  'carl sagan': {
-    name: 'Carl Sagan',
-    lifespan: '1934 – 1996 (New York, USA)',
-    bio: 'Carl Edward Sagan was an American astronomer, planetary scientist, cosmologist, astrophysicist, astrobiologist, author, and science communicator. He pioneered the search for extraterrestrial intelligence (SETI) and became the most famous voice of science in the 20th century, urging humanity to appreciate their place on the "pale blue dot".',
-    style: 'Lyrical science communication, planetary advocacy, and skeptical rationalist philosophy.',
-    works: [
-      { title: 'Cosmos', year: 1980, desc: 'A breathtaking tour of space, time, civilization, and science.' },
-      { title: 'Contact', year: 1985, desc: 'A science fiction novel about humanity\'s first contact with alien signals.' },
-      { title: 'The Demon-Haunted World', year: 1995, desc: 'A defense of scientific skepticism against pseudoscience and superstition.' }
-    ],
-    quotes: [
-      "We are made of star-stuff.",
-      "Somewhere, something incredible is waiting to be known."
-    ]
-  },
-  'richard dawkins': {
-    name: 'Richard Dawkins',
-    lifespan: 'Born 1941 (Nairobi, Kenya)',
-    bio: 'Clinton Richard Dawkins is a British evolutionary biologist and author. He served as the Charles Simonyi Professor for the Public Understanding of Science at Oxford. He rose to fame with his gene-centered view of evolution, coining the term "meme" and popularizing evolutionary biology.',
-    style: 'Gene-centered biological theory, clear metaphoric writing, and rationalist critique of religion.',
-    works: [
-      { title: 'The Selfish Gene', year: 1976, desc: 'Rewriting evolution from the perspective of replicator molecules.' },
-      { title: 'The Blind Watchmaker', year: 1986, desc: 'An explanation of complex design via natural selection without creator intervention.' }
-    ],
-    quotes: [
-      "We are survival machines — robot vehicles blindly programmed to preserve the selfish molecules known as genes."
-    ]
-  },
-  'plato': {
-    name: 'Plato',
-    lifespan: '428 BC – 348 BC (Athens, Greece)',
-    bio: 'Plato was an Athenian philosopher during the Classical period in Ancient Greece, founder of the Platonist school of thought and the Academy, the first institution of higher learning in the Western world. He was the student of Socrates and the teacher of Aristotle, setting down dialogues that formed Western philosophy.',
-    style: 'Philosophical dialogue, allegorical storytelling, and metaphysical theory of Forms.',
-    works: [
-      { title: 'The Republic', year: -380, desc: 'A dialogical exploration of justice, the ideal state, and the allegory of the Cave.' },
-      { title: 'Symposium', year: -385, desc: 'A banquet dialogue exploring the nature and forms of Love.' }
-    ],
-    quotes: [
-      "The heaviest penalty for declining to rule is to be ruled by someone inferior to yourself.",
-      "Wise men speak because they have something to say; Fools because they have to say something."
-    ]
-  },
-  'jane austen': {
-    name: 'Jane Austen',
-    lifespan: '1775 – 1817 (Hampshire, England)',
-    bio: 'Jane Austen was an English novelist known primarily for her six major novels, which critique and comment upon the British landed gentry at the end of the 18th century. Austen\'s plots often explore the dependence of women on marriage in the pursuit of favorable social standing and economic security.',
-    style: 'Comedy of manners, biting irony, social critique, and sharp romantic realism.',
-    works: [
-      { title: 'Pride and Prejudice', year: 1813, desc: 'A comedy of manners focusing on Elizabeth Bennet\'s clash with Mr. Darcy.' },
-      { title: 'Sense and Sensibility', year: 1811, desc: 'Tracking the emotional journeys of sisters Elinor and Marianne Dashwood.' }
-    ],
-    quotes: [
-      "A lady's imagination is very rapid; it jumps from admiration to love, from love to matrimony in a moment.",
-      "I must keep to my own style and go on in my own way."
-    ]
-  },
-  'charlotte bronte': {
-    name: 'Charlotte Brontë',
-    lifespan: '1816 – 1855 (Yorkshire, England)',
-    bio: 'Charlotte Brontë was an English novelist and poet, the eldest of the three Brontë sisters who survived into adulthood and whose novels became classics of English literature. Writing under the pen name Currer Bell, she broke barriers by addressing themes of female independence and passion in Victorian England.',
-    style: 'Gothic romance, intense emotional monologue, and social critique of female dependence.',
-    works: [
-      { title: 'Jane Eyre', year: 1847, desc: 'A gothic tale of an orphan governess\'s independence and love for Mr. Rochester.' }
-    ],
-    quotes: [
-      "I am no bird; and no net ensnares me: I am a free human being with an independent will."
-    ]
-  },
-  'viktor frankl': {
-    name: 'Viktor Frankl',
-    lifespan: '1905 – 1997 (Vienna, Austria)',
-    bio: 'Viktor Emil Frankl was an Austrian neurologist, psychiatrist, philosopher, author, and Holocaust survivor. He was the founder of logotherapy, a school of psychotherapy which describes a search for a life\'s meaning as the central human motivational force, formulated during his survival in Nazi camps.',
-    style: 'Existential psychiatry, personal narrative reflection, and logotherapeutic philosophy.',
-    works: [
-      { title: 'Man\'s Search for Meaning', year: 1946, desc: 'A psychological memoir of camp survival and an introduction to logo-therapy.' }
-    ],
-    quotes: [
-      "He who has a why to live can bear almost any how.",
-      "When we are no longer able to change a situation, we are challenged to change ourselves."
-    ]
-  }
-};
-
-function executeAuthorSearch() {
-  const input = document.getElementById('author-search-input');
-  const query = input.value.trim();
-  if (!query) return;
-  
-  const loading = document.getElementById('author-loading');
-  const result = document.getElementById('author-result');
-  
-  loading.style.display = 'block';
-  result.style.display = 'none';
-  
-  const qLower = query.toLowerCase().trim();
-  
-  // 1. Check curated authors first for instant, high-quality biographies
-  if (CURATED_AUTHORS[qLower]) {
-    loading.style.display = 'none';
-    result.style.display = 'block';
-    renderAuthorProfileHTML(CURATED_AUTHORS[qLower], result);
-    return;
-  }
-  
-  // 2. Fetch from Open Library Author Search API
-  const authorUrl = `https://openlibrary.org/search/authors.json?q=${encodeURIComponent(query)}`;
-  
-  fetch(authorUrl)
-    .then(res => {
-      if (!res.ok) throw new Error('Author not found');
-      return res.json();
-    })
-    .then(data => {
-      loading.style.display = 'none';
-      result.style.display = 'block';
-      
-      const doc = data.docs && data.docs[0];
-      
-      const isValidRealAuthor = (d, q) => {
-        if (!d || !d.name) return false;
-        const name = d.name.trim();
-        const nameLower = name.toLowerCase();
-        const qLower = q.toLowerCase().trim();
-        
-        const orgKeywords = [
-          'society', 'library', 'press', 'books', 'association', 'institute', 
-          'university', 'corporation', 'inc', 'co', 'publishing', 'media', 
-          'group', 'foundation', 'project', 'literacy', 'nonsense', 'test', 
-          'testing', 'department', 'board', 'committee', 'club', 'ministry',
-          'archive', 'world', 'history', 'science', 'studies', 'program',
-          'government', 'office', 'service', 'services', 'agency', 'council'
-        ];
-        if (orgKeywords.some(keyword => nameLower.includes(keyword) || qLower.includes(keyword))) {
-          return false;
-        }
-        
-        const isGibberish = (str) => {
-          if (!str) return false;
-          const s = str.toLowerCase().replace(/[^a-z]/g, '');
-          return /([a-z]{3,})\1+/.test(s) || /(.)\2{3,}/.test(s);
-        };
-        
-        if (isGibberish(name) || isGibberish(qLower) || (d.top_work && isGibberish(d.top_work))) {
-          return false;
-        }
-        
-        if (d.top_work) {
-          const twLower = d.top_work.toLowerCase().trim();
-          if (twLower === nameLower || twLower === qLower) {
-            return false;
+    .catch(() => {
+      // Tier 2 Fallback: Datamuse Lexical API
+      const datamuseUrl = `https://api.datamuse.com/words?sp=${encodeURIComponent(word)}&md=d&max=1`;
+      fetch(datamuseUrl)
+        .then(r => r.json())
+        .then(dmData => {
+          if (dmData && dmData.length > 0 && dmData[0].defs && dmData[0].defs.length > 0) {
+            const defs = dmData[0].defs.map(d => {
+              const parts = d.split('	');
+              return { pos: parts[0] || 'noun', text: parts[1] || d };
+            });
+            renderCustomDictEntry(rawWord, '', defs);
+          } else {
+            throw new Error("Datamuse miss");
           }
-        }
-        
-        const parts = name.split(/\s+/);
-        
-        // Vowel/initial sanity check: every word must contain a vowel or be an initial (e.g. ending in dot or 1-2 char initial)
-        const hasGibberishWord = parts.some(p => {
-          const clean = p.replace(/[^a-zA-Z\.]/g, '');
-          if (clean.length === 0) return false;
-          if (clean.endsWith('.') || clean.length <= 2) return false;
-          return !/[aeiouy]/i.test(clean);
+        })
+        .catch(() => {
+          // Tier 3 Fallback: STATIC_WORLD_DICT & Local Book Glossaries
+          const staticDef = STATIC_WORLD_DICT[word] || findLocalBookDict(word);
+          if (staticDef) {
+            renderCustomDictEntry(rawWord, '/lexical/', [{ pos: 'general', text: staticDef }]);
+          } else {
+            // Tier 4 Fallback: Wikipedia Summary API
+            const wikiUrl = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(rawWord)}`;
+            fetch(wikiUrl)
+              .then(wr => wr.json())
+              .then(wData => {
+                if (wData && wData.extract) {
+                  renderCustomDictEntry(wData.title || rawWord, wData.description || 'encyclopedic entry', [{ pos: 'concept', text: wData.extract }]);
+                } else {
+                  throw new Error("Wiki miss");
+                }
+              })
+              .catch(() => {
+                if (loading) loading.style.display = 'none';
+                if (result) {
+                  result.style.display = 'block';
+                  result.innerHTML = `
+                    <div style="text-align:center;padding:2rem 0;color:var(--text3)">
+                      🔍 Definition for "${rawWord}" not found. Try searching root words like <i>"serendipity"</i> or <i>"cosmos"</i>.
+                    </div>
+                  `;
+                }
+              });
+          }
         });
-        if (hasGibberishWord) {
-          return false;
-        }
-        
-        // Single word name check (real authors have first and last names)
-        if (parts.length === 1) {
-          const singleName = parts[0].toLowerCase();
-          const famousSingleNames = ['homer', 'plato', 'aristotle', 'virgil', 'dante', 'sappho', 'aesop', 'euripides', 'sophocles', 'herodotus', 'thucydides', 'cicero', 'seneca', 'plutarch', 'ovid', 'horace', 'rachel', 'rumi', 'hafez', 'firdowsi', 'valmiki', 'vyasa', 'kalidasa'];
-          if (!famousSingleNames.includes(singleName)) {
-            return false;
-          }
-        }
-        
-        return true;
-      };
-
-      if (doc && isValidRealAuthor(doc, query)) {
-        const name = doc.name || query;
-        const lifespan = (doc.birth_date || doc.death_date) 
-          ? `${doc.birth_date || 'Unknown'} – ${doc.death_date || 'Present'}`
-          : 'Lifespan details unrecorded in registry';
-        
-        const topWork = doc.top_work || 'Unlisted Masterpiece';
-        const subjects = doc.top_subjects ? doc.top_subjects.slice(0, 4) : ['Literature', 'General'];
-        
-        const authorObj = {
-          name: name,
-          lifespan: lifespan,
-          bio: `${name} is an author indexed in the global catalog registry with a registered count of ${doc.work_count || 1} works. Known for themes involving ${subjects.slice(0,3).join(', ').toLowerCase()}, their celebrated top work is recognized as "${topWork}".`,
-          style: `Exploring subject fields of ${subjects.slice(0,3).join(', ').toLowerCase()} through narrative analysis.`,
-          works: [
-            { title: topWork, year: 'Various', desc: `Recognized as one of the primary works in the author's bibliography.` }
-          ],
-          quotes: [
-            `The reading of all good books is like a conversation with the finest minds of past centuries.`
-          ]
-        };
-        renderAuthorProfileHTML(authorObj, result);
-      } else {
-        throw new Error('No author matching criteria found');
-      }
-    })
-    .catch(err => {
-      console.warn('API author lookup failed:', err);
-      loading.style.display = 'none';
-      result.style.display = 'block';
-      
-      const isNotFound = err.message === 'Author not found' || err.message === 'No author matching criteria found';
-      
-      if (isNotFound) {
-        result.innerHTML = `
-          <div style="text-align:center;padding:3rem 0;color:var(--accent);display:flex;flex-direction:column;align-items:center;gap:0.75rem">
-            <span style="font-size:2.5rem">👤</span>
-            <h4 style="font-size:1.1rem;font-weight:700;margin:0">Author Not Found</h4>
-            <p style="font-size:0.85rem;color:var(--text3);margin:0;max-width:300px">"<strong>${query}</strong>" does not seem to exist in the global author registry. Please check the spelling or search for another author.</p>
-          </div>
-        `;
-      } else {
-        result.innerHTML = `
-          <div style="text-align:center;padding:3rem 0;color:var(--accent);display:flex;flex-direction:column;align-items:center;gap:0.75rem">
-            <span style="font-size:2.5rem">⚠️</span>
-            <h4 style="font-size:1.1rem;font-weight:700;margin:0">Registry Connection Failed</h4>
-            <p style="font-size:0.85rem;color:var(--text3);margin:0;max-width:300px">Unable to contact the global registry right now. Please check your internet connection and try again.</p>
-          </div>
-        `;
-      }
     });
 }
 
-function renderAuthorProfileHTML(author, targetElement) {
-  const worksHtml = author.works.map(w => `
-    <div style="margin-bottom:0.6rem; background:var(--bg3); padding:0.6rem; border-radius:6px; border:1px solid var(--border)">
-      <div style="font-size:0.85rem; font-weight:700; color:var(--text); display:flex; justify-content:space-between">
-        <span> ${w.title}</span>
-        <span style="font-size:0.75rem; color:var(--text3)">📅 ${w.year}</span>
-      </div>
-      <div style="font-size:0.78rem; color:var(--text2); margin-top:0.25rem">${w.desc}</div>
-    </div>
-  `).join('');
-  
-  const quotesHtml = author.quotes.map(q => `
-    <p style="font-size:0.82rem; line-height:1.4; color:var(--text3); font-style:italic; border-left:2px solid var(--teal); padding-left:0.6rem; margin-bottom:0.5rem">
-      "${q}"
-    </p>
-  `).join('');
+function findLocalBookDict(w) {
+  const target = w.toLowerCase();
+  if (typeof MASTER_BOOKS !== 'undefined') {
+    for (const b of MASTER_BOOKS) {
+      if (b.dictionary) {
+        for (const [k, v] of Object.entries(b.dictionary)) {
+          if (k.toLowerCase() === target) return v;
+        }
+      }
+    }
+  }
+  return null;
+}
 
-  targetElement.innerHTML = `
+function renderDictData(entry) {
+  const loading = document.getElementById('dictionary-loading');
+  const result = document.getElementById('dictionary-result');
+  if (loading) loading.style.display = 'none';
+  if (!result) return;
+  result.style.display = 'block';
+
+  const wordName = entry.word;
+  const phoneticText = entry.phonetic || (entry.phonetics && entry.phonetics.map(p => p.text).filter(Boolean)[0]) || '';
+  const audioObj = entry.phonetics && entry.phonetics.find(p => p.audio && p.audio.trim() !== '');
+  const audioUrl = audioObj ? audioObj.audio : '';
+
+  let meaningsHtml = '';
+  let primaryDef = '';
+
+  if (entry.meanings) {
+    entry.meanings.forEach(m => {
+      const partOfSpeech = m.partOfSpeech;
+      const definitions = m.definitions.slice(0, 2);
+
+      meaningsHtml += `
+        <div style="margin-bottom: 0.8rem">
+          <span style="font-size: 0.72rem; font-weight:800; color: var(--teal); text-transform: uppercase; background: rgba(20,184,166,0.1); padding: 0.15rem 0.4rem; border-radius: 4px">${partOfSpeech}</span>
+          <ul style="padding-left:1.2rem; margin-top:0.4rem; font-size:0.85rem; color:var(--text); line-height:1.4">
+            ${definitions.map(d => {
+              if (!primaryDef) primaryDef = d.definition;
+              return `
+                <li style="margin-bottom:0.25rem">
+                  <div>${d.definition}</div>
+                  ${d.example ? `<div style="font-size:0.78rem; color:var(--text3); font-style:italic">"${d.example}"</div>` : ''}
+                </li>
+              `;
+            }).join('')}
+          </ul>
+        </div>
+      `;
+    });
+  }
+
+  const safeWord = wordName.replace(/'/g, "\'");
+  const safeDef = (primaryDef || 'Definition').replace(/'/g, "\'");
+  const playOnClick = audioUrl 
+    ? `new Audio('${audioUrl}').play()` 
+    : `speechSynthesis.speak(new SpeechSynthesisUtterance('${safeWord}'))`;
+
+  const playBtnHtml = `<button onclick="${playOnClick}" style="background:var(--bg3); border:1px solid var(--border); border-radius:50%; width:32px; height:32px; display:inline-flex; align-items:center; justify-content:center; cursor:pointer" title="Listen Pronunciation">🔊</button>`;
+
+  const isSaved = typeof state !== 'undefined' && state.vocab && state.vocab.some(v => v.word.toLowerCase() === wordName.toLowerCase());
+
+  result.innerHTML = `
     <div style="margin-top: 1.5rem; border-top: 1px solid var(--border); padding-top: 1.5rem">
-      <div style="display:flex; align-items:center; gap: 0.8rem; margin-bottom: 0.8rem">
-        <div style="background:var(--accent); color:#ffffff; border-radius:50%; width:40px; height:40px; display:inline-flex; align-items:center; justify-content:center; font-size:1.2rem; font-weight:800">
-          ${author.name.charAt(0)}
-        </div>
-        <div>
-          <h4 style="font-family:var(--heading-font);font-size:1.4rem;font-weight:900;color:var(--text);margin:0">${author.name}</h4>
-          <p style="font-size:0.78rem; color:var(--text3); margin:0">📅 ${author.lifespan}</p>
-        </div>
+      <div style="display:flex; align-items:center; gap: 0.8rem; margin-bottom: 1rem">
+        <h4 style="font-family:var(--heading-font);font-size:1.6rem;font-weight:900;color:var(--text);margin:0">${wordName}</h4>
+        <span style="font-size:0.9rem; color:var(--text3); font-style:italic">${phoneticText}</span>
+        ${playBtnHtml}
       </div>
       
-      <div style="margin-bottom: 1rem">
-        <h5 style="font-weight:700;font-size:0.85rem;color:var(--accent);text-transform:uppercase;margin:0 0 0.3rem">Biography & Legacy</h5>
-        <p style="font-size:0.85rem;line-height:1.45;color:var(--text);margin:0">${author.bio}</p>
+      <div style="margin-bottom: 1.5rem">
+        ${meaningsHtml}
       </div>
       
-      <div style="margin-bottom: 1rem">
-        <h5 style="font-weight:700;font-size:0.85rem;color:var(--accent);text-transform:uppercase;margin:0 0 0.3rem">Writing Style & Themes</h5>
-        <p style="font-size:0.82rem;color:var(--text2);margin:0;font-style:italic">${author.style}</p>
+      <button id="save-dict-vocab-btn" class="${isSaved ? 'btn-secondary' : 'btn-primary'}" style="width:100%; padding: 0.6rem; font-size: 0.85rem" onclick="saveWordToSanctuary('${safeWord}', '${safeDef}')">
+        ${isSaved ? '✓ Already Saved in Sanctuary' : '📥 Save Word to Vocabulary Sanctuary (+10 XP)'}
+      </button>
+    </div>
+  `;
+}
+
+function renderCustomDictEntry(wordName, phoneticText, defs) {
+  const loading = document.getElementById('dictionary-loading');
+  const result = document.getElementById('dictionary-result');
+  if (loading) loading.style.display = 'none';
+  if (!result) return;
+  result.style.display = 'block';
+
+  let meaningsHtml = '';
+  let primaryDef = '';
+
+  defs.forEach(d => {
+    if (!primaryDef) primaryDef = d.text;
+    meaningsHtml += `
+      <div style="margin-bottom: 0.8rem">
+        <span style="font-size: 0.72rem; font-weight:800; color: var(--teal); text-transform: uppercase; background: rgba(20,184,166,0.1); padding: 0.15rem 0.4rem; border-radius: 4px">${d.pos}</span>
+        <ul style="padding-left:1.2rem; margin-top:0.4rem; font-size:0.85rem; color:var(--text); line-height:1.4">
+          <li style="margin-bottom:0.25rem">${d.text}</li>
+        </ul>
+      </div>
+    `;
+  });
+
+  const safeWord = wordName.replace(/'/g, "\'");
+  const safeDef = (primaryDef || 'Definition').replace(/'/g, "\'");
+  const playBtnHtml = `<button onclick="speechSynthesis.speak(new SpeechSynthesisUtterance('${safeWord}'))" style="background:var(--bg3); border:1px solid var(--border); border-radius:50%; width:32px; height:32px; display:inline-flex; align-items:center; justify-content:center; cursor:pointer" title="Listen Pronunciation">🔊</button>`;
+  const isSaved = typeof state !== 'undefined' && state.vocab && state.vocab.some(v => v.word.toLowerCase() === wordName.toLowerCase());
+
+  result.innerHTML = `
+    <div style="margin-top: 1.5rem; border-top: 1px solid var(--border); padding-top: 1.5rem">
+      <div style="display:flex; align-items:center; gap: 0.8rem; margin-bottom: 1rem">
+        <h4 style="font-family:var(--heading-font);font-size:1.6rem;font-weight:900;color:var(--text);margin:0">${wordName}</h4>
+        <span style="font-size:0.9rem; color:var(--text3); font-style:italic">${phoneticText}</span>
+        ${playBtnHtml}
       </div>
       
-      <div style="margin-bottom: 1rem">
-        <h5 style="font-weight:700;font-size:0.85rem;color:var(--accent);text-transform:uppercase;margin:0 0 0.4rem">Celebrated Masterpieces</h5>
-        ${worksHtml}
+      <div style="margin-bottom: 1.5rem">
+        ${meaningsHtml}
       </div>
       
-      ${author.quotes.length > 0 ? `
-        <div style="margin-bottom: 0.5rem">
-          <h5 style="font-weight:700;font-size:0.85rem;color:var(--accent);text-transform:uppercase;margin:0 0 0.4rem">Memorable Quotes</h5>
-          ${quotesHtml}
-        </div>
-      ` : ''}
+      <button id="save-dict-vocab-btn" class="${isSaved ? 'btn-secondary' : 'btn-primary'}" style="width:100%; padding: 0.6rem; font-size: 0.85rem" onclick="saveWordToSanctuary('${safeWord}', '${safeDef}')">
+        ${isSaved ? '✓ Already Saved in Sanctuary' : '📥 Save Word to Vocabulary Sanctuary (+10 XP)'}
+      </button>
     </div>
   `;
 }
