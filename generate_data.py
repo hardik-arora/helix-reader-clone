@@ -658,7 +658,7 @@ def main():
     fieldnames = [
         "resource_id", "isbn", "olid", "cover_url", "title", "author", "source", "topic", 
         "reading_level", "excerpt", "keywords", "language", 
-        "format", "summary", "dictionary"
+        "format", "summary", "dictionary", "pages", "rating", "year", "published_year"
     ]
     
     records = []
