@@ -6119,7 +6119,7 @@ function ensureEmojiFallback(el, book) {
     if (!el.querySelector('.book-cover-emoji')) {
       const emojiEl = document.createElement('div');
       emojiEl.className = 'book-cover-emoji';
-      emojiEl.textContent = book?.emoji || '📖';
+      
       el.insertBefore(emojiEl, el.firstChild);
     }
   }
@@ -6201,16 +6201,45 @@ function makeCoverStyle(book) {
 }
 
 function renderBookCard(book) {
-  const imgSrc = book.cover_url || (book.isbn ? `https://covers.openlibrary.org/b/isbn/${book.isbn}-L.jpg` : 'https://openlibrary.org/images/icons/avatar_book-lg.png');
+  const coverUrl = book.cover_url || (book.cover ? book.cover : (book.isbn ? `https://covers.openlibrary.org/b/isbn/${book.isbn}-L.jpg` : ''));
+  const safeTitle = (book.title || '').replace(/'/g, "\'");
+  const safeAuthor = (book.author || '').replace(/'/g, "\'");
+
   return `
     <div class="book-card" onclick="flipAndOpenBook(this, '${book.id}')">
       <div class="book-cover" data-book-id="${book.id}">
-        <img src="${imgSrc}" alt="${book.title}" class="book-cover-img" style="width:100%; height:100%; object-fit:cover; border-radius:4px;" onerror="this.onerror=null; this.src='https://openlibrary.org/images/icons/avatar_book-lg.png';" />
+        <img 
+          src="${coverUrl}" 
+          alt="${book.title}" 
+          class="book-cover-img" 
+          style="width:100%; height:100%; object-fit:cover; border-radius:4px;" 
+          onerror="this.onerror=null; renderSpineFallback(this.parentElement, '${safeTitle}', '${safeAuthor}');" 
+        />
       </div>
       <div class="book-card-info">
         <div class="book-title">${book.title}</div>
         <div class="book-author">${book.author}</div>
       </div>
+    </div>
+  `;
+}
+
+function renderSpineFallback(container, title, author) {
+  const colors = [
+    'linear-gradient(135deg, #1e1b4b 0%, #312e81 100%)',
+    'linear-gradient(135deg, #4c0519 0%, #881337 100%)',
+    'linear-gradient(135deg, #064e3b 0%, #047857 100%)',
+    'linear-gradient(135deg, #78350f 0%, #b45309 100%)',
+    'linear-gradient(135deg, #311b92 0%, #512da8 100%)',
+    'linear-gradient(135deg, #1a237e 0%, #283593 100%)'
+  ];
+  let hash = 0;
+  for (let i = 0; i < title.length; i++) hash = title.charCodeAt(i) + ((hash << 5) - hash);
+  const color = colors[Math.abs(hash) % colors.length];
+  container.innerHTML = `
+    <div class="book-spine-fallback" style="background: ${color}; width:100%; height:100%; border-radius:4px; display:flex; flex-direction:column; justify-content:center; align-items:center; padding:12px; text-align:center; color:#fff; box-sizing:border-box;">
+      <div style="font-weight:700; font-size:0.85rem; line-height:1.2; margin-bottom:6px;">${title}</div>
+      <div style="font-size:0.75rem; opacity:0.85;">${author}</div>
     </div>
   `;
 }
@@ -6455,16 +6484,45 @@ function makeCoverStyle(book) {
 }
 
 function renderBookCard(book) {
-  const imgSrc = book.cover_url || (book.isbn ? `https://covers.openlibrary.org/b/isbn/${book.isbn}-L.jpg` : 'https://openlibrary.org/images/icons/avatar_book-lg.png');
+  const coverUrl = book.cover_url || (book.cover ? book.cover : (book.isbn ? `https://covers.openlibrary.org/b/isbn/${book.isbn}-L.jpg` : ''));
+  const safeTitle = (book.title || '').replace(/'/g, "\'");
+  const safeAuthor = (book.author || '').replace(/'/g, "\'");
+
   return `
     <div class="book-card" onclick="flipAndOpenBook(this, '${book.id}')">
       <div class="book-cover" data-book-id="${book.id}">
-        <img src="${imgSrc}" alt="${book.title}" class="book-cover-img" style="width:100%; height:100%; object-fit:cover; border-radius:4px;" onerror="this.onerror=null; this.src='https://openlibrary.org/images/icons/avatar_book-lg.png';" />
+        <img 
+          src="${coverUrl}" 
+          alt="${book.title}" 
+          class="book-cover-img" 
+          style="width:100%; height:100%; object-fit:cover; border-radius:4px;" 
+          onerror="this.onerror=null; renderSpineFallback(this.parentElement, '${safeTitle}', '${safeAuthor}');" 
+        />
       </div>
       <div class="book-card-info">
         <div class="book-title">${book.title}</div>
         <div class="book-author">${book.author}</div>
       </div>
+    </div>
+  `;
+}
+
+function renderSpineFallback(container, title, author) {
+  const colors = [
+    'linear-gradient(135deg, #1e1b4b 0%, #312e81 100%)',
+    'linear-gradient(135deg, #4c0519 0%, #881337 100%)',
+    'linear-gradient(135deg, #064e3b 0%, #047857 100%)',
+    'linear-gradient(135deg, #78350f 0%, #b45309 100%)',
+    'linear-gradient(135deg, #311b92 0%, #512da8 100%)',
+    'linear-gradient(135deg, #1a237e 0%, #283593 100%)'
+  ];
+  let hash = 0;
+  for (let i = 0; i < title.length; i++) hash = title.charCodeAt(i) + ((hash << 5) - hash);
+  const color = colors[Math.abs(hash) % colors.length];
+  container.innerHTML = `
+    <div class="book-spine-fallback" style="background: ${color}; width:100%; height:100%; border-radius:4px; display:flex; flex-direction:column; justify-content:center; align-items:center; padding:12px; text-align:center; color:#fff; box-sizing:border-box;">
+      <div style="font-weight:700; font-size:0.85rem; line-height:1.2; margin-bottom:6px;">${title}</div>
+      <div style="font-size:0.75rem; opacity:0.85;">${author}</div>
     </div>
   `;
 }
@@ -6747,7 +6805,7 @@ function fetchGlobalSearch(query) {
             lang: lang,
             pages: pages,
             rating: rawRating.toFixed(1),
-            emoji: '📖',
+            
             summary: summary,
             excerpt: summary,
             keywords: keywords,
@@ -6818,7 +6876,7 @@ function fetchGlobalSearch(query) {
                 lang: lang,
                 pages: pages,
                 rating: rating,
-                emoji: '📖',
+                
                 summary: summary,
                 excerpt: summary,
                 keywords: keywords,
@@ -6951,7 +7009,7 @@ function openBookDetails(bookId, skipAnim = false) {
       <div class="detail-cover-area">
         <div class="detail-cover-img" data-book-id="${book.id}" style="${makeCoverStyle(book)}">
           <div class="book-spine-line"></div>
-          <div class="book-cover-emoji" style="font-size:4rem">${book.emoji || '📖'}</div>
+          <div class="book-cover-emoji" style="font-size:4rem"></div>
           <div class="book-cover-text">
             <div class="book-cover-title" style="font-size:1.15rem">${book.title}</div>
             <div class="book-cover-author">${book.author}</div>
@@ -8217,7 +8275,7 @@ function executeAISummary() {
           <div style="margin-top: 1.5rem; border-top: 1px solid var(--border); padding-top: 1.5rem">
             <div style="display:flex; gap: 1.2rem; margin-bottom: 1.2rem">
               <div style="${coverStyle}">
-                ${coverUrl !== 'none' ? '' : '📖'}
+                
               </div>
               <div style="flex:1">
                 <h4 style="font-family:var(--heading-font);font-size:1.4rem;font-weight:900;color:var(--text);margin-bottom:0.25rem">${title}</h4>
