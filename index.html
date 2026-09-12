@@ -3644,6 +3644,7 @@
       <button class="filter-chip active" id="lib-tab-reading" onclick="switchLibTab('reading')"> Active Reading</button>
       <button class="filter-chip" id="lib-tab-favorites" onclick="switchLibTab('favorites')">❤️ Favorites</button>
       <button class="filter-chip" id="lib-tab-completed" onclick="switchLibTab('completed')">✅ Completed Books</button>
+      <button class="filter-chip" id="lib-tab-custom" onclick="switchLibTab('custom')">📥 Imported Texts (<span id="custom-count-badge">0</span>)</button>
       <button class="filter-chip" id="lib-tab-vocab" onclick="switchLibTab('vocab')">🎒 Custom Vocabulary</button>
       <button class="filter-chip" id="lib-tab-highlights" onclick="switchLibTab('highlights')">🖊️ Highlighting Logs</button>
       <button class="filter-chip" id="lib-tab-badges" onclick="switchLibTab('badges')">🏆 Achievements</button>
@@ -3663,6 +3664,9 @@
 
     <!-- Highlights Tab -->
     <div class="lib-content-section" id="lib-section-highlights" style="display:none"></div>
+
+    <!-- Imported Texts Tab -->
+    <div class="lib-content-section" id="lib-section-custom" style="display:none"></div>
 
     <!-- Achievements Tab -->
     <div class="lib-content-section" id="lib-section-badges" style="display:none">
@@ -7310,12 +7314,14 @@ function openReader(bookId, skipAnim = false) {
     ? readerBook.quotes.map(q => `   "${q}"`).join('\n\n')
     : '';
 
-  const mainText = [
-    `📚 PREFACE: NARRATIVE OVERVIEW\n\n${readerBook.summary || 'No summary available.'}`,
-    ` CHAPTER I: THE INAUGURAL EXCERPT\n\n${readerBook.excerpt || 'No excerpt available.'}`,
-    `✨ NOTABLE QUOTES & FAMOUS PHRASES\n\n${quotesBlock || 'No quotes archived for this edition.'}`,
-    `🎯 CRITICAL ANALYSIS & KEY THEMES\n\nThis selection explores fundamental questions of ${readerBook.topic ? readerBook.topic.toLowerCase() : 'literature'}, focusing on its cultural impact, historical context, and thematic depth.`
-  ].join('\n\n════════════════════════════════\n\n');
+  const mainText = readerBook.content 
+    ? `📖 FULL IMPORTED DOCUMENT: ${readerBook.title}\nAuthor: ${readerBook.author} · Category: ${readerBook.topic}\n\n${readerBook.content}`
+    : [
+        `📚 PREFACE: NARRATIVE OVERVIEW\n\n${readerBook.summary || 'No summary available.'}`,
+        ` CHAPTER I: THE INAUGURAL EXCERPT\n\n${readerBook.excerpt || 'No excerpt available.'}`,
+        `✨ NOTABLE QUOTES & FAMOUS PHRASES\n\n${quotesBlock || 'No quotes archived for this edition.'}`,
+        `🎯 CRITICAL ANALYSIS & KEY THEMES\n\nThis selection explores fundamental questions of ${readerBook.topic ? readerBook.topic.toLowerCase() : 'literature'}, focusing on its cultural impact, historical context, and thematic depth.`
+      ].join('\n\n════════════════════════════════\n\n');
 
   // Parse easy segments
   easySegments = mainText.split('\n\n').filter(Boolean);
@@ -8056,7 +8062,11 @@ function renderLibraryPage() {
   const doneListTarget = document.getElementById('lib-section-completed');
   const vocabListTarget = document.getElementById('lib-section-vocab');
   const highlightsListTarget = document.getElementById('lib-section-highlights');
+  const customListTarget = document.getElementById('lib-section-custom');
   const badgesTarget = document.getElementById('badges-unlocked-grid');
+
+  const customBadge = document.getElementById('custom-count-badge');
+  if (customBadge) customBadge.textContent = state.customBooks ? state.customBooks.length : 0;
 
   const allBooks = [...MASTER_BOOKS, ...DYNAMIC_SEARCH_CACHE, ...state.customBooks];
 
@@ -8122,6 +8132,32 @@ function renderLibraryPage() {
         </div>
       `).join('')
     : `<div style="text-align:center;padding:3rem 0;color:var(--text3)"><p>Highlight favorite text lines inside reader to save extracts here.</p></div>`;
+
+  // Custom Imported Texts
+  if (customListTarget) {
+    const customList = state.customBooks || [];
+    customListTarget.innerHTML = customList.length
+      ? customList.map(b => `
+          <div class="record-card" style="align-items:flex-start">
+            <div style="flex:1;margin-right:1rem">
+              <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.3rem">
+                <span style="font-size:1.2rem">📝</span>
+                <span style="font-weight:800;font-size:1.1rem;color:var(--text);cursor:pointer" onclick="openReader('${b.id}')">${b.title}</span>
+                <span class="detail-meta-chip" style="font-size:0.7rem">${b.topic || 'Custom'}</span>
+              </div>
+              <p style="font-size:0.8rem;color:var(--text3);margin-bottom:0.5rem">by <strong>${b.author}</strong> · ${b.pages} pages</p>
+              <div style="background:var(--bg3);padding:0.6rem 0.8rem;border-radius:6px;font-size:0.85rem;color:var(--text);font-style:italic;line-height:1.4">
+                "${b.excerpt}"
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:0.4rem;align-self:center">
+              <button class="btn-primary" style="padding:0.5rem 1.2rem;font-size:0.85rem" onclick="openReader('${b.id}')">📖 Read Full Text</button>
+              <button class="btn-secondary" style="padding:0.4rem 0.8rem;font-size:0.75rem;color:#ef4444" onclick="deleteCustomBook('${b.id}')">🗑️ Delete</button>
+            </div>
+          </div>
+        `).join('')
+      : `<div style="text-align:center;padding:3rem 0;color:var(--text3)"><p>You have not imported any custom text documents yet.</p><button class="btn-primary" style="margin-top:1rem" onclick="openImporter()">📥 Import Your Text Now</button></div>`;
+  }
 
   // Badges grid
   badgesTarget.innerHTML = ALL_BADGES.map(badge => {
@@ -8215,9 +8251,9 @@ function submitCustomBook() {
   const title = document.getElementById('import-title').value.trim();
   const author = document.getElementById('import-author').value.trim();
   const category = document.getElementById('import-category').value;
-  const content = document.getElementById('import-content').value.trim();
+  const contentText = document.getElementById('import-content').value.trim();
 
-  if (!title || !author || !content) {
+  if (!title || !author || !contentText) {
     showNotification('⚠️ All fields are required to import!');
     return;
   }
@@ -8230,18 +8266,23 @@ function submitCustomBook() {
     level: 'General',
     year: new Date().getFullYear(),
     lang: 'English',
-    pages: Math.max(1, Math.round(content.length / 800)),
+    pages: Math.max(1, Math.round(contentText.length / 800)),
     rating: '5.0',
     emoji: '📝',
     color: ['#0f172a', '#1e293b'],
-    summary: `A custom document added by the user titled "${title}" exploring custom themes.`,
-    excerpt: content.substring(0, 400) + '...',
+    summary: `Custom document titled "${title}" authored by ${author}.`,
+    excerpt: contentText.substring(0, 400) + (contentText.length > 400 ? '...' : ''),
+    content: contentText,
     keywords: ['custom', category.toLowerCase()],
     dictionary: { custom: 'Made or done to order for a particular customer.' },
     quotes: []
   };
 
+  if (!state.customBooks) state.customBooks = [];
   state.customBooks.unshift(newBook);
+  if (!state.reading.includes(newBook.id)) {
+    state.reading.unshift(newBook.id);
+  }
   saveState();
   addXP(100);
   
@@ -8250,8 +8291,21 @@ function submitCustomBook() {
   document.getElementById('import-author').value = '';
   document.getElementById('import-content').value = '';
   
-  showNotification('📥 Custom book successfully added! (+100 XP)');
+  showNotification(`📥 Custom text "${title}" successfully saved! (+100 XP)`);
   navigate('library');
+  switchLibTab('custom');
+}
+
+function deleteCustomBook(bookId) {
+  if (confirm('Are you sure you want to delete this custom text from your library?')) {
+    state.customBooks = (state.customBooks || []).filter(b => b.id !== bookId);
+    state.reading = (state.reading || []).filter(id => id !== bookId);
+    state.favorites = (state.favorites || []).filter(id => id !== bookId);
+    state.completed = (state.completed || []).filter(id => id !== bookId);
+    saveState();
+    renderLibraryPage();
+    showNotification('🗑️ Custom text removed from library.');
+  }
 }
 
 // ════════════════════════════════════════
