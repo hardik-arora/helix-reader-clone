@@ -6293,7 +6293,7 @@ function renderBookCard(book) {
           alt="${book.title}" 
           class="book-cover-img" 
           style="width:100%; height:100%; object-fit:cover; border-radius:6px;" 
-          onerror="this.onerror=null; this.src='https://books.google.com/books/content?vid=isbn' + '${isbn}' + '&printsec=frontcover&img=1&zoom=1';" 
+          onerror="if(!this.dataset.triedFallback){ this.dataset.triedFallback='true'; this.src='https://books.google.com/books/content?vid=isbn' + ('${isbn}' || '') + '&printsec=frontcover&img=1&zoom=1'; } else { this.onerror=null; this.src=getFallbackSvg('${safeTitle}', '${safeAuthor}'); }" 
         />
       </div>
       <div class="book-card-info">
@@ -6578,7 +6578,7 @@ function renderBookCard(book) {
           alt="${book.title}" 
           class="book-cover-img" 
           style="width:100%; height:100%; object-fit:cover; border-radius:6px;" 
-          onerror="this.onerror=null; this.src='https://books.google.com/books/content?vid=isbn' + '${isbn}' + '&printsec=frontcover&img=1&zoom=1';" 
+          onerror="if(!this.dataset.triedFallback){ this.dataset.triedFallback='true'; this.src='https://books.google.com/books/content?vid=isbn' + ('${isbn}' || '') + '&printsec=frontcover&img=1&zoom=1'; } else { this.onerror=null; this.src=getFallbackSvg('${safeTitle}', '${safeAuthor}'); }" 
         />
       </div>
       <div class="book-card-info">
@@ -11223,17 +11223,33 @@ function loadBooksJSON() {
     .then(res => res.json())
     .then(jsonBooks => {
       jsonBooks.forEach((jb, i) => {
-        const exists = MASTER_BOOKS.some(mb => mb.title.toLowerCase().trim() === jb.title.toLowerCase().trim());
-        if (!exists) {
+        const mb = MASTER_BOOKS.find(b => b.title.toLowerCase().trim() === jb.title.toLowerCase().trim() || b.id === jb.id);
+        if (mb) {
+          if (jb.cover || jb.cover_url) { mb.cover = jb.cover || jb.cover_url; mb.cover_url = jb.cover || jb.cover_url; }
+          if (jb.isbn) mb.isbn = jb.isbn;
+          if (jb.pages) { mb.pages = jb.pages; mb.page_count = jb.pages; }
+          if (jb.rating) mb.rating = jb.rating;
+          if (jb.lang || jb.language) { mb.lang = jb.lang || jb.language; mb.language = jb.lang || jb.language; }
+          if (jb.year || jb.published_year) { mb.year = jb.year || jb.published_year; mb.published_year = jb.year || jb.published_year; }
+          if (jb.summary) mb.summary = jb.summary;
+        } else {
           MASTER_BOOKS.push({
-            id: 'json-' + (i + 1),
+            id: jb.id || jb.resource_id || ('json-' + (i + 1)),
             title: jb.title,
             author: jb.author,
-            topic: jb.category.includes('Science') ? 'Science' : (jb.category.includes('Biographies') ? 'Biography' : 'Fiction'),
-            cover_url: jb.cover,
-            cover: jb.cover,
-            summary: jb.title + ' by ' + jb.author,
-            rating: 4.8
+            topic: jb.topic || jb.category || 'General',
+            category: jb.category || jb.topic || 'General',
+            isbn: jb.isbn || '',
+            cover_url: jb.cover || jb.cover_url,
+            cover: jb.cover || jb.cover_url,
+            pages: jb.pages || jb.page_count || 240,
+            page_count: jb.pages || jb.page_count || 240,
+            rating: jb.rating || 4.6,
+            lang: jb.lang || jb.language || 'English',
+            language: jb.lang || jb.language || 'English',
+            year: jb.year || jb.published_year || 1886,
+            published_year: jb.published_year || jb.year || 1886,
+            summary: jb.summary || (jb.title + ' by ' + jb.author)
           });
         }
       });
