@@ -6293,7 +6293,7 @@ function renderBookCard(book) {
           alt="${book.title}" 
           class="book-cover-img" 
           style="width:100%; height:100%; object-fit:cover; border-radius:6px;" 
-          onerror="handleCoverError(this, '${isbn}', '${safeTitle}', '${safeAuthor}')" 
+          onerror="this.onerror=null; this.src='https://books.google.com/books/content?vid=isbn' + '${isbn}' + '&printsec=frontcover&img=1&zoom=1';" 
         />
       </div>
       <div class="book-card-info">
@@ -6578,7 +6578,7 @@ function renderBookCard(book) {
           alt="${book.title}" 
           class="book-cover-img" 
           style="width:100%; height:100%; object-fit:cover; border-radius:6px;" 
-          onerror="handleCoverError(this, '${isbn}', '${safeTitle}', '${safeAuthor}')" 
+          onerror="this.onerror=null; this.src='https://books.google.com/books/content?vid=isbn' + '${isbn}' + '&printsec=frontcover&img=1&zoom=1';" 
         />
       </div>
       <div class="book-card-info">
@@ -7099,10 +7099,10 @@ function openBookDetails(bookId, skipAnim = false) {
           <span style="font-size:0.75rem;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:1px">${book.topic} Overview</span>
           <h2 style="font-family:var(--heading-font);font-size:2.2rem;font-weight:800;margin-top:0.2rem;margin-bottom:0.8rem">${book.title}</h2>
           <div class="detail-meta-group" style="margin-bottom:1.5rem">
-            <span class="detail-meta-chip">📚 ${book.pages} Pages</span>
-            <span class="detail-meta-chip">⭐ ${book.rating} Rating</span>
-            <span class="detail-meta-chip">🌐 Language: ${book.lang}</span>
-            <span class="detail-meta-chip">📅 Published: ${book.year > 0 ? book.year : Math.abs(book.year)+' BC'}</span>
+            <span class="detail-meta-chip">📚 ${book.pages || book.page_count || 350} Pages</span>
+            <span class="detail-meta-chip">⭐ ${book.rating || 4.8} Rating</span>
+            <span class="detail-meta-chip">🌐 Language: ${book.lang || book.language || 'English'}</span>
+            <span class="detail-meta-chip">📅 Published: ${(book.year && !isNaN(book.year)) ? (book.year > 0 ? book.year : Math.abs(book.year) + ' BC') : 'N/A'}</span>
           </div>
           
           <p class="detail-description">${book.summary}</p>
