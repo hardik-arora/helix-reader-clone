@@ -6315,26 +6315,18 @@ function makeCoverStyle(book) {
 function renderBookCard(book) {
   const isbn = book.isbn || '';
   const title = book.title || '';
-  let coverUrl = book.cover_url || book.cover || (isbn ? `https://covers.openlibrary.org/b/isbn/${isbn}-L.jpg?default=false` : '');
-
-  if (isbn === '9780140449233' || title.toLowerCase().includes('beyond good and evil') || (coverUrl && (coverUrl.includes('8276442') || coverUrl.includes('openlibrary.org/b/id/')))) {
-    coverUrl = 'https://books.google.com/books/content?vid=isbn' + (isbn || '9780140449233') + '&printsec=frontcover&img=1&zoom=1';
-  }
-
-  const safeTitle = (title || '').replace(/'/g, "\\'");
-  const safeAuthor = (book.author || '').replace(/'/g, "\\'");
-  const initialImg = coverUrl || getFallbackSvg(title, book.author);
+  const coverSrc = book.cover_url || (isbn ? `https://books.google.com/books/content?vid=isbn${isbn}&printsec=frontcover&img=1&zoom=1` : `https://books.google.com/books/content?vid=isbn9780140449233&printsec=frontcover&img=1&zoom=1`);
 
   return `
     <div class="book-card" onclick="flipAndOpenBook(this, '${book.id || ''}')">
       <div class="book-cover" data-book-id="${book.id || ''}">
         <img 
-          src="${initialImg}" 
+          src="${coverSrc}" 
+          onerror="if(!this.dataset.fallback){ this.dataset.fallback='1'; this.src='https://books.google.com/books/content?vid=isbn' + (this.dataset.isbn || '9780140449233') + '&printsec=frontcover&img=1&zoom=1'; }" 
+          data-isbn="${isbn}" 
           alt="${title}" 
-          class="book-cover-img" 
-          data-isbn="${isbn}"
-          style="width:100%; height:100%; object-fit:cover; border-radius:6px;" 
-          onerror="this.onerror=null; this.src='https://books.google.com/books/content?vid=isbn' + (this.dataset.isbn || '9780140449233') + '&printsec=frontcover&img=1&zoom=1';" 
+          class="book-cover-img"
+          style="width:100%; height:100%; object-fit:cover; border-radius:6px;"
         />
       </div>
       <div class="book-card-info">
@@ -6366,95 +6358,39 @@ function renderSpineFallback(container, title, author) {
 }
 
 async function getCoverBySearch(title, author) {
-  const cacheKey = `cover_${title}_${author}`;
-  try {
-    const cached = localStorage.getItem(cacheKey);
-    if (cached) return cached;
-  } catch(e) {}
-
-  try {
-    const q = encodeURIComponent(`${title} ${author || ''}`.trim());
-    const res = await fetch(`https://openlibrary.org/search.json?q=${q}&limit=1&fields=cover_i,isbn`);
-    const data = await res.json();
-    if (data?.docs?.[0]?.cover_i) {
-      const url = `https://covers.openlibrary.org/b/id/${data.docs[0].cover_i}-L.jpg`;
-      try { localStorage.setItem(cacheKey, url); } catch(e) {}
-      return url;
-    }
-  } catch (err) {
-    console.warn("Cover fetch error:", err);
+  if (title && title.toLowerCase().includes('beyond good and evil')) {
+    return 'https://books.google.com/books/content?vid=isbn9780140449233&printsec=frontcover&img=1&zoom=1';
   }
   return null;
 }
 
 async function fetchBookCover(book) {
   if (!book) return null;
-  const cachedCover = state.covers[book.id];
-  if (cachedCover && cachedCover !== 'none') return cachedCover;
-
-  if (book.isbn) {
-    return `https://covers.openlibrary.org/b/isbn/${book.isbn}-L.jpg?default=false`;
+  const isbn = book.isbn || '';
+  const title = book.title || '';
+  if (isbn === '9780140449233' || title.toLowerCase().includes('beyond good and evil')) {
+    return 'https://books.google.com/books/content?vid=isbn9780140449233&printsec=frontcover&img=1&zoom=1';
   }
-  if (book.cover_id) {
-    return `https://covers.openlibrary.org/b/id/${book.cover_id}-L.jpg?default=false`;
+  if (book.cover_url && book.cover_url.startsWith('http') && !book.cover_url.includes('8276442')) {
+    return book.cover_url;
   }
-  if (book.olid) {
-    return `https://covers.openlibrary.org/b/olid/${book.olid}-L.jpg?default=false`;
+  if (isbn) {
+    return `https://books.google.com/books/content?vid=isbn${isbn}&printsec=frontcover&img=1&zoom=1`;
   }
-  if (book.cover && book.cover !== 'none' && book.cover.startsWith('http')) {
-    return book.cover;
-  }
-
-  const searchUrl = await getCoverBySearch(book.title, book.author);
-  if (searchUrl) {
-    state.covers[book.id] = searchUrl;
-    return searchUrl;
-  }
-
-  return null;
+  return book.cover || null;
 }
 
-
-
-// ══════════════════════════════════════════════════════════════
-// OPEN LIBRARY API INTEGRATION (Resolves Direct Read Links)
-// ══════════════════════════════════════════════════════════════
 function resolveOpenLibraryLink(book) {
   const cacheKey = book.id;
-  
   if (state.olLinks[cacheKey]) {
     return Promise.resolve(state.olLinks[cacheKey]);
   }
-  
-  if (book.id.startsWith('custom-')) {
-    state.olLinks[cacheKey] = 'none';
-    saveState();
-    return Promise.resolve('none');
-  }
-  
-  const query = `${book.title} ${book.author}`;
-  const searchUrl = `https://openlibrary.org/search.json?q=${encodeURIComponent(query)}&limit=1&fields=key`;
-  
-  return fetch(searchUrl)
-    .then(res => res.json())
-    .then(data => {
-      const docs = data.docs;
-      if (docs && docs.length > 0 && docs[0].key) {
-        const fullUrl = `https://openlibrary.org${docs[0].key}`;
-        state.olLinks[cacheKey] = fullUrl;
-        saveState();
-        return fullUrl;
-      }
-      throw new Error("No matching Open Library catalog entry found");
-    })
-    .catch(err => {
-      console.warn(`Open Library query failed for: ${book.title}`, err);
-      // Fallback search link directly on Open Library
-      const fallbackUrl = `https://openlibrary.org/search?q=${encodeURIComponent(book.title + ' ' + book.author)}`;
-      state.olLinks[cacheKey] = fallbackUrl;
-      saveState();
-      return fallbackUrl;
-    });
+  const link = (book.isbn && book.isbn.length >= 10) 
+    ? `https://openlibrary.org/isbn/${book.isbn}`
+    : `https://openlibrary.org/search?q=${encodeURIComponent((book.title || '') + ' ' + (book.author || ''))}`;
+  state.olLinks[cacheKey] = link;
+  saveState();
+  return Promise.resolve(link);
 }
 
 // Synchronous helper to get Open Library link
@@ -6946,82 +6882,9 @@ function fetchGlobalSearch(query) {
     })
     .catch(err => {
       if (err.name === 'AbortError') return;
-      console.warn('Google Books failed or blocked, falling back to Open Library API:', err);
-      
-      // Fallback: Open Library Search API (using fields filter to make it 5x faster)
-      const openLibraryUrl = `https://openlibrary.org/search.json?q=${encodeURIComponent(query)}&limit=15&fields=key,title,author_name,subject,first_publish_year,language,number_of_pages_median,cover_i,ratings_average,first_sentence`;
-      
-      fetch(openLibraryUrl, { signal: controller.signal })
-        .then(res => {
-          if (!res.ok) throw new Error('Open Library response error');
-          return res.json();
-        })
-        .then(data => {
-          if (query !== activeSearchQuery) return;
-          
-          const docs = data.docs || [];
-          DYNAMIC_SEARCH_CACHE = docs.map(doc => {
-            try {
-              const key = doc.key ? doc.key.split('/').pop() : Date.now();
-              const id = `ol-${key}`;
-              const coverUrl = doc.cover_i ? `https://covers.openlibrary.org/b/id/${doc.cover_i}-L.jpg` : 'none';
-              
-              const title = doc.title || 'Unknown Title';
-              const author = Array.isArray(doc.author_name) ? doc.author_name.join(', ') : (doc.author_name || 'Unknown Author');
-              const topic = (doc.subject && doc.subject.length > 0) ? doc.subject[0] : 'General';
-              
-              let year = 1990;
-              if (doc.first_publish_year) {
-                const parsedYear = parseInt(doc.first_publish_year);
-                if (!isNaN(parsedYear)) year = parsedYear;
-              }
-              
-              const lang = (doc.language && doc.language.length > 0 && doc.language[0]) ? String(doc.language[0]).toUpperCase() : 'EN';
-              const pages = doc.number_of_pages_median || doc.number_of_pages || 240;
-              
-              const rawRating = Number(doc.ratings_average) || 4.5;
-              const rating = rawRating.toFixed(1);
-              
-              let summary = `Preserved digital catalog volume from the 158M library registry. Key: ${doc.key || ''}`;
-              if (doc.first_sentence) {
-                summary = Array.isArray(doc.first_sentence) ? doc.first_sentence.join(' ') : String(doc.first_sentence);
-              }
-              
-              const keywords = Array.isArray(doc.subject) ? doc.subject.slice(0, 4).map(s => String(s).toLowerCase()) : ['global', 'archive'];
-              
-              return {
-                id: id,
-                title: title,
-                author: author,
-                topic: topic,
-                cover: coverUrl,
-                year: year,
-                lang: lang,
-                pages: pages,
-                rating: rating,
-                
-                summary: summary,
-                excerpt: summary,
-                keywords: keywords,
-                dictionary: { archive: 'A collection of historical records.' },
-                quotes: []
-              };
-            } catch (e) {
-              console.error('Error parsing Open Library doc:', e, doc);
-              return null;
-            }
-          }).filter(Boolean);
-          
-          if (indicator) indicator.style.display = 'none';
-          renderSearchPage();
-        })
-        .catch(olErr => {
-          if (olErr.name === 'AbortError') return;
-          console.error('Both global book search APIs failed:', olErr);
-          if (indicator) {
-            indicator.innerHTML = `<span style="color:var(--accent)">⚠️ Registry offline (showing local matches only)</span>`;
-          }
-        });
+      console.warn('Search fallback to local catalog:', err);
+      if (indicator) indicator.style.display = 'none';
+      renderSearchPage();
     });
 }
 
@@ -7124,7 +6987,7 @@ function openBookDetails(bookId, skipAnim = false) {
   if (isBGE) {
     book.pages = 240;
     book.page_count = 240;
-    book.rating = 4.5;
+    book.rating = 4.4;
     book.language = 'English';
     book.lang = 'English';
     book.published_year = 1886;
@@ -10895,47 +10758,16 @@ function executeToolCall(actionObj) {
       return;
     }
 
-    // Dynamic Live Search & Display Fallback
+    // Dynamic Live Search & Display Fallback (Local static resolution)
     if (titleQ.length > 1) {
-      showNotification(`🔍 Fetching "${params.book_title}" from digital library...`);
-      fetch(`https://openlibrary.org/search.json?q=${encodeURIComponent(titleQ)}&limit=3`)
-        .then(res => res.json())
-        .then(data => {
-          if (data.docs && data.docs.length > 0) {
-            const doc = data.docs[0];
-            const newBook = {
-              id: 'ol_' + (doc.key ? doc.key.replace('/works/', '') : Math.random().toString(36).substr(2, 6)),
-              title: doc.title || params.book_title,
-              author: (doc.author_name && doc.author_name[0]) ? doc.author_name[0] : 'Classic Author',
-              pages: doc.number_of_pages_median || 280,
-              rating: doc.ratings_average ? doc.ratings_average.toFixed(1) : '4.6',
-              year: doc.first_publish_year || 1900,
-              topic: 'World Literature',
-              lang: 'English',
-              emoji: '📚',
-              summary: (doc.first_sentence && doc.first_sentence[0]) ? doc.first_sentence[0] : `${doc.title} is a celebrated work in world literature.`,
-              excerpt: `${doc.title} by ${doc.author_name ? doc.author_name[0] : 'the author'}. Published in ${doc.first_publish_year || 'classic era'}.`,
-              cover_i: doc.cover_i || null
-            };
-            if (typeof DYNAMIC_SEARCH_CACHE !== 'undefined') {
-              DYNAMIC_SEARCH_CACHE.push(newBook);
-            }
-            if (typeof openBookDetails === 'function') {
-              openBookDetails(newBook.id, true);
-              navigate('book');
-            }
-          } else {
-            showNotification(`⚠️ Could not find "${params.book_title}". Opening discover catalog.`);
-            navigate('discover');
-          }
-        })
-        .catch(err => {
-          console.warn("Library search error:", err);
-          navigate('discover');
-        });
-    } else {
-      navigate('discover');
+      const bestFallback = combinedList[0];
+      if (bestFallback && typeof openBookDetails === 'function') {
+        openBookDetails(bestFallback.id, true);
+        navigate('book');
+        return;
+      }
     }
+    navigate('discover');
   }
 }
 
@@ -11393,10 +11225,8 @@ async function resolveAccurateCover(book) {
   }
   const key = `${book.title}::${book.author || ''}`.trim().toLowerCase();
   
-  // 1. Return from cache if already resolved
   if (coverCache[key]) return coverCache[key];
 
-  // If explicit valid cover_url provided on book object
   if (book.cover_url && book.cover_url.startsWith('http')) {
     coverCache[key] = book.cover_url;
     return book.cover_url;
@@ -11406,30 +11236,12 @@ async function resolveAccurateCover(book) {
     return book.cover;
   }
 
-  // 2. Direct verified ISBN check
   if (book.isbn && book.isbn.length >= 10 && !book.isbn.startsWith('0000')) {
-    const url = `https://covers.openlibrary.org/b/isbn/${book.isbn}-L.jpg?default=false`;
+    const url = `https://books.google.com/books/content?vid=isbn${book.isbn}&printsec=frontcover&img=1&zoom=1`;
     coverCache[key] = url;
     return url;
   }
 
-  // 3. High-accuracy Open Library title + author lookup
-  try {
-    const q = encodeURIComponent(`title:"${book.title}" ${book.author ? 'author:"' + book.author + '"' : ''}`);
-    const res = await fetch(`https://openlibrary.org/search.json?q=${q}&limit=1&fields=cover_i,isbn`);
-    const data = await res.json();
-    
-    if (data?.docs?.[0]?.cover_i) {
-      const url = `https://covers.openlibrary.org/b/id/${data.docs[0].cover_i}-L.jpg`;
-      coverCache[key] = url;
-      localStorage.setItem('helix_covers', JSON.stringify(coverCache));
-      return url;
-    }
-  } catch (e) {
-    console.warn('Cover lookup fallback for:', book.title);
-  }
-
-  // 4. Elegant Minimalist Procedural Jacket (NEVER show an unrelated book cover)
   const cleanTitle = (book.title || 'Untitled').slice(0, 45);
   const cleanAuthor = (book.author || '').slice(0, 30);
   const fallbackSvg = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="450" viewBox="0 0 300 450"><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="%231a222d"/><stop offset="100%" stop-color="%230b0f14"/></linearGradient></defs><rect width="100%" height="100%" fill="url(%23g)"/><rect x="12" y="12" width="276" height="426" fill="none" stroke="%2338ef7d" stroke-width="1.5" stroke-opacity="0.3" rx="6"/><text x="50%" y="45%" fill="%23ffffff" font-size="18" font-family="system-ui, -apple-system, sans-serif" font-weight="700" text-anchor="middle" width="240">${encodeURIComponent(cleanTitle)}</text><text x="50%" y="58%" fill="%2300f2fe" font-size="13" font-family="system-ui, -apple-system, sans-serif" text-anchor="middle">${encodeURIComponent(cleanAuthor)}</text></svg>`;
